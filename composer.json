@@ -1,0 +1,29 @@
+{
+    "name": "peteryang/yycms-core",
+    "description": "yycms core",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "peter",
+            "email": "904801074@qq.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Ycore\\": "./"
+        },
+        "files": [
+            "Helper/function.php"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Ycore\\YyCmsServiceProvider"
+            ]
+        }
+    }
+}
