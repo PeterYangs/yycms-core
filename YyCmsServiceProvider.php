@@ -45,7 +45,7 @@ class YyCmsServiceProvider extends ServiceProvider
     {
 
 
-//        这一块是抄laravel的RouteServiceProvider，不要问我为什么这样写，因为我也不知道
+        //这一块是抄laravel的RouteServiceProvider，不要问我为什么这样写，因为我也不知道
         $this->booted(function () {
             $this->setRootControllerNamespace();
 

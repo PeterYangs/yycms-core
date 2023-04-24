@@ -5,7 +5,7 @@ namespace Ycore\Console;
 
 use App\Events\WebsitePush;
 use App\Http\Controllers\Admin\CategoryController;
-use App\Models\Article;
+use Ycore\Models\Article;
 use App\Tool\ArticleGenerator;
 use Illuminate\Console\Command;
 
