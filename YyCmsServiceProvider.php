@@ -7,8 +7,35 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Traits\ForwardsCalls;
+use Ycore\Console\AutoPush;
+use Ycore\Console\BatchPush;
+use Ycore\Console\ChangePushTime;
+use Ycore\Console\CleanCache;
+use Ycore\Console\CleanUserAccess;
+use Ycore\Console\CreateAdmin;
+use Ycore\Console\CreateArticle;
+use Ycore\Console\CreateChannelRoute;
+use Ycore\Console\CreateGitHookScript;
+use Ycore\Console\FindTag;
+use Ycore\Console\GetAccess;
+use Ycore\Console\GitCheckoutHook;
+use Ycore\Console\HomeStatic;
+use Ycore\Console\MakeAllLink;
+use Ycore\Console\MakeXml;
+use Ycore\Console\MatchApk;
+use Ycore\Console\MysqlBackup;
+use Ycore\Console\PushCustom;
+use Ycore\Console\PushRandomStoreToArticle;
+use Ycore\Console\SearchAccess;
+use Ycore\Console\SetSeoTitle;
+use Ycore\Console\Spider;
+use Ycore\Console\SpiderTable;
+use Ycore\Console\StaticTool;
+use Ycore\Console\SyncExpand;
+use Ycore\Console\Test;
 use Ycore\Console\Test2;
 use Closure;
+use Ycore\Console\TimingArticlePush;
 
 class YyCmsServiceProvider extends ServiceProvider
 {
@@ -72,7 +99,35 @@ class YyCmsServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
 
             $this->commands([
-                Test2::class
+                Test2::class,
+                AutoPush::class,
+                BatchPush::class,
+                ChangePushTime::class,
+                CleanCache::class,
+                CleanUserAccess::class,
+                CreateAdmin::class,
+                CreateArticle::class,
+                CreateChannelRoute::class,
+                CreateGitHookScript::class,
+                FindTag::class,
+                GetAccess::class,
+                GitCheckoutHook::class,
+                HomeStatic::class,
+                MakeAllLink::class,
+                MakeXml::class,
+                MatchApk::class,
+                MysqlBackup::class,
+                PushCustom::class,
+                PushRandomStoreToArticle::class,
+                SearchAccess::class,
+                SetSeoTitle::class,
+                Spider::class,
+                SpiderTable::class,
+                StaticTool::class,
+                SyncExpand::class,
+                Test::class,
+                TimingArticlePush::class,
+
             ]);
 
         }

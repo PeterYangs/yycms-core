@@ -1222,14 +1222,18 @@ function getArticleByIdList(array $ids)
  * 获取文章主图
  * Create by Peter Yang
  * 2022-07-12 16:28:17
- * @param Article $article
  * @return string
  */
-function getImage(Article $article): string
+function getImage($article): string
 {
 
+    if ($article instanceof Article) {
 
-    return getImagePrefix(getObjPlus($article, 'img'));
+        return getImagePrefix(getObjPlus($article, 'img'));
+    }
+
+
+    return "";
 }
 
 
@@ -1237,14 +1241,20 @@ function getImage(Article $article): string
  * 获取文章标题
  * Create by Peter Yang
  * 2022-07-12 16:57:14
- * @param Article $article
  * @return string
  */
-function getTitle(Article $article): string
+function getTitle($article): string
 {
 
 
-    return $article->title;
+    if ($article instanceof Article) {
+
+
+        return $article->title;
+    }
+
+
+    return "";
 }
 
 
