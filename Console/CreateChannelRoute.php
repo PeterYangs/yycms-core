@@ -91,7 +91,13 @@ class CreateChannelRoute extends Command
 
                     $pcRoute .= "Route::get('/{$vv->route}', make(\App\Http\\" . str_replace(".php", "",
                             str_replace("/", "\\",
-                                $vv->controller)) . "::class, '{$vv->action}', ['cid' => {$vo->id}]))";
+                                $vv->controller)) . "::class, '{$vv->action}', ['cid' => {$vo->id},'is_auto'=>1]))";
+
+                    if ($vv->tag === "detail") {
+
+                        $pcRoute .= "->middleware(\Ycore\Http\Middleware\home\StaticRender::class)";
+
+                    }
 
                     if ($vv->alias) {
 
@@ -110,7 +116,13 @@ class CreateChannelRoute extends Command
 
                     $mobileRoute .= "Route::get('/{$vv->route}', make(\App\Http\\" . str_replace(".php", "",
                             str_replace("/", "\\",
-                                $vv->controller)) . "::class, '{$vv->action}', ['cid' => {$vo->id}]))";
+                                $vv->controller)) . "::class, '{$vv->action}', ['cid' => {$vo->id},'is_auto'=>1]))";
+
+                    if ($vv->tag === "detail") {
+
+                        $mobileRoute .= "->middleware(\Ycore\Http\Middleware\home\StaticRender::class)";
+
+                    }
 
                     if ($vv->alias) {
 

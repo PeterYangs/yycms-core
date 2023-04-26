@@ -2,6 +2,10 @@
 
 namespace Ycore\Http\Controllers\Admin;
 
+//use App\Http\Middleware\admin\Auth;
+
+use Ycore\Http\Middleware\admin\Auth;
+
 class AuthCheckController extends LoginCheckController
 {
 
@@ -11,7 +15,8 @@ class AuthCheckController extends LoginCheckController
 
         parent::__construct();
 
-        $this->middleware('powerAuth');
+
+        $this->middleware(Auth::class);
 
     }
 

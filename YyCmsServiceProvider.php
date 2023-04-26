@@ -2,8 +2,11 @@
 
 namespace Ycore;
 
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Contracts\Routing\UrlGenerator;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Traits\ForwardsCalls;
@@ -20,6 +23,7 @@ use Ycore\Console\FindTag;
 use Ycore\Console\GetAccess;
 use Ycore\Console\GitCheckoutHook;
 use Ycore\Console\HomeStatic;
+use Ycore\Console\Init;
 use Ycore\Console\MakeAllLink;
 use Ycore\Console\MakeXml;
 use Ycore\Console\MatchApk;
@@ -127,6 +131,7 @@ class YyCmsServiceProvider extends ServiceProvider
                 SyncExpand::class,
                 Test::class,
                 TimingArticlePush::class,
+                Init::class
 
             ]);
 
@@ -137,6 +142,23 @@ class YyCmsServiceProvider extends ServiceProvider
 
     private function bootRoutes()
     {
+
+        //api访问限流
+        RateLimiter::for('api', function (Request $request) {
+            return Limit::perMinute(1000)->by($request->user()?->id ?: $request->ip());
+        });
+
+        //后台登录访问限流
+        RateLimiter::for('login', function (Request $request) {
+
+
+            return Limit::perMinute(20)->by($request->ip())->response(function () {
+
+
+                return response('访问次数过多', 429);
+
+            });
+        });
 
 
         $this->routes(function () {

@@ -2,7 +2,7 @@
 
 namespace Ycore\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\BaseController;
+
 use App\Tool\Json;
 use Ycore\Models\Admin;
 
