@@ -4,7 +4,7 @@ namespace Ycore\Http\Middleware\home;
 
 
 use Ycore\Models\Article;
-use App\Scope\ArticleSpecialScope;
+use Ycore\Scope\ArticleSpecialScope;
 use Closure;
 use Illuminate\Http\Request;
 use Jenssegers\Agent\Agent;

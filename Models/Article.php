@@ -4,7 +4,7 @@ namespace Ycore\Models;
 
 use App\Events\ArticleDestroy;
 use App\Events\ArticleUpdate;
-use App\Scope\ArticleScope;
+use Ycore\Scope\ArticleScope;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
