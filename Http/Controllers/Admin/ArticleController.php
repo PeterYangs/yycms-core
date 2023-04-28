@@ -4,7 +4,7 @@ namespace Ycore\Http\Controllers\Admin;
 
 use App\Events\ArticleUpdate;
 use App\Events\WebsitePush;
-use App\Jobs\EmailJob;
+use Ycore\Jobs\EmailJob;
 use Ycore\Models\Article;
 use Ycore\Models\ArticleAssociationObject;
 use Ycore\Models\ArticleExpand;

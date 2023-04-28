@@ -2,7 +2,7 @@
 
 namespace Ycore\Http\Middleware\home;
 
-use App\Jobs\UserAccessJob;
+use Ycore\Jobs\UserAccessJob;
 use Closure;
 use Illuminate\Http\Request;
 
