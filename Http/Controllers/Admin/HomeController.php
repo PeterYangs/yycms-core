@@ -3,7 +3,7 @@
 namespace Ycore\Http\Controllers\Admin;
 
 
-use App\Tool\Json;
+use Ycore\Tool\Json;
 
 class HomeController extends AuthCheckController
 {

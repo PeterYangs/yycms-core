@@ -8,8 +8,8 @@ use Ycore\Models\ArticleExpand;
 use Ycore\Models\ArticleTag;
 use Ycore\Models\Category;
 use Ycore\Models\Options;
-use App\Tool\Json;
-use App\Tool\Seo;
+use Ycore\Tool\Json;
+use Ycore\Tool\Seo;
 use QL\QueryList;
 
 function paginate(\Illuminate\Database\Eloquent\Builder $list, int $page = 1, $row = 10)
@@ -739,6 +739,7 @@ function getImagePrefix(string $url)
 function getDetailUrl($item): string
 {
 
+
     if (!$item) {
 
         return '';
@@ -752,14 +753,12 @@ function getDetailUrl($item): string
 
     if (!$category) {
 
+
         return '';
     }
 
-//    $detail_name = $category->category_detail;
 
-    $type = getHostPrefix();
-
-    if ($type === "m") {
+    if ((parse_url(getOption("m_domain"))['host'] ?? "") === request()->getHost()) {
 
         $detail_name = Cache::get('category:detail:mobile_' . $category->id);
 
@@ -767,6 +766,8 @@ function getDetailUrl($item): string
 
 
         $detail_name = Cache::get('category:detail:pc_' . $category->id);
+
+
     }
 
 

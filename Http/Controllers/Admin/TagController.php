@@ -4,8 +4,8 @@ namespace Ycore\Http\Controllers\Admin;
 
 
 use Ycore\Models\Tag;
-use App\Tool\Json;
-use App\Tool\Search;
+use Ycore\Tool\Json;
+use Ycore\Tool\Search;
 
 class TagController extends AuthCheckController
 {

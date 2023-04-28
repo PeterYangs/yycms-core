@@ -6,7 +6,7 @@ use Ycore\Models\Article;
 use Ycore\Models\ArticleAssociationObject;
 use Ycore\Models\Category;
 use Ycore\Models\Collect;
-use App\Tool\Json;
+use Ycore\Tool\Json;
 
 class CollectController extends AuthCheckController
 {

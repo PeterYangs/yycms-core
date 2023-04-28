@@ -5,7 +5,7 @@ namespace Ycore\Http\Controllers\Admin;
 
 
 use App\Service\Search\SearchInterface;
-use App\Tool\Json;
+use Ycore\Tool\Json;
 
 class SearchController extends AuthCheckController
 {

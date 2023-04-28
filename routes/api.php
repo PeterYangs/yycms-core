@@ -362,7 +362,7 @@ Route::middleware([])->group(function () {
 
 //        return j();
 
-        return \App\Tool\Json::code(1, "success", getOption('icp'));
+        return \Ycore\Tool\Json::code(1, "success", getOption('icp'));
 
     });
 

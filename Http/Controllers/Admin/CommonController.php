@@ -3,7 +3,7 @@
 namespace Ycore\Http\Controllers\Admin;
 
 use Ycore\Models\Category;
-use App\Tool\Json;
+use Ycore\Tool\Json;
 
 class CommonController extends AuthCheckController
 {

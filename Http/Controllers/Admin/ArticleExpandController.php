@@ -4,7 +4,7 @@ namespace Ycore\Http\Controllers\Admin;
 
 use Ycore\Models\ArticleExpand;
 use Ycore\Models\ArticleExpandDetail;
-use App\Tool\Json;
+use Ycore\Tool\Json;
 use Illuminate\Database\Schema\Blueprint;
 
 class ArticleExpandController extends AuthCheckController

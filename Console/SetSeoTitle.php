@@ -4,7 +4,7 @@ namespace Ycore\Console;
 
 use Ycore\Models\Article;
 use Ycore\Models\Category;
-use App\Tool\Seo;
+use Ycore\Tool\Seo;
 use Illuminate\Console\Command;
 
 class SetSeoTitle extends Command

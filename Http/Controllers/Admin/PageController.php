@@ -4,7 +4,7 @@ namespace Ycore\Http\Controllers\Admin;
 
 
 use Ycore\Models\Page;
-use App\Tool\Json;
+use Ycore\Tool\Json;
 
 class PageController extends AuthCheckController
 {

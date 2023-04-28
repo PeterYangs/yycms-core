@@ -4,7 +4,7 @@ namespace Ycore\Http\Middleware\admin;
 
 use Ycore\Models\Role;
 use Ycore\Models\Rules;
-use App\Tool\Json;
+use Ycore\Tool\Json;
 use Closure;
 use Illuminate\Http\Request;
 use Nette\Reflection\ClassType;

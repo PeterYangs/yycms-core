@@ -3,7 +3,7 @@
 namespace Ycore\Http\Controllers\Admin;
 
 use Ycore\Models\Rules;
-use App\Tool\Json;
+use Ycore\Tool\Json;
 
 class RulesController extends AuthCheckController
 {

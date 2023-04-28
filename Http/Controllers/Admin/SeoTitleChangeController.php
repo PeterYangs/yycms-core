@@ -4,7 +4,7 @@ namespace Ycore\Http\Controllers\Admin;
 
 
 use Ycore\Models\SeoTitleChange;
-use App\Tool\Json;
+use Ycore\Tool\Json;
 use Illuminate\Support\Facades\Schema;
 
 class SeoTitleChangeController extends AuthCheckController

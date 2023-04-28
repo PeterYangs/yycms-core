@@ -6,11 +6,11 @@ use App\Events\ArticleUpdate;
 use App\Events\WebsitePush;
 use Ycore\Models\Article;
 use Ycore\Models\StoreArticle;
-use App\Tool\Expand;
-use App\Tool\Json;
-use App\Tool\Push;
-use App\Tool\Search;
-use App\Tool\Seo;
+use Ycore\Tool\Expand;
+use Ycore\Tool\Json;
+use Ycore\Tool\Push;
+use Ycore\Tool\Search;
+use Ycore\Tool\Seo;
 use Illuminate\Support\Facades\File;
 
 class StoreArticleController extends AuthCheckController

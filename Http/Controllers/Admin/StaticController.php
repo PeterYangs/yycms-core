@@ -2,7 +2,7 @@
 
 namespace Ycore\Http\Controllers\Admin;
 
-use App\Tool\Json;
+use Ycore\Tool\Json;
 use Symfony\Component\Process\Process;
 
 class StaticController extends AuthCheckController

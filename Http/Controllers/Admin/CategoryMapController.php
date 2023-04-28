@@ -3,8 +3,8 @@
 namespace Ycore\Http\Controllers\Admin;
 
 use Ycore\Models\CategoryMap;
-use App\Tool\Json;
-use App\Tool\Search;
+use Ycore\Tool\Json;
+use Ycore\Tool\Search;
 
 class CategoryMapController extends AuthCheckController
 {

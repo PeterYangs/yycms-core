@@ -3,7 +3,7 @@
 namespace Ycore\Http\Middleware\admin;
 
 use Ycore\Models\Admin;
-use App\Tool\Json;
+use Ycore\Tool\Json;
 use Closure;
 use Illuminate\Http\Request;
 use Nette\Reflection\ClassType;

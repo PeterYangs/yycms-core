@@ -11,7 +11,7 @@ namespace Ycore\Http\Controllers\Admin;
 use Ycore\Models\ArticleExpand;
 use Ycore\Models\Category;
 use Ycore\Models\CategoryRoute;
-use App\Tool\Json;
+use Ycore\Tool\Json;
 use Illuminate\Http\Request;
 
 class CategoryController extends AuthCheckController

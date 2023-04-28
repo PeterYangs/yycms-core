@@ -4,8 +4,8 @@ namespace Ycore\Http\Controllers\Admin;
 
 use Ycore\Models\Spider;
 use Ycore\Models\SpiderItem;
-use App\Tool\Json;
-use App\Tool\Search;
+use Ycore\Tool\Json;
+use Ycore\Tool\Search;
 use Symfony\Component\Process\Process;
 
 class SpiderController extends AuthCheckController

@@ -10,10 +10,10 @@ use Ycore\Models\ArticleAssociationObject;
 use Ycore\Models\ArticleExpand;
 use Ycore\Models\Category;
 use Ycore\Models\Special;
-use App\Tool\ArticleGenerator;
-use App\Tool\Expand;
-use App\Tool\Json;
-use App\Tool\Seo;
+use Ycore\Tool\ArticleGenerator;
+use Ycore\Tool\Expand;
+use Ycore\Tool\Json;
+use Ycore\Tool\Seo;
 use Illuminate\Contracts\Foundation\ExceptionRenderer;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Date;
@@ -243,7 +243,7 @@ class ArticleController extends AuthCheckController
         $list = Article::onlyTrashed()->with('category')->with('admin_id_create')->with('admin_id_update')->orderBy('deleted_at',
             'desc');
 
-        $custom = \App\Tool\Search::searchList($list, request()->input('search', '[]'));
+        $custom = \Ycore\Tool\Search::searchList($list, request()->input('search', '[]'));
 
 
         foreach ($custom as $key => $value) {
@@ -292,7 +292,7 @@ class ArticleController extends AuthCheckController
             ->orderBy('id', 'desc');
 
 
-        $custom = \App\Tool\Search::searchList($list, request()->input('search', '[]'));
+        $custom = \Ycore\Tool\Search::searchList($list, request()->input('search', '[]'));
 
 
         foreach ($custom as $key => $value) {
@@ -473,7 +473,7 @@ class ArticleController extends AuthCheckController
             'desc');
 
 
-        $custom = \App\Tool\Search::searchList($list, request()->input('search', '[]'));
+        $custom = \Ycore\Tool\Search::searchList($list, request()->input('search', '[]'));
 
 //        dd($custom);
 

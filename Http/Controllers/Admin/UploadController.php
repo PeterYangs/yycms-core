@@ -3,7 +3,7 @@
 namespace Ycore\Http\Controllers\Admin;
 
 use App\Service\Upload\Upload;
-use App\Tool\Json;
+use Ycore\Tool\Json;
 use DebugBar\DebugBar;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;

@@ -3,12 +3,12 @@
 namespace Ycore\Console;
 
 use App\Events\ArticleUpdate;
-use App\Http\Controllers\Admin\CategoryController;
+use Ycore\Http\Controllers\Admin\CategoryController;
 use Ycore\Models\Article;
 use Ycore\Models\Category;
 use Ycore\Models\StoreApk;
-use App\Tool\Expand;
-use App\Tool\Seo;
+use Ycore\Tool\Expand;
+use Ycore\Tool\Seo;
 use Illuminate\Console\Command;
 
 class MatchApk extends Command

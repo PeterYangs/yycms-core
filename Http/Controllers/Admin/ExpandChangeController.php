@@ -3,7 +3,7 @@
 namespace Ycore\Http\Controllers\Admin;
 
 use Ycore\Models\ExpandChange;
-use App\Tool\Json;
+use Ycore\Tool\Json;
 
 class ExpandChangeController extends AuthCheckController
 {

@@ -4,7 +4,7 @@ namespace Ycore\Http\Controllers\Admin;
 
 use Ycore\Models\Role;
 use Ycore\Models\Rules;
-use App\Tool\Json;
+use Ycore\Tool\Json;
 
 class RoleController extends AuthCheckController
 {

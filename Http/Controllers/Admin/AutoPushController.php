@@ -3,7 +3,7 @@
 namespace Ycore\Http\Controllers\Admin;
 
 use Ycore\Models\AutoPush;
-use App\Tool\Json;
+use Ycore\Tool\Json;
 
 class AutoPushController extends AuthCheckController
 {

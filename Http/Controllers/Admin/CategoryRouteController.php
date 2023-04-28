@@ -4,7 +4,7 @@ namespace Ycore\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Ycore\Models\CategoryRoute;
-use App\Tool\Json;
+use Ycore\Tool\Json;
 
 class CategoryRouteController extends Controller
 {

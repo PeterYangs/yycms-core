@@ -4,7 +4,7 @@ namespace Ycore\Http\Controllers\Admin;
 
 
 use Ycore\Models\Special;
-use App\Tool\Json;
+use Ycore\Tool\Json;
 
 class SpecialController extends AuthCheckController
 {
