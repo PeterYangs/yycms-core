@@ -22,7 +22,9 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Ycore\\YyCmsServiceProvider"
+                "Ycore\\YyCmsServiceProvider",
+                "Ycore\\YyCmsRouteProvider",
+                "Ycore\\YyCmsEventProvider"
             ]
         }
     }
