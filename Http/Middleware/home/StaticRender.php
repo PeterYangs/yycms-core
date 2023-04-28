@@ -21,11 +21,11 @@ class StaticRender
     public function handle(Request $request, Closure $next)
     {
 
-//        if (!config('static.open', false)) {
-//
-//
-//            return $next($request);
-//        }
+        if (!config('static.open', false)) {
+
+
+            return $next($request);
+        }
 
 
         if ($request->query('admin_key') === env('ADMIN_KEY')) {
@@ -39,7 +39,8 @@ class StaticRender
         if ($request->path() === "/") {
 
 
-            if (str_replace("." . env('TOP_DOMAIN'), '', $request->getHttpHost()) === config('static.mobile_prefix')) {
+            if ((parse_url(getOption("m_domain"))['host'] ?? "") === $request->host()) {
+
 
                 if (!Storage::disk('static')->fileExists('mobile/index.html')) {
 
@@ -64,15 +65,8 @@ class StaticRender
         }
 
 
-//        $route=$request->route();
-//
-//        dd($route,$request->input());
-
-
-//        if (pathinfo($request->path())['extension'] ?? "" === "html") {
-
-
-        if (str_replace("." . env('TOP_DOMAIN'), '', $request->getHttpHost()) === config('static.mobile_prefix')) {
+        //详情页判断
+        if ((parse_url(getOption("m_domain"))['host'] ?? "") === $request->host()) {
 
             if (!Storage::disk('static')->fileExists('mobile/' . $request->path())) {
 
@@ -96,9 +90,5 @@ class StaticRender
         return response()->file(\Storage::disk('static')->path('pc/' . $request->path()), ['is_static' => 1, 'static_time' => date("Y-m-d H:i:s", \Storage::disk('static')->lastModified('pc/' . $request->path()))]);
 
 
-//        }
-
-
-        return $next($request);
     }
 }
