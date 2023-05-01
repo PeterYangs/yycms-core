@@ -2,7 +2,7 @@
 
 namespace Ycore\Http\Controllers\Admin;
 
-use App\Service\Upload\Upload;
+use Ycore\Service\Upload\Upload;
 use Ycore\Tool\Json;
 use DebugBar\DebugBar;
 use Illuminate\Support\Facades\Storage;

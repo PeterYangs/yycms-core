@@ -2,8 +2,8 @@
 
 namespace Ycore\Http\Controllers\Admin;
 
-use App\Events\ArticleUpdate;
-use App\Events\WebsitePush;
+use Ycore\Events\ArticleUpdate;
+use Ycore\Events\WebsitePush;
 use Ycore\Models\Article;
 use Ycore\Models\SearchArticle;
 use Ycore\Models\StoreArticle;
