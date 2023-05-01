@@ -36,4 +36,27 @@ class YRoute
     }
 
 
+    public static function mobileRoute($callback)
+    {
+
+        \Route::domain(parse_url(getOption('m_domain'))['host'] ?? "")->middleware([UserAccess::class, ArticleSpecial::class])->group(function () use ($callback) {
+
+
+            try {
+
+                include_once base_path("routes/channel/mobile.php");
+
+            } catch (\Exception $exception) {
+
+            }
+
+
+            $callback();
+
+
+        });
+
+    }
+
+
 }

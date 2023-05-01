@@ -3,7 +3,7 @@
 namespace Ycore\Models;
 
 /**
- * App\Models\Tag
+ * Ycore\Models\Tag
  *
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
