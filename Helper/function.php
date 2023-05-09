@@ -725,6 +725,15 @@ function getImagePrefix(string $url)
     }
 
 
+    $img = Hook::applyFilter('the_image', $url, env("IMAGE_DOMAIN"));
+
+    if ($img !== null) {
+
+
+        return $img;
+    }
+
+
     return env("IMAGE_DOMAIN") . "/uploads/" . $url;
 
 }
@@ -1241,6 +1250,7 @@ function getImage($article): string
 
     if ($article instanceof Article) {
 
+
         return getImagePrefix(getObjPlus($article, 'img'));
     }
 
@@ -1261,6 +1271,13 @@ function getTitle($article): string
 
     if ($article instanceof Article) {
 
+
+        $fTitle = Hook::applyFilter('the_title', $article->title, $article);
+
+        if ($fTitle !== null) {
+
+            return $fTitle;
+        }
 
         return $article->title;
     }

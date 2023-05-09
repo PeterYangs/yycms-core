@@ -1,0 +1,15 @@
+Filter
+
+not_remove_link 文章a链接过滤器
+参数1   $link   a链接中的href内容
+返回值   返回true则不隐藏a标签
+
+the_title  文章标题过滤器
+参数1   $title 源标题
+参数2   $article 文章模型对象
+返回值  返回新的标题
+
+the_image  文章头图过滤器
+参数1  $url  图片路径，不带域名
+参数2  $img_domain  图片域名
+返回值   完整的图片链接
