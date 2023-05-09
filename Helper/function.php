@@ -8,6 +8,7 @@ use Ycore\Models\ArticleExpand;
 use Ycore\Models\ArticleTag;
 use Ycore\Models\Category;
 use Ycore\Models\Options;
+use Ycore\Tool\Hook;
 use Ycore\Tool\Json;
 use Ycore\Tool\Seo;
 use QL\QueryList;
@@ -1108,6 +1109,7 @@ function getContent(Article $article)
     });
 
 
+    //给图片添加完整域名
     $html->find('img')->map(function (\QL\Dom\Elements $elements) use (&$imgIndex, $article) {
 
 
@@ -1138,16 +1140,25 @@ function getContent(Article $article)
     });
 
 
+    //移除外部a标签
     $html->find('a')->map(function (\QL\Dom\Elements $elements) {
 
 
         $elements->removeAttr("alt");
         $elements->removeAttr("title");
 
-        $html = $elements->html();
+
+        $not_link = Hook::applyFilter('not_remove_link', $elements->attr('href'));
 
 
-        $elements->replaceWith($html);
+        if ($not_link === null || $not_link === false) {
+
+            $html = $elements->html();
+
+
+            $elements->replaceWith($html);
+
+        }
 
 
     });
