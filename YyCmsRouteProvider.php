@@ -35,7 +35,7 @@ class YyCmsRouteProvider extends ServiceProvider
 
         $this->routes(function () {
 
-            Route::middleware('api')
+            Route::middleware('web')
                 ->prefix('api')
                 ->group(__DIR__ . "/routes/api.php");
 
