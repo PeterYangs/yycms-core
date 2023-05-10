@@ -2,7 +2,7 @@
 
 namespace Ycore\Listeners;
 
-use App\Events\ArticleUpdate;
+use Ycore\Events\ArticleUpdate;
 use Ycore\Models\Article;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -22,7 +22,7 @@ class ResetTagList
     /**
      * Handle the event.
      *
-     * @param  \App\Events\ArticleUpdate  $event
+     * @param  \Ycore\Events\ArticleUpdate  $event
      * @return void
      */
     public function handle(ArticleUpdate $event)

@@ -2,7 +2,7 @@
 
 namespace Ycore\Listeners;
 
-use App\Events\ArticleDestroy;
+use Ycore\Events\ArticleDestroy;
 use Ycore\Models\Article;
 
 /**
@@ -23,7 +23,7 @@ class DeleteStaticPage
     /**
      * Handle the event.
      *
-     * @param \App\Events\ArticleDestroy $event
+     * @param \Ycore\Events\ArticleDestroy $event
      * @return void
      */
     public function handle(ArticleDestroy $event)

@@ -2,8 +2,8 @@
 
 namespace Ycore\Console;
 
-use App\Events\ArticleUpdate;
-use App\Events\WebsitePush;
+use Ycore\Events\ArticleUpdate;
+use Ycore\Events\WebsitePush;
 use Ycore\Models\Article;
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;

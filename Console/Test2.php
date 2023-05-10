@@ -3,7 +3,7 @@
 namespace Ycore\Console;
 
 
-use App\Events\WebsitePush;
+use Ycore\Events\WebsitePush;
 use Ycore\Http\Controllers\Admin\CategoryController;
 use Ycore\Models\Article;
 use Ycore\Tool\ArticleGenerator;

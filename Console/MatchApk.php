@@ -2,7 +2,7 @@
 
 namespace Ycore\Console;
 
-use App\Events\ArticleUpdate;
+use Ycore\Events\ArticleUpdate;
 use Ycore\Http\Controllers\Admin\CategoryController;
 use Ycore\Models\Article;
 use Ycore\Models\Category;

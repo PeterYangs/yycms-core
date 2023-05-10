@@ -2,7 +2,7 @@
 
 namespace Ycore\Listeners;
 
-use App\Events\WebsitePush;
+use Ycore\Events\WebsitePush;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
@@ -27,7 +27,7 @@ class BaiduPush
     /**
      * Handle the event.
      *
-     * @param \App\Events\WebsitePush $event
+     * @param \Ycore\Events\WebsitePush $event
      * @return void
      */
     public function handle(WebsitePush $event)

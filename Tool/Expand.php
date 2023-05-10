@@ -2,7 +2,7 @@
 
 namespace Ycore\Tool;
 
-use App\Http\Controllers\Admin\CategoryController;
+use Ycore\Http\Controllers\Admin\CategoryController;
 use Ycore\Models\Article;
 
 class Expand

@@ -2,7 +2,7 @@
 
 namespace Ycore\Listeners;
 
-use App\Events\ArticleUpdate;
+use Ycore\Events\ArticleUpdate;
 use Ycore\Models\Article;
 
 class ArticleStatic
@@ -20,7 +20,7 @@ class ArticleStatic
     /**
      * Handle the event.
      *
-     * @param \App\Events\ArticleUpdate $event
+     * @param \Ycore\Events\ArticleUpdate $event
      * @return void
      */
     public function handle(ArticleUpdate $event)

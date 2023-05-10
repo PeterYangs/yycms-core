@@ -3,8 +3,8 @@
 namespace Ycore\Tool;
 
 //文章操作类
-use App\Events\ArticleUpdate;
-use App\Events\WebsitePush;
+use Ycore\Events\ArticleUpdate;
+use Ycore\Events\WebsitePush;
 use Ycore\Http\Controllers\Admin\CategoryController;
 use Ycore\Models\Article;
 use Illuminate\Support\Facades\Date;

@@ -2,7 +2,7 @@
 
 namespace Ycore\Console;
 
-use App\Http\Controllers\Admin\CategoryController;
+use Ycore\Http\Controllers\Admin\CategoryController;
 use Ycore\Models\Article;
 use Ycore\Models\Category;
 use Illuminate\Console\Command;

@@ -2,9 +2,8 @@
 
 namespace Ycore\Console;
 
-use App\Dao\CategoryPushConfig;
-use App\Events\ArticleUpdate;
-use App\Events\WebsitePush;
+use Ycore\Events\ArticleUpdate;
+use Ycore\Events\WebsitePush;
 use Ycore\Http\Controllers\Admin\CategoryController;
 use Ycore\Models\Article;
 use Ycore\Models\Category;

@@ -2,14 +2,14 @@
 
 namespace Ycore\Models;
 
-use App\Events\ArticleDestroy;
-use App\Events\ArticleUpdate;
+use Ycore\Events\ArticleDestroy;
+use Ycore\Events\ArticleUpdate;
 use Ycore\Scope\ArticleScope;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * App\Models\Article
+ * Ycore\Models\Article
  *
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -25,11 +25,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $seo_desc seo描述
  * @property string $seo_keyword seo关键字
  * @property int $hits 点击量
- * @property \App\Models\Admin|null $admin_id_create 创建编辑
- * @property \App\Models\Admin|null $admin_id_update 最后修改编辑
+ * @property \Ycore\Models\Admin|null $admin_id_create 创建编辑
+ * @property \Ycore\Models\Admin|null $admin_id_update 最后修改编辑
  * @property int $status 发布状态,1是发布，2是下架，默认发布
  * @property int $push_status 自动发布状态，1为已发布，2为定时发布，3为自动发布
- * @property-read \App\Models\Category|null $category
+ * @property-read \Ycore\Models\Category|null $category
  * @method static \Illuminate\Database\Eloquent\Builder|Article newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Article newQuery()
  * @method static \Illuminate\Database\Query\Builder|Article onlyTrashed()
@@ -57,9 +57,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @mixin \Eloquent
  * @property int $special_id 特殊属性id
  * @property int $select_order 自定义排序,不影响前台
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ArticleTag[] $article_tag
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Ycore\Models\ArticleTag[] $article_tag
  * @property-read int|null $article_tag_count
- * @property-read \App\Models\Special|null $special
+ * @property-read \Ycore\Models\Special|null $special
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereSelectOrder($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereSpecialId($value)
  */
