@@ -50,6 +50,11 @@ class YyCmsServiceProvider extends ServiceProvider
     public function boot()
     {
 
+
+        $this->publishes([
+            __DIR__ . '/config/yycms.php' => config_path('yycms.php')
+        ]);
+
         $this->bootCommands();
 
 
@@ -108,6 +113,8 @@ class YyCmsServiceProvider extends ServiceProvider
     public function register()
     {
 
+
+        $this->mergeConfigFrom(__DIR__."/config/yycms.php",'yycms');
 
         $this->app->bind(SearchInterface::class, function ($app) {
 
