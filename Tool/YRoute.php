@@ -13,9 +13,18 @@ class YRoute
     public static function pcRoute($callback)
     {
 
-//        \Route::
 
-        \Route::domain(parse_url(getOption('domain'))['host'] ?? "")->middleware([UserAccess::class, ArticleSpecial::class])->group(function () use ($callback) {
+        try {
+
+            $domain = parse_url(getOption('domain'))['host'] ?? "";
+
+        } catch (\Exception $exception) {
+
+            return;
+        }
+
+
+        \Route::domain($domain)->middleware([UserAccess::class, ArticleSpecial::class])->group(function () use ($callback) {
 
 
             try {
@@ -39,7 +48,18 @@ class YRoute
     public static function mobileRoute($callback)
     {
 
-        \Route::domain(parse_url(getOption('m_domain'))['host'] ?? "")->middleware([UserAccess::class, ArticleSpecial::class])->group(function () use ($callback) {
+
+        try {
+
+            $domain = parse_url(getOption('m_domain'))['host'] ?? "";
+
+        } catch (\Exception $exception) {
+
+            return;
+        }
+
+
+        \Route::domain($domain)->middleware([UserAccess::class, ArticleSpecial::class])->group(function () use ($callback) {
 
 
             try {
