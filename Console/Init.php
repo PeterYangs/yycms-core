@@ -3,6 +3,8 @@
 namespace Ycore\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 use Symfony\Component\Process\Process;
 
 class Init extends Command
@@ -28,6 +30,56 @@ class Init extends Command
      */
     public function handle()
     {
+
+
+        try {
+
+            DB::select('show tables');
+
+
+        } catch (\Exception $exception) {
+
+
+            $this->error("检测到数据库连接出错，请检查数据库配置" . PHP_EOL . "error:" . $exception->getMessage());
+
+            return 0;
+        }
+
+
+        if (env('CACHE_DRIVER') !== "redis") {
+
+
+            $this->error("请将缓存驱动改为redis(项目目录下的.env文件中，改CACHE_DRIVER=redis)");
+
+            return 0;
+        }
+
+
+        try {
+
+            Redis::command('ping');
+
+        } catch (\Exception $exception) {
+
+
+            $this->error("检测到redis连接出错，请检查redis配置" . PHP_EOL . "error:" . $exception->getMessage());
+
+
+            return 0;
+
+        }
+
+
+        if (!\Schema::hasTable('migrations')) {
+
+
+            $this->info("检测到数据库为空，正在进行数据库初始化。。。");
+
+            $this->call("migrate");
+
+            $this->info("数据库初始化成功！");
+
+        }
 
 
         while (true) {
@@ -72,6 +124,24 @@ class Init extends Command
 
             break;
         }
+
+
+        $this->info("正在生成路由文件。。。");
+
+        $this->call("CreateChannelRoute");
+
+        $this->info("路由文件生成成功！");
+
+
+        $is_test = $this->ask("需要生成测试数据吗？(y/n)", "y");
+
+        if (strtolower($is_test) === "y") {
+
+
+            $this->call("create:article", ['num' => 30]);
+
+        }
+
 
         $bar = $this->output->createProgressBar(5);
 

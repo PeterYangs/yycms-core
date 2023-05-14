@@ -47,7 +47,7 @@ class Test extends Command
 
 
 
-        dd(123);
+//        dd(123);
 
 //        $ag = new ArticleGenerator();
 //
