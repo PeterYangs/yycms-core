@@ -84,7 +84,7 @@ class CreateArticle extends Command
 
             $this->index++;
 
-            $title = date("H").$value->name . $key . $this->index;
+            $title = date("YmH").$value->name . $key . $this->index;
 
             $post = [
 
