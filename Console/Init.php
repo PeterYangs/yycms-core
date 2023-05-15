@@ -69,6 +69,9 @@ class Init extends Command
 
         }
 
+        //发布资源
+        $this->call("vendor:publish", ['--provider' => "Ycore\YyCmsServiceProvider"]);
+
 
         if (!\Schema::hasTable('migrations')) {
 
@@ -131,6 +134,8 @@ class Init extends Command
         $this->call("CreateChannelRoute");
 
         $this->info("路由文件生成成功！");
+
+
 
 
         $is_test = $this->ask("需要生成测试数据吗？(y/n)", "y");
