@@ -127,12 +127,6 @@ class ArticleGenerator
 
             $expandDataKeyValue = dealExpandToTable($expand);
 
-            //判断是否更新seo标题
-            $isChangeSeoTitle = Seo::isChangeArticleSeoTitle($article->id, $articleData, $table_name, $expandDataKeyValue);
-
-            $article->expand = $expand;
-
-
             foreach ($this->articleData as $key => $value) {
 
 
@@ -143,6 +137,14 @@ class ArticleGenerator
 
 
             }
+
+//            dd($article->toArray());
+
+
+            //判断是否更新seo标题
+            $isChangeSeoTitle = Seo::isChangeArticleSeoTitle($article->id, $article->toArray(), $table_name, $expandDataKeyValue);
+
+            $article->expand = $expand;
 
 
             $article->save();
@@ -169,7 +171,7 @@ class ArticleGenerator
             event(new ArticleUpdate($article->id));
 
 
-            if ($article->push_status === 1 && $isPush) {
+            if ($article->push_status === 1 && $article->status === 1 && $isPush) {
 
                 event(new WebsitePush($article->id));
             }
@@ -260,6 +262,7 @@ class ArticleGenerator
 
             if (app()->has('adminInfo')) {
 
+
                 $articleData['admin_id_create'] = resolve('adminInfo')['id'];
                 $articleData['admin_id_update'] = resolve('adminInfo')['id'];
 
@@ -348,7 +351,7 @@ class ArticleGenerator
             event(new ArticleUpdate($article->id));
 
 
-            if ($article->push_status === 1 && $isPush) {
+            if ($article->push_status === 1 && $article->status === 1 && $isPush) {
 
                 event(new WebsitePush($article->id));
             }

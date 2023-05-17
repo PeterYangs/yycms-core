@@ -120,7 +120,6 @@ class StoreArticleController extends AuthCheckController
 
         $id = $post['id'] ?? null;
 
-//        $post['expand_data'] = json_encode($post['expand_data'], JSON_THROW_ON_ERROR);
 
         $temp = [];
 
@@ -131,7 +130,21 @@ class StoreArticleController extends AuthCheckController
 
         }
 
-        $post['expand_data'] = $temp;
+        $post['expand_data'] = json_encode($temp);
+
+        $post['seo_title'] = "";
+
+        if (app()->has('adminInfo')) {
+
+            $post['admin_id_create'] = resolve('adminInfo')['id'];
+            $post['admin_id_update'] = resolve('adminInfo')['id'];
+
+        } else {
+
+            $post['admin_id_create'] = 1;
+            $post['admin_id_update'] = 1;
+
+        }
 
 
         StoreArticle::updateOrCreate(['id' => $id], $post);

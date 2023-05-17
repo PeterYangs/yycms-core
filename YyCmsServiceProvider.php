@@ -56,6 +56,10 @@ class YyCmsServiceProvider extends ServiceProvider
             __DIR__ . "/database/schema/mysql-schema.dump" => database_path('schema/mysql-schema.dump')
         ]);
 
+
+        $this->loadMigrationsFrom(__DIR__."/database/migrations");
+
+
         $this->bootCommands();
 
 

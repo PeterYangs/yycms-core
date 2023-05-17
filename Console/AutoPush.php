@@ -8,6 +8,7 @@ use Ycore\Http\Controllers\Admin\CategoryController;
 use Ycore\Models\Article;
 use Ycore\Models\Category;
 use Ycore\Models\StoreArticle;
+use Ycore\Tool\ArticleGenerator;
 use Ycore\Tool\Expand;
 use Ycore\Tool\Push;
 use Ycore\Tool\Seo;
@@ -41,7 +42,7 @@ class AutoPush extends Command
 
         $now = time();
 
-        $list = \Ycore\Models\AutoPush::where('status', 1)->where('type', 'spider')->get();
+        $list = \Ycore\Models\AutoPush::where('status', 1)->get();
 
 
         foreach ($list as $key => $value) {
@@ -138,64 +139,137 @@ class AutoPush extends Command
             }
 
 
-//            if ($isOk) {
+            if ($value->type === "spider") {
 
 
-            $category_id = $value->category_id;
+                $category_id = $value->category_id;
 
-            //获取该分类的子分类
-            $cIds = Category::where('pid', $category_id)->get()->pluck('id')->push($category_id)->all();
-
-
-            $query = StoreArticle::whereIn('category_id', $cIds)->where('status', 1)->limit($value->number);
+                //获取该分类的子分类
+                $cIds = Category::where('pid', $category_id)->get()->pluck('id')->push($category_id)->all();
 
 
-            switch ($value->rule) {
-
-                case 1:
-
-                    $query->orderBy('id', 'desc');
-
-                    break;
+                $query = StoreArticle::whereIn('category_id', $cIds)->where('status', 1)->limit($value->number);
 
 
-                case 2:
+                switch ($value->rule) {
 
-                    $query->orderBy('id', 'asc');
+                    case 1:
 
-                    break;
+                        $query->orderBy('id', 'desc');
 
-                case 3:
-
-                    $query->inRandomOrder();
-
-                    break;
+                        break;
 
 
-            }
+                    case 2:
 
-            $res = $query->get();
+                        $query->orderBy('id', 'asc');
 
+                        break;
 
-            foreach ($res as $a) {
+                    case 3:
 
+                        $query->inRandomOrder();
 
-                try {
+                        break;
 
-                    Push::spiderToArticle($a, $value->push_status);
-
-                } catch (\Exception $exception) {
-
-
-                    echo "发布错误" . $exception->getMessage() . PHP_EOL;
 
                 }
 
+                $res = $query->get();
+
+
+                foreach ($res as $a) {
+
+
+                    try {
+
+                        Push::spiderToArticle($a, $value->push_status, $value->article_status);
+
+                    } catch (\Exception $exception) {
+
+
+                        echo "发布错误" . $exception->getMessage() . PHP_EOL;
+
+                    }
+
+
+                }
 
             }
 
 
-//            }
+            if ($value->type === "article") {
+
+//                dd(123);
+
+                $category_id = $value->category_id;
+
+                //获取该分类的子分类
+                $cIds = Category::where('pid', $category_id)->get()->pluck('id')->push($category_id)->all();
+
+
+//                dd($cIds);
+
+                $query = Article::where('push_status', 3)
+                    ->whereNull('deleted_at')
+                    ->withoutGlobalScopes()
+                    ->whereIn('category_id', $cIds)
+                    ->where('status', 1)
+                    ->with('category')
+                    ->limit($value->number);
+
+
+                switch ($value->rule) {
+
+                    case 1:
+
+                        $query->orderBy('id', 'desc');
+
+                        break;
+
+
+                    case 2:
+
+                        $query->orderBy('id', 'asc');
+
+                        break;
+
+                    case 3:
+
+                        $query->inRandomOrder();
+
+                        break;
+
+
+                }
+
+                $res = $query->get();
+
+//                dd($res);
+
+                foreach ($res as $a) {
+
+
+                    try {
+
+//                        Push::spiderToArticle($a, $value->push_status, $value->article_status);
+
+                        $ar = new ArticleGenerator();
+
+
+                        $ar->fill(['push_status' => 1], [])->update(['id' => $a->id], true);
+
+
+                    } catch (\Exception $exception) {
+
+
+                        echo "发布错误" . $exception->getMessage() . PHP_EOL;
+
+                    }
+
+
+                }
+            }
 
 
         }

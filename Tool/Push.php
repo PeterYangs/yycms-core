@@ -20,9 +20,10 @@ class Push
      * 2023-02-09 15:33:30
      * @param StoreArticle $storeArticle
      * @param int $push_status 发布类型
+     * @param int $status 文章状态
      * @throws \Throwable
      */
-    static function spiderToArticle(StoreArticle $storeArticle, int $push_status = 1)
+    static function spiderToArticle(StoreArticle $storeArticle, int $push_status = 1, int $status = 1)
     {
 
         $article = null;
@@ -51,7 +52,8 @@ class Push
                 'seo_desc' => $storeArticle->seo_desc,
                 'seo_keyword' => $storeArticle->seo_keyword,
                 'special_id' => $storeArticle->special_id,
-                'push_status' => $push_status
+                'push_status' => $push_status,
+                'status' => $status
             ], $ex)->create();
 
 

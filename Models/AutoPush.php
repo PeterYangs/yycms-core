@@ -20,7 +20,8 @@ class AutoPush extends Mode
         'number',
         'rule',
         'status',
-        'push_status'
+        'push_status',
+        'article_status'
     ];
 
     protected $appends = ['cycle_desc'];
