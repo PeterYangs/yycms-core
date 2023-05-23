@@ -9,6 +9,8 @@ use Ycore\Http\Controllers\Admin\CategoryController;
 use Ycore\Models\Article;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Ycore\Models\Category;
+use Ycore\Models\Collect;
 
 class ArticleGenerator
 {
@@ -196,7 +198,7 @@ class ArticleGenerator
      * @param bool $isPush 是否推送到站长
      * @throws \Throwable
      */
-    function create(bool $isPush = true)
+    function create(bool $isPush = true, bool $autoAssociationObject = true)
     {
 
 
@@ -342,6 +344,27 @@ class ArticleGenerator
 
             //设置seo标题
             Seo::setSeoTitle($article->id, true);
+
+
+            //自动设置关联关系
+            if ($autoAssociationObject) {
+
+                $category = Category::where('id', $this->articleData['category_id'])->first();
+
+
+                $collect = Collect::whereIn('son_id', [$category->id, $category->parent->id])->first();
+
+
+                if ($collect) {
+
+
+//                    dd($collect);
+
+                }
+
+//                dd($collect->toArray());
+
+            }
 
 
             \DB::commit();

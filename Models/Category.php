@@ -9,6 +9,7 @@
 namespace Ycore\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 
 /**
@@ -95,6 +96,29 @@ class Category extends Base
         return $this->hasMany(get_class($this), 'pid', 'id')->select(['id', 'pid']);
     }
 
+
+    public function parent(): Attribute
+    {
+
+
+        return new Attribute(
+            get: function ($value, $attrs) {
+
+
+                $pid = $attrs['pid'];
+
+                if ($pid === 0) {
+
+                    return collect([]);
+                }
+
+                return $this->where('id', $pid)->first();
+
+            }
+        );
+
+    }
+
     public function category_route()
     {
 
@@ -103,19 +127,20 @@ class Category extends Base
     }
 
 
-    function collect(){
+    function collect()
+    {
 
 
-        return $this->hasMany(Collect::class,'category_id','id');
+        return $this->hasMany(Collect::class, 'category_id', 'id');
     }
 
 
-    function collect_son(){
+    function collect_son()
+    {
 
 
-        return $this->hasMany(Collect::class,'son_id','id');
+        return $this->hasMany(Collect::class, 'son_id', 'id');
     }
-
 
 
 }

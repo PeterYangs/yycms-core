@@ -46,19 +46,18 @@ class Test extends Command
 //         dd(app()->has('icps'));
 
 
-
 //        dd(123);
 
-//        $ag = new ArticleGenerator();
-//
-//
-////        $ag->fill([
-////            'title' => '这是一个标题2',
-////            'category_id' => config('category.game'),
-////            'content' => '<p>这是一个内容</p>',
-////            'img' => 'test_img/7.png'
-////        ], ['size' => "123M"])->create();
-//
+        $ag = new ArticleGenerator();
+
+
+        $ag->fill([
+            'title' => '这是一个标题2',
+            'category_id' => 6,
+            'content' => '<p>这是一个内容休闲益智游戏</p>',
+            'img' => 'test_img/7.png'
+        ], ['size' => "123M"])->create();
+
 //
 //        $ag->fill([
 //            'title' => '这是一个标题4',
