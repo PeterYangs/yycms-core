@@ -111,6 +111,9 @@ class CollectController extends AuthCheckController
 
         }
 
+        //更新updated_at时间
+        Article::where('id', $article_id)->update(['updated_at' => date('Y-m-d H:i:s')]);
+
 
         return Json::code(1, 'success');
 
