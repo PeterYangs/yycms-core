@@ -15,7 +15,7 @@ return new class extends Migration {
         Schema::create('collect_tag', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('title')->comment('描述');
+            $table->string('title')->unique()->comment('描述');
         });
 
         DB::statement("ALTER TABLE `collect_tag` COMMENT='关联标记表'");//表注释
