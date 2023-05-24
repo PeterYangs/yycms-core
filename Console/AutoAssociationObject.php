@@ -58,7 +58,7 @@ class AutoAssociationObject extends Command
 
 
         Article::whereIn('category_id', $category->pluck('id')->all())
-            ->whereRaw("not EXISTS(select *  from article_association_object  WHERE `slave` = article.id)")->orderBy('id', 'desc')->chunk(100, function ($items) {
+            ->whereRaw("not EXISTS(select *  from article_association_object  WHERE `slave` = article.id)")->orderBy('id', 'desc')->chunkById(100, function ($items) {
 
 
                 foreach ($items as $item) {
