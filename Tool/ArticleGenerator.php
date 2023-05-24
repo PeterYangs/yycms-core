@@ -9,8 +9,10 @@ use Ycore\Http\Controllers\Admin\CategoryController;
 use Ycore\Models\Article;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Ycore\Models\ArticleAssociationObject;
 use Ycore\Models\Category;
 use Ycore\Models\Collect;
+use Ycore\Models\CollectTag;
 
 class ArticleGenerator
 {
@@ -358,11 +360,41 @@ class ArticleGenerator
                 if ($collect) {
 
 
-//                    dd($collect);
+                    $content = $this->articleData['content'];
+
+
+                    $t = CollectTag::whereRaw("? like CONCAT('%',title,'%')", [$content])->limit(10)->get();
+
+
+                    if ($t->count() > 0) {
+
+
+                        $mainList = Article::where('category_id', $collect->category_id)->where(function ($query) use ($t) {
+
+
+                            foreach ($t as $v) {
+
+                                $query->orWhere('title', 'like', '%' . $v->title . '%');
+                            }
+
+                        })->limit(4)->get();
+
+
+                        foreach ($mainList as $main) {
+
+                            ArticleAssociationObject::create([
+                                'main' => $main->id,
+                                'slave' => $article->id
+                            ]);
+
+                        }
+
+
+                    }
+
 
                 }
 
-//                dd($collect->toArray());
 
             }
 
