@@ -2,6 +2,7 @@
 
 namespace Ycore;
 
+use Ycore\Console\AutoAssociationObject;
 use Ycore\Models\Options;
 use Ycore\Service\Search\Search;
 use Ycore\Service\Search\SearchInterface;
@@ -57,7 +58,7 @@ class YyCmsServiceProvider extends ServiceProvider
         ]);
 
 
-        $this->loadMigrationsFrom(__DIR__."/database/migrations");
+        $this->loadMigrationsFrom(__DIR__ . "/database/migrations");
 
 
         $this->bootCommands();
@@ -188,7 +189,8 @@ class YyCmsServiceProvider extends ServiceProvider
                 SyncExpand::class,
                 Test::class,
                 TimingArticlePush::class,
-                Init::class
+                Init::class,
+                AutoAssociationObject::class
 
             ]);
 
