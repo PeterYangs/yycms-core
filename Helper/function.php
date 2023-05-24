@@ -2093,7 +2093,7 @@ function getOption(string $key, mixed $default = null): mixed
  * @param int $limit
  * @return Category[]
  */
-function getCategory(int|string|array $categoryName, int $limit = 15, $exceptSelf = false, array $querys = [])
+function getCategory(int|string|array $categoryName, int $limit = 15, $exceptSelf = false, array $querys = []): \Illuminate\Database\Eloquent\Collection
 {
 
     $category = getCategoryIds($categoryName, $exceptSelf);
