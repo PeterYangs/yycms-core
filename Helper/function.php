@@ -2091,7 +2091,9 @@ function getOption(string $key, mixed $default = null): mixed
  * 2023-02-23 14:57:40
  * @param int|string|array $categoryName
  * @param int $limit
- * @return Category[]
+ * @param bool $exceptSelf    是否包含自己,默认包含自己
+ * @param array $querys
+ * @return \Illuminate\Database\Eloquent\Collection
  */
 function getCategory(int|string|array $categoryName, int $limit = 15, $exceptSelf = false, array $querys = []): \Illuminate\Database\Eloquent\Collection
 {

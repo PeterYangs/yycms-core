@@ -3,11 +3,18 @@
 namespace Ycore\Http\Controllers\Pc;
 
 use Ycore\Models\Category;
+use Ycore\Tool\Hook;
 
 class Channel extends Base
 {
 
 
+    /**
+     * 栏目控制器
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|string
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
     function channel()
     {
 
@@ -23,17 +30,28 @@ class Channel extends Base
 
         $cid = getCategoryIds($category->id);
 
-//        dd($cid);
 
         $query = ArticleListModel()->whereIn('category_id', $cid);
 
         $query->orderBy('push_time', 'desc');
 
+        $channel = Hook::applyFilter('channel', $category, $route, 'pc', request()->input(), request()->route());
+
+
+        if ($channel === null || !($channel instanceof \Ycore\Dao\Channel)) {
+
+            $channel = \Ycore\Dao\Channel::channel(10, 1);
+
+        }
+
+        $data = $query->seoPaginate($channel->getSize(), ['*'], $channel->getPage(),
+            $channel->getPath());
+
 
         if (file_exists($viewFile)) {
 
 
-            return view($route, ['category' => $category]);
+            return view($route, ['category' => $category, 'data' => $data]);
         }
 
         return 'channel';

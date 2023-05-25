@@ -37,6 +37,6 @@ class CategoryRoute extends Base
 
     protected $table = 'category_route';
 
-    protected $fillable = ['title', 'route', 'controller', 'action', 'alias', 'tag', 'type', 'category_id'];
+    protected $fillable = ['title', 'route', 'controller', 'action', 'alias', 'tag', 'type', 'category_id','is_main'];
 
 }

@@ -2,6 +2,7 @@
 
 namespace Ycore\Http\Controllers\Pc;
 
+use Illuminate\Pagination\Paginator;
 use Ycore\Http\Controllers\YyCms;
 
 class Base extends YyCms
@@ -12,6 +13,8 @@ class Base extends YyCms
         parent::__construct();
 
         \View::addLocation(base_path('theme/demo/pc/view'));
+
+        Paginator::defaultView('pc.paginator');
     }
 
 
