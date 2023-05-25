@@ -351,50 +351,8 @@ class ArticleGenerator
             //自动设置关联关系
             if ($autoAssociationObject) {
 
-                $category = Category::where('id', $this->articleData['category_id'])->first();
 
-
-                $collect = Collect::whereIn('son_id', [$category->id, $category->parent->id])->first();
-
-
-                if ($collect) {
-
-
-                    $content = $this->articleData['content'];
-
-
-                    $t = CollectTag::whereRaw("? like CONCAT('%',title,'%')", [$content])->limit(10)->get();
-
-
-                    if ($t->count() > 0) {
-
-
-                        $mainList = Article::where('category_id', $collect->category_id)->where(function ($query) use ($t) {
-
-
-                            foreach ($t as $v) {
-
-                                $query->orWhere('title', 'like', '%' . $v->title . '%');
-                            }
-
-                        })->limit(4)->get();
-
-
-                        foreach ($mainList as $main) {
-
-                            ArticleAssociationObject::create([
-                                'main' => $main->id,
-                                'slave' => $article->id
-                            ]);
-
-                        }
-
-
-                    }
-
-
-                }
-
+                autoAssociationObject($article);
 
             }
 

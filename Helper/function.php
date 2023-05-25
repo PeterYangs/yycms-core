@@ -1,12 +1,15 @@
 <?php
 
 
+use Ycore\Events\ArticleUpdate;
 use Ycore\Http\Controllers\Admin\CategoryController;
 use Ycore\Models\Article;
 use Ycore\Models\ArticleAssociationObject;
 use Ycore\Models\ArticleExpand;
 use Ycore\Models\ArticleTag;
 use Ycore\Models\Category;
+use Ycore\Models\Collect;
+use Ycore\Models\CollectTag;
 use Ycore\Models\Options;
 use Ycore\Tool\Hook;
 use Ycore\Tool\Json;
@@ -1996,55 +1999,6 @@ function setOption(string $key, mixed $value, bool $autoload = false): void
 }
 
 
-///**
-// * 批量设置配置项
-// * Create by Peter Yang
-// * 2023-01-30 15:59:27
-// * @param array $array
-// */
-//function setOptionBatch(array $array)
-//{
-//
-//
-//    $data = [];
-//
-//    foreach ($array as $key => $value) {
-//
-//
-//        $type = "string";
-//
-//        if (is_numeric($value['value'])) {
-//
-//            $type = "int";
-//        }
-//
-//
-//        if (is_array($value['value'])) {
-//
-//            $type = "array";
-//
-//            $value['value'] = json_encode($value['value'], JSON_THROW_ON_ERROR);
-//        }
-//
-//
-//        Options::updateOrInsert();
-//
-////        if ($autoload) {
-////
-////            $autoloadNum = 1;
-////
-////        } else {
-////
-////            $autoloadNum = 0;
-////        }
-//
-//
-//    }
-//
-//
-//}
-
-
 /**
  * Create by Peter Yang
  * 2023-01-30 15:14:16
@@ -2108,4 +2062,72 @@ function getCategory(int|string|array $categoryName, int $limit = 15, $exceptSel
     return $q->limit($limit)->get();
 
 }
+
+
+/**
+ * 自动设置一对多关系
+ * @param Article $article
+ * @return bool
+ */
+function autoAssociationObject(Article $article): bool
+{
+
+    $category = Category::where('id', $article->category_id)->first();
+
+
+    $collect = Collect::whereIn('son_id', [$category->id, $category->parent->id])->first();
+
+
+    if ($collect) {
+
+
+        $content = $article->content;
+
+
+        $t = CollectTag::whereRaw("? like CONCAT('%',title,'%')", [$content])->limit(10)->get();
+
+
+        if ($t->count() > 0) {
+
+
+            $mainList = Article::where('category_id', $collect->category_id)->where(function ($query) use ($t) {
+
+
+                foreach ($t as $v) {
+
+                    $query->orWhere('title', 'like', '%' . $v->title . '%');
+                }
+
+            })->limit(4)->get();
+
+
+            foreach ($mainList as $main) {
+
+                ArticleAssociationObject::create([
+                    'main' => $main->id,
+                    'slave' => $article->id
+                ]);
+
+
+                if (app()->runningInConsole()) {
+
+
+                    echo $article->title . "=>" . $mainList->pluck('title')->join(",") . PHP_EOL;
+
+                }
+
+
+            }
+
+
+            return true;
+
+        }
+
+
+    }
+
+    return false;
+}
+
 
