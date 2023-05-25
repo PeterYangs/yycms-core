@@ -66,7 +66,7 @@ Route::get("/", make(\Ycore\Http\Controllers\Pc\Index::class, 'index'))->middlew
 //Route::get("/game",make(\Ycore\Http\Controllers\Pc\Channel::class,'channel'));
 
 
-Route::get('/game', make(\App\Http\Controllers\Pc\Game::class, 'gameList', ['cid' => 1,'is_auto'=>1]))->name('pc.game');
+Route::get('/game', make(\Ycore\Http\Controllers\Pc\Channel::class, 'channel', ['cid' => 1,'is_auto'=>1]))->name('pc.game');
 
 Route::get('/game/list-{page}.html', make(\App\Http\Controllers\Pc\Game::class, 'gameList', ['cid' => 1,'is_auto'=>1]));
 

@@ -14,4 +14,12 @@ class Base extends YyCms
         \View::addLocation(base_path('theme/demo/pc/view'));
     }
 
+
+    function getViewPath()
+    {
+
+        return base_path('theme/demo/pc/view');
+    }
+
+
 }
