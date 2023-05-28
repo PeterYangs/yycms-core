@@ -198,9 +198,10 @@ class ArticleGenerator
      * Create by Peter Yang
      * 2023-03-23 15:03:56
      * @param bool $isPush 是否推送到站长
+     * @param bool $autoAssociationObject 是否自动处理一对多关系
      * @throws \Throwable
      */
-    function create(bool $isPush = true, bool $autoAssociationObject = true)
+    function create(bool $isPush = true, bool $autoAssociationObject = true, bool $is_gpt = false)
     {
 
 
@@ -327,6 +328,13 @@ class ArticleGenerator
             $articleData['seo_title'] = ($articleData['seo_title'] ?? "");
             $articleData['seo_desc'] = ($articleData['seo_desc'] ?? "");
             $articleData['seo_keyword'] = ($articleData['seo_keyword'] ?? "");
+
+
+            if ($is_gpt) {
+
+
+
+            }
 
 
             $article = Article::create($articleData);

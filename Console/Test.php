@@ -7,6 +7,7 @@ use Ycore\Http\Controllers\Admin\CategoryController;
 use Ycore\Models\Article;
 use Ycore\Tool\ArticleGenerator;
 use Illuminate\Console\Command;
+use Ycore\Tool\ChatGpt;
 
 class Test extends Command
 {
@@ -34,6 +35,9 @@ class Test extends Command
     {
 
 
+        dd(ChatGpt::do("请告诉我武汉明天天气"));
+
+
 //        event(new WebsitePush(9233));
 
 //        setOption('site_name', '60下载');
@@ -48,15 +52,15 @@ class Test extends Command
 
 //        dd(123);
 
-        $ag = new ArticleGenerator();
-
-
-        $ag->fill([
-            'title' => '这是一个标题2',
-            'category_id' => 6,
-            'content' => '<p>这是一个内容休闲益智游戏</p>',
-            'img' => 'test_img/7.png'
-        ], ['size' => "123M"])->create();
+//        $ag = new ArticleGenerator();
+//
+//
+//        $ag->fill([
+//            'title' => '这是一个标题2',
+//            'category_id' => 6,
+//            'content' => '<p>这是一个内容休闲益智游戏</p>',
+//            'img' => 'test_img/7.png'
+//        ], ['size' => "123M"])->create();
 
 //
 //        $ag->fill([
