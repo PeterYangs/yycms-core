@@ -34,8 +34,14 @@ class Test extends Command
     public function handle()
     {
 
+//        $is_gpt=1;
+//
+//
+//        dd(!($is_gpt === 0));
 
-        dd(ChatGpt::do("请告诉我武汉明天天气"));
+//        dd(ChatGpt::do(ChatGpt::gameTemplate("王者荣耀")));
+
+//        dd();
 
 
 //        event(new WebsitePush(9233));
@@ -51,16 +57,16 @@ class Test extends Command
 
 
 //        dd(123);
-
-//        $ag = new ArticleGenerator();
+//
+        $ag = new ArticleGenerator();
 //
 //
-//        $ag->fill([
-//            'title' => '这是一个标题2',
-//            'category_id' => 6,
-//            'content' => '<p>这是一个内容休闲益智游戏</p>',
-//            'img' => 'test_img/7.png'
-//        ], ['size' => "123M"])->create();
+        $ag->fill([
+            'title' => '原神',
+            'category_id' => 6,
+            'content' => '<p>这是一个内容休闲益智游戏</p>',
+            'img' => 'test_img/7.png'
+        ], ['size' => "123M"])->create(true, true, true);
 
 //
 //        $ag->fill([

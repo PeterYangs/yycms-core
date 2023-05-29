@@ -330,8 +330,36 @@ class ArticleGenerator
             $articleData['seo_keyword'] = ($articleData['seo_keyword'] ?? "");
 
 
+            $category = Category::where('id', $articleData['category_id'])->first();
+
+            if (!$category) {
+
+
+                throw new \Exception("分类id不存在:" . $category->id);
+            }
+
+            //chatgpt替换内容(临时,只对游戏和应用生效)
             if ($is_gpt) {
 
+                for ($i = 0; $i < 2; $i++) {
+
+                    if (optional($category->parent)->id === config('category.game')) {
+
+                        $articleData['content'] = ChatGpt::do(ChatGpt::gameTemplate($articleData['title']));
+                    }
+
+                    if (optional($category->parent)->id === config('category.app')) {
+
+                        $articleData['content'] = ChatGpt::do(ChatGpt::appTemplate($articleData['title']));
+                    }
+
+                    if (!str_contains($articleData['content'], "<html")) {
+
+                        break;
+                    }
+
+
+                }
 
 
             }
