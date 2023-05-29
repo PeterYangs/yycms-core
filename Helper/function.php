@@ -2078,6 +2078,14 @@ function autoAssociationObject(Article $article): bool
     $collect = Collect::whereIn('son_id', [$category->id, $category->parent->id])->first();
 
 
+    //是否已经设置了关联
+    $isFind = Article::whereRaw("not EXISTS(select *  from article_association_object  WHERE `slave` = article.id)")->where('id', $article->id)->first();
+
+    if ($isFind) {
+
+        return false;
+    }
+
     if ($collect) {
 
 
