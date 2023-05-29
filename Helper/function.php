@@ -2103,10 +2103,16 @@ function autoAssociationObject(Article $article): bool
 
             foreach ($mainList as $main) {
 
-                ArticleAssociationObject::create([
-                    'main' => $main->id,
-                    'slave' => $article->id
-                ]);
+                try {
+
+                    ArticleAssociationObject::create([
+                        'main' => $main->id,
+                        'slave' => $article->id
+                    ]);
+
+                } catch (\Exception $exception) {
+
+                }
 
 
                 if (app()->runningInConsole()) {
