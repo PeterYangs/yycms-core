@@ -338,32 +338,6 @@ class ArticleGenerator
                 throw new \Exception("分类id不存在:" . $category->id);
             }
 
-            //chatgpt替换内容(临时,只对游戏和应用生效)
-            if ($is_gpt) {
-
-                for ($i = 0; $i < 2; $i++) {
-
-                    if (optional($category->parent)->id === config('category.game')) {
-
-                        $articleData['content'] = ChatGpt::do(ChatGpt::gameTemplate($articleData['title']));
-                    }
-
-                    if (optional($category->parent)->id === config('category.app')) {
-
-                        $articleData['content'] = ChatGpt::do(ChatGpt::appTemplate($articleData['title']));
-                    }
-
-                    if (!str_contains($articleData['content'], "<html")) {
-
-                        break;
-                    }
-
-
-                }
-
-
-            }
-
 
             $article = Article::create($articleData);
 
@@ -389,6 +363,46 @@ class ArticleGenerator
 
 
                 autoAssociationObject($article);
+
+            }
+
+
+            //chatgpt替换内容(临时,只对游戏和应用生效)
+            if ($is_gpt) {
+
+                for ($i = 0; $i < 2; $i++) {
+
+                    if (optional($category->parent)->id === config('category.game')) {
+
+                        $article->content = ChatGpt::do(ChatGpt::gameTemplate($article->title));
+                    }
+
+                    if (optional($category->parent)->id === config('category.app')) {
+
+                        $article->content = ChatGpt::do(ChatGpt::appTemplate($article->title));
+                    }
+
+                    if (!str_contains($article->content, "<html")) {
+
+                        break;
+                    }
+
+
+                    throw new \Exception("生成失败！");
+
+                }
+
+                $article->save();
+
+
+                //自动设置关联关系
+                if ($autoAssociationObject) {
+
+
+                    autoAssociationObject($article);
+
+                }
+
 
             }
 
