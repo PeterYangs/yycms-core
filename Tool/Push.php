@@ -21,9 +21,10 @@ class Push
      * @param StoreArticle $storeArticle
      * @param int $push_status 发布类型
      * @param int $status 文章状态
+     * @param bool $is_gpt 是否用gpt生成
      * @throws \Throwable
      */
-    static function spiderToArticle(StoreArticle $storeArticle, int $push_status = 1, int $status = 1)
+    static function spiderToArticle(StoreArticle $storeArticle, int $push_status = 1, int $status = 1, bool $is_gpt = false)
     {
 
         $article = null;
@@ -54,7 +55,7 @@ class Push
                 'special_id' => $storeArticle->special_id,
                 'push_status' => $push_status,
                 'status' => $status
-            ], $ex)->create();
+            ], $ex)->create(true, true, $is_gpt);
 
 
         } catch (\Exception $exception) {

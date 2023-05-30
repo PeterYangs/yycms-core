@@ -183,7 +183,7 @@ class AutoPush extends Command
 
                     try {
 
-                        Push::spiderToArticle($a, $value->push_status, $value->article_status);
+                        Push::spiderToArticle($a, $value->push_status, $value->article_status, !($value->is_gpt === 0));
 
                     } catch (\Exception $exception) {
 
@@ -245,14 +245,12 @@ class AutoPush extends Command
 
                 $res = $query->get();
 
-//                dd($res);
 
                 foreach ($res as $a) {
 
 
                     try {
 
-//                        Push::spiderToArticle($a, $value->push_status, $value->article_status);
 
                         $ar = new ArticleGenerator();
 

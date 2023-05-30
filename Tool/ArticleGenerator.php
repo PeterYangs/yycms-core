@@ -13,6 +13,7 @@ use Ycore\Models\ArticleAssociationObject;
 use Ycore\Models\Category;
 use Ycore\Models\Collect;
 use Ycore\Models\CollectTag;
+use Ycore\Service\Ai\Ai;
 
 class ArticleGenerator
 {
@@ -23,8 +24,17 @@ class ArticleGenerator
     protected array $expandData;
 
 
+    /**
+     * @var Ai
+     */
+    protected Ai $ai;
+
     public function __construct()
     {
+
+
+        $this->ai = resolve(Ai::class);
+
     }
 
 
@@ -198,9 +208,10 @@ class ArticleGenerator
      * Create by Peter Yang
      * 2023-03-23 15:03:56
      * @param bool $isPush 是否推送到站长
+     * @param bool $autoAssociationObject 是否自动处理一对多关系
      * @throws \Throwable
      */
-    function create(bool $isPush = true, bool $autoAssociationObject = true)
+    function create(bool $isPush = true, bool $autoAssociationObject = true, bool $is_gpt = false)
     {
 
 
@@ -329,6 +340,15 @@ class ArticleGenerator
             $articleData['seo_keyword'] = ($articleData['seo_keyword'] ?? "");
 
 
+            $category = Category::where('id', $articleData['category_id'])->first();
+
+            if (!$category) {
+
+
+                throw new \Exception("分类id不存在:" . $category->id);
+            }
+
+
             $article = Article::create($articleData);
 
 
@@ -351,47 +371,41 @@ class ArticleGenerator
             //自动设置关联关系
             if ($autoAssociationObject) {
 
-                $category = Category::where('id', $this->articleData['category_id'])->first();
+
+                autoAssociationObject($article);
+
+            }
 
 
-                $collect = Collect::whereIn('son_id', [$category->id, $category->parent->id])->first();
+            //chatgpt替换内容
+            if ($is_gpt) {
 
+                for ($i = 0; $i < 2; $i++) {
 
-                if ($collect) {
+                    $article->content = $this->ai->article($article);
 
+                    if (!str_contains($article->content, "<html")) {
 
-                    $content = $this->articleData['content'];
-
-
-                    $t = CollectTag::whereRaw("? like CONCAT('%',title,'%')", [$content])->limit(10)->get();
-
-
-                    if ($t->count() > 0) {
-
-
-                        $mainList = Article::where('category_id', $collect->category_id)->where(function ($query) use ($t) {
-
-
-                            foreach ($t as $v) {
-
-                                $query->orWhere('title', 'like', '%' . $v->title . '%');
-                            }
-
-                        })->limit(4)->get();
-
-
-                        foreach ($mainList as $main) {
-
-                            ArticleAssociationObject::create([
-                                'main' => $main->id,
-                                'slave' => $article->id
-                            ]);
-
-                        }
-
-
+                        break;
                     }
 
+
+                }
+
+                if (str_contains($article->content, "<html")) {
+
+                    throw new \Exception("生成失败！");
+                }
+
+
+                $article->save();
+
+
+                //自动设置关联关系
+                if ($autoAssociationObject) {
+
+
+                    autoAssociationObject($article);
 
                 }
 
