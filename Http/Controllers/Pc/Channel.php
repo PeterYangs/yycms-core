@@ -23,9 +23,23 @@ class Channel extends Base
         $category = Category::where('id', $cid)->with('category_route')->firstOrFail();
 
 
-        $route = $category->category_route->where('type', 1)->where('tag', 'list')->value('route');
+        $route = "channel-" . $category->category_route->where('type', 1)->where('tag', 'list')->where('is_main', 1)->value('route');
+
 
         $viewFile = $this->getViewPath() . "/" . $route . ".blade.php";
+
+        $view = $route;
+
+        if (!file_exists($viewFile)) {
+
+            $route = "channel-" . $category->parent->category_route->where('type', 1)->where('tag', 'list')->where('is_main', 1)->value('route');
+
+            $viewFile = $this->getViewPath() . "/" . $route . ".blade.php";
+
+
+            $view = $route;
+
+        }
 
 
         $cid = getCategoryIds($category->id);
@@ -44,6 +58,7 @@ class Channel extends Base
 
         }
 
+
         $data = $query->seoPaginate($channel->getSize(), ['*'], $channel->getPage(),
             $channel->getPath());
 
@@ -51,10 +66,10 @@ class Channel extends Base
         if (file_exists($viewFile)) {
 
 
-            return view($route, ['category' => $category, 'data' => $data]);
+            return view($view, ['category' => $category, 'data' => $data]);
         }
 
-        return 'channel';
+        return view('channel', ['category' => $category, 'data' => $data]);
     }
 
 }
