@@ -4,6 +4,7 @@ namespace Ycore;
 
 use Ycore\Console\AutoAssociationObject;
 use Ycore\Models\Options;
+use Ycore\Service\Ai\ChatGpt;
 use Ycore\Service\Search\Search;
 use Ycore\Service\Search\SearchInterface;
 use Ycore\Service\Upload\AliUpload;
@@ -43,6 +44,7 @@ use Ycore\Console\Test2;
 use Closure;
 use Ycore\Console\TimingArticlePush;
 use Ycore\Tool\AcademyPaginator;
+use Ycore\Service\Ai\Ai;
 
 class YyCmsServiceProvider extends ServiceProvider
 {
@@ -147,6 +149,22 @@ class YyCmsServiceProvider extends ServiceProvider
                     return new LocalUpload();
 
             }
+
+        });
+
+
+        $this->app->bind(Ai::class, function ($app) {
+
+
+            switch (env("AI_TYPE", 'chat_gpt')) {
+
+
+                default:
+
+                    return new ChatGpt();
+
+            }
+
 
         });
 

@@ -66,7 +66,8 @@ class Category extends Base
         'seo_keywords',
         'seo_description',
         'status',
-        'sort'
+        'sort',
+        'ai_command'
     ];
 
     protected static function booted()
@@ -140,6 +141,42 @@ class Category extends Base
 
 
         return $this->hasMany(Collect::class, 'son_id', 'id');
+    }
+
+
+    function aiCommand(): Attribute
+    {
+
+        return new Attribute(
+
+            get: function ($value) {
+
+
+                if (!$value) {
+
+                    return [];
+                }
+
+
+                return json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+
+            },
+            set: function ($value) {
+
+                if (!$value) {
+
+
+                    return [];
+                }
+
+
+                return json_encode($value, JSON_THROW_ON_ERROR);
+
+            }
+
+
+        );
+
     }
 
 

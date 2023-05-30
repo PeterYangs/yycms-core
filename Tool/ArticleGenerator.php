@@ -13,6 +13,7 @@ use Ycore\Models\ArticleAssociationObject;
 use Ycore\Models\Category;
 use Ycore\Models\Collect;
 use Ycore\Models\CollectTag;
+use Ycore\Service\Ai\Ai;
 
 class ArticleGenerator
 {
@@ -23,8 +24,17 @@ class ArticleGenerator
     protected array $expandData;
 
 
+    /**
+     * @var Ai
+     */
+    protected Ai $ai;
+
     public function __construct()
     {
+
+
+        $this->ai = resolve(Ai::class);
+
     }
 
 
@@ -367,20 +377,12 @@ class ArticleGenerator
             }
 
 
-            //chatgpt替换内容(临时,只对游戏和应用生效)
+            //chatgpt替换内容
             if ($is_gpt) {
 
                 for ($i = 0; $i < 2; $i++) {
 
-                    if (optional($category->parent)->id === config('category.game')) {
-
-                        $article->content = ChatGpt::do(ChatGpt::gameTemplate($article->title));
-                    }
-
-                    if (optional($category->parent)->id === config('category.app')) {
-
-                        $article->content = ChatGpt::do(ChatGpt::appTemplate($article->title));
-                    }
+                    $article->content = $this->ai->article($article);
 
                     if (!str_contains($article->content, "<html")) {
 
@@ -388,9 +390,13 @@ class ArticleGenerator
                     }
 
 
-                    throw new \Exception("生成失败！");
-
                 }
+
+                if (str_contains($article->content, "<html")) {
+
+                    throw new \Exception("生成失败！");
+                }
+
 
                 $article->save();
 

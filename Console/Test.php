@@ -8,6 +8,7 @@ use Ycore\Models\Article;
 use Ycore\Tool\ArticleGenerator;
 use Illuminate\Console\Command;
 use Ycore\Tool\ChatGpt;
+use Ycore\Service\Ai\Ai;
 
 class Test extends Command
 {
@@ -31,8 +32,24 @@ class Test extends Command
      * @return int
      * @throws \JsonException
      */
-    public function handle()
+    public function handle(Ai $ai)
     {
+
+
+//        dd(resolve(Ai::class));
+
+
+//        $game=ArticleDetailModel()->where('category_id', 2)->first();
+//
+////        ;
+//
+//        dd($ai->article($game));
+
+
+//        dd($ai->do("请告诉我怎么发财！"));
+
+
+//        dd(ChatGpt::gameTemplate("王者荣耀"));
 
 //        $is_gpt=1;
 //
@@ -62,7 +79,7 @@ class Test extends Command
 //
 //
         $ag->fill([
-            'title' => '原神',
+            'title' => '原神官方版',
             'category_id' => 6,
             'content' => '<p>这是一个内容休闲益智游戏</p>',
             'img' => 'test_img/7.png'
