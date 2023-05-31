@@ -131,7 +131,7 @@ class Init extends Command
 
         $this->info("正在生成路由文件。。。");
 
-        $this->call("CreateChannelRoute");
+        $this->call("CreateRoute");
 
         $this->info("路由文件生成成功！");
 

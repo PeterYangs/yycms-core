@@ -3,6 +3,7 @@
 namespace Ycore;
 
 use Ycore\Console\AutoAssociationObject;
+use Ycore\Console\CreateRoute;
 use Ycore\Models\Options;
 use Ycore\Service\Ai\ChatGpt;
 use Ycore\Service\Search\Search;
@@ -208,7 +209,8 @@ class YyCmsServiceProvider extends ServiceProvider
                 Test::class,
                 TimingArticlePush::class,
                 Init::class,
-                AutoAssociationObject::class
+                AutoAssociationObject::class,
+                CreateRoute::class
 
             ]);
 
