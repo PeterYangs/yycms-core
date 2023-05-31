@@ -110,7 +110,7 @@ class Category extends Base
 
                 if ($pid === 0) {
 
-                    return collect([]);
+                    return null;
                 }
 
                 return $this->where('id', $pid)->first();

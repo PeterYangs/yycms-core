@@ -17,40 +17,39 @@ class Channel extends Base
      */
     function channel()
     {
-
         $cid = request()->get('cid');
 
         $category = Category::where('id', $cid)->with('category_route')->firstOrFail();
 
-
-        $route = "channel-" . $category->category_route->where('type', 1)->where('tag', 'list')->where('is_main', 1)->value('route');
-
-
-        $viewFile = $this->getViewPath() . "/" . $route . ".blade.php";
-
-        $view = $route;
-
-        if (!file_exists($viewFile)) {
-
-            $route = "channel-" . $category->parent->category_route->where('type', 1)->where('tag', 'list')->where('is_main', 1)->value('route');
-
-            $viewFile = $this->getViewPath() . "/" . $route . ".blade.php";
+        $route = $category->category_route->where('type', 1)->where('tag', 'list')->where('is_main', 1)->value('route');
 
 
-            $view = $route;
+        $currentRoute = $route;
+
+        $viewFile = $this->getViewPath() . "/channel-" . $route . ".blade.php";
+
+        $view = "/channel-" . $route;
+
+        if (!file_exists($viewFile) && $category->pid !== 0) {
+
+            $route = $category->parent->category_route->where('type', 1)->where('tag', 'list')->where('is_main', 1)->value('route');
+
+            $viewFile = $this->getViewPath() . "/channel-" . $route . ".blade.php";
+
+            $view = "/channel-" . $route;
 
         }
 
-
         $cid = getCategoryIds($category->id);
-
 
         $query = ArticleListModel()->whereIn('category_id', $cid);
 
         $query->orderBy('push_time', 'desc');
 
-        $channel = Hook::applyFilter('channel', $category, $route, 'pc', request()->input(), request()->route());
 
+//        dd($route);
+
+        $channel = Hook::applyFilter('channel', $category->toArray(), $category->parent ? $category->parent->toArray() : ['id' => 0], $currentRoute, 'pc', request()->input(), request()->route());
 
         if ($channel === null || !($channel instanceof \Ycore\Dao\Channel)) {
 
