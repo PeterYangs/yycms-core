@@ -3,7 +3,17 @@
 
 //后台图片访问
 use App\Http\Controllers\Pc\HitsController;
-use Ycore\Http\Middleware\home\StaticRender;
+use Ycore\Tool\YRoute;
+
+
+YRoute::pcRoute(function () {
+
+});
+
+YRoute::mobileRoute(function () {
+
+});
+
 
 Route::get('/backend/{path}.{ex}', function ($path, $ex) {
 
@@ -34,7 +44,6 @@ Route::get('/backend/{path}.{ex}', function ($path, $ex) {
 
 //编辑器图片访问
 Route::get("/api/uploads/{path}.{ex}", function ($path, $ex) {
-
 
 
     switch (env('UPLOAD_TYPE')) {
@@ -117,7 +126,6 @@ Route::get('beian', function () {
 
     return view('beian');
 });
-
 
 
 //Route::get("/", make(\Ycore\Http\Controllers\Pc\Index::class, 'index'))->middleware(StaticRender::class)->name('pc.index');
@@ -306,6 +314,6 @@ Route::get('beian', function () {
 //
 //Route::get('/yyph/{id}.html', make(\App\Http\Controllers\Pc\Rank::class, 'rank_detail', ['cid' => 37,'is_auto'=>1]))->middleware(\Ycore\Http\Middleware\home\StaticRender::class);
 
-Route::get('search', [\App\Http\Controllers\Pc\Search::class, 'search'])->name('pc.search');
-
-Route::get('/page/sitemap.html', [\App\Http\Controllers\Pc\Page::class, 'sitemap'])->name('pc.page_sitemap');
+//Route::get('search', [\App\Http\Controllers\Pc\Search::class, 'search'])->name('pc.search');
+//
+//Route::get('/page/sitemap.html', [\App\Http\Controllers\Pc\Page::class, 'sitemap'])->name('pc.page_sitemap');
