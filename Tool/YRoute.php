@@ -17,7 +17,12 @@ class YRoute
 
         \View::addLocation(base_path('theme/' . getOption('theme', 'demo') . '/pc/view'));
 
-        Paginator::defaultView('pc.paginator');
+
+        if (\View::exists('paginator')) {
+
+            Paginator::defaultView('paginator');
+
+        }
 
 
         try {
@@ -47,9 +52,9 @@ class YRoute
 //            dd(base_path('theme/demo/pc/route/route.php'));
 
 
-            if (file_exists(base_path('theme/'.getOption('theme', 'demo').'/pc/route/route.php'))) {
+            if (file_exists(base_path('theme/' . getOption('theme', 'demo') . '/pc/route/route.php'))) {
 
-                include_once base_path('theme/'.getOption('theme', 'demo').'/pc/route/route.php');
+                include_once base_path('theme/' . getOption('theme', 'demo') . '/pc/route/route.php');
 
             }
 
@@ -66,10 +71,13 @@ class YRoute
     public static function mobileRoute($callback)
     {
 
-        \View::addLocation(base_path('theme/'.getOption('theme', 'demo').'/mobile/view'));
+        \View::addLocation(base_path('theme/' . getOption('theme', 'demo') . '/mobile/view'));
 
-        Paginator::defaultView('mobile.paginator');
+        if (\View::exists('paginator')) {
 
+            Paginator::defaultView('paginator');
+
+        }
 
         try {
 
@@ -93,9 +101,9 @@ class YRoute
 
             }
 
-            if (file_exists(base_path('theme/'.getOption('theme', 'demo').'/mobile/route/route.php'))) {
+            if (file_exists(base_path('theme/' . getOption('theme', 'demo') . '/mobile/route/route.php'))) {
 
-                include_once base_path('theme/'.getOption('theme', 'demo').'/mobile/route/route.php');
+                include_once base_path('theme/' . getOption('theme', 'demo') . '/mobile/route/route.php');
 
             }
 
