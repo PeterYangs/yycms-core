@@ -2,6 +2,7 @@
 
 
 //后台图片访问
+use App\Http\Controllers\Pc\HitsController;
 use Ycore\Http\Middleware\home\StaticRender;
 
 Route::get('/backend/{path}.{ex}', function ($path, $ex) {
@@ -59,7 +60,64 @@ Route::get("/api/uploads/{path}.{ex}", function ($path, $ex) {
 
 })->where(['path' => "[/A-Za-z0-9._]+", 'ex' => "(jpg|jpeg|png|gif|webp){1}"]);
 
-Route::get("/", make(\Ycore\Http\Controllers\Pc\Index::class, 'index'))->middleware(StaticRender::class)->name('pc.index');
+//二维码
+Route::get('/qrcode/{id}', [\App\Http\Controllers\Pc\QrCode::class, 'build'])->name('qrcode');
+
+
+Route::get('/download/{type}/{id}',
+    [\App\Http\Controllers\Pc\Download::class, 'download'])->where(['type' => '(az|ios){1}'])->name('download');
+
+
+//文章点击
+Route::get('/hits/{id}', [HitsController::class, 'add']);
+
+
+Route::get('/now', function () {
+
+
+    return now()->format("Y-m-d H:i:s");
+});
+
+
+Route::get("search-article-baidu-check", function () {
+
+    $id = (int)request()->input('id');
+
+
+    if (!$id) {
+
+
+        abort(404);
+
+
+    }
+
+
+    $item = \Ycore\Models\SearchArticle::where('id', $id)->firstOrFail();
+
+
+    $html = \QL\QueryList::html($item->content);
+
+    $text = $html->find("")->text();
+
+
+    $key = mb_substr($text, 0, 37);
+
+
+    $url = "https://www.baidu.com/s?wd=" . urlencode($key);
+
+
+    return response()->redirectGuest($url);
+
+});
+
+
+Route::get('beian', function () {
+
+
+    return view('beian');
+});
+
 
 
 //Route::get("/", make(\Ycore\Http\Controllers\Pc\Index::class, 'index'))->middleware(StaticRender::class)->name('pc.index');

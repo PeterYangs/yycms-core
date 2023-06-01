@@ -47,8 +47,6 @@ class Channel extends Base
         $query->orderBy('push_time', 'desc');
 
 
-//        dd($route);
-
         $channel = Hook::applyFilter('channel', $category->toArray(), $category->parent ? $category->parent->toArray() : ['id' => 0], $currentRoute, 'pc', request()->input(), request()->route());
 
         if ($channel === null || !($channel instanceof \Ycore\Dao\Channel)) {

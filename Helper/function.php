@@ -2045,7 +2045,7 @@ function getOption(string $key, mixed $default = null): mixed
  * 2023-02-23 14:57:40
  * @param int|string|array $categoryName
  * @param int $limit
- * @param bool $exceptSelf    是否包含自己,默认包含自己
+ * @param bool $exceptSelf 是否包含自己,默认包含自己
  * @param array $querys
  * @return \Illuminate\Database\Eloquent\Collection
  */
@@ -2145,5 +2145,50 @@ function autoAssociationObject(Article $article): bool
 
     return false;
 }
+
+/**
+ * 根据标签id查询标签详情
+ * @param $tagId
+ * @param $notFoundReturn404
+ * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|\Ycore\Models\Base|\Ycore\Models\Tag|null
+ */
+function getTagById($tagId, $notFoundReturn404 = false)
+{
+
+    $tag = \Ycore\Models\Tag::where('id', $tagId)->first();
+
+    if (!$tag && $notFoundReturn404) {
+
+        abort(404);
+    }
+
+    return $tag;
+
+}
+
+
+/**
+ * 根据标签id查询文章
+ * @param $tagId
+ * @param $size
+ * @param $page
+ * @param $path
+ * @param $order
+ * @return Closure|mixed|object
+ */
+function getArticleByTagId($tagId, $size = 10, $page = 1, $path = "/tag/list-[PAGE].html", $order = ['push_time', 'desc'])
+{
+
+    return ArticleListModel()->with('article_tag')->whereHas('article_tag', function ($query) use ($tagId) {
+
+
+        $query->where('tag_id', $tagId);
+
+    })->orderBy($order[0], $order[1])->seoPaginate(15, ['*'], $page,
+        "/tag/" . $tagId . "/list-[PAGE]" . ".html");
+
+}
+
+
 
 

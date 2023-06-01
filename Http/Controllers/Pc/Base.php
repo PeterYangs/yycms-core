@@ -12,16 +12,14 @@ class Base extends YyCms
     {
         parent::__construct();
 
-        \View::addLocation(base_path('theme/demo/pc/view'));
 
-        Paginator::defaultView('pc.paginator');
     }
 
 
     function getViewPath()
     {
 
-        return base_path('theme/demo/pc/view');
+        return base_path('theme/'.getOption('theme','demo').'/pc/view');
     }
 
 
