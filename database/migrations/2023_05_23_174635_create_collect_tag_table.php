@@ -13,6 +13,7 @@ return new class extends Migration {
     public function up()
     {
         Schema::create('collect_tag', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->timestamps();
             $table->string('title')->unique()->comment('描述');
