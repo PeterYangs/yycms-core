@@ -2081,7 +2081,7 @@ function autoAssociationObject(Article $article): bool
 
 
     //是否已经设置了关联
-    $isFind = Article::whereRaw("not EXISTS(select *  from article_association_object  WHERE `slave` = article.id)")->where('id', $article->id)->first();
+    $isFind = Article::whereRaw(" EXISTS(select *  from article_association_object  WHERE `slave` = article.id)")->where('id', $article->id)->first();
 
     if ($isFind) {
 

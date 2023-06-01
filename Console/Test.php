@@ -79,7 +79,7 @@ class Test extends Command
 //
 //
         $ag->fill([
-            'title' => '原神官方版',
+            'title' => '原神官方版啊11',
             'category_id' => 6,
             'content' => '<p>这是一个内容休闲益智游戏</p>',
             'img' => 'test_img/7.png'
