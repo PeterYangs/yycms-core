@@ -102,6 +102,9 @@ class YyCmsServiceProvider extends ServiceProvider
             \View::share('isBeian', getOption('is_beian'));
 
 
+            loadTheme();
+
+
         } catch (\Exception $exception) {
 
         }

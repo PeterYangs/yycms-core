@@ -2190,5 +2190,18 @@ function getArticleByTagId($tagId, $size = 10, $page = 1, $path = "/tag/list-[PA
 }
 
 
+function loadTheme()
+{
+
+    if (file_exists(base_path('theme/' . getOption("theme", 'demo') . '/function.php'))) {
+
+
+        include base_path('theme/' . getOption("theme", 'demo') . '/function.php');
+
+    }
+
+}
+
+
 
 
