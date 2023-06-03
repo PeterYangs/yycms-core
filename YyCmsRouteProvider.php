@@ -44,6 +44,10 @@ class YyCmsRouteProvider extends ServiceProvider
 
         });
 
+        Route::pattern('id','[0-9]+');
+        Route::pattern('page','[0-9]+');
+        Route::pattern('order','[0-9]+');
+
 
 
 
