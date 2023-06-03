@@ -2,6 +2,7 @@
 
 namespace Ycore;
 
+use Illuminate\Pagination\Paginator;
 use Ycore\Console\AutoAssociationObject;
 use Ycore\Console\CreateRoute;
 use Ycore\Models\Options;
@@ -105,6 +106,30 @@ class YyCmsServiceProvider extends ServiceProvider
             loadTheme();
 
 
+            if (!app()->runningInConsole()) {
+
+                //移动端
+                if (request()->host() === parse_url(getOption('m_domain'))['host']) {
+
+                    \View::addLocation(base_path('theme/' . getOption('theme', 'demo') . '/mobile/view'));
+
+                } else {
+
+                    \View::addLocation(base_path('theme/' . getOption('theme', 'demo') . '/pc/view'));
+
+                }
+
+                if (\View::exists('paginator')) {
+
+                    Paginator::defaultView('paginator');
+
+
+                }
+
+
+            }
+
+
         } catch (\Exception $exception) {
 
         }
@@ -125,11 +150,6 @@ class YyCmsServiceProvider extends ServiceProvider
     public function register()
     {
 
-
-//        $this->mergeConfigFrom(__DIR__."/config/yycms.php",'yycms');
-
-
-//        $this->loadMigrationsFrom(__DIR__."/database/schema");
 
         $this->app->bind(SearchInterface::class, function ($app) {
 

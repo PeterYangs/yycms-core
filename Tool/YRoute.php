@@ -27,15 +27,6 @@ class YRoute
 
         \Route::domain($domain)->middleware([UserAccess::class, ArticleSpecial::class])->group(function () use ($callback) {
 
-            \View::addLocation(base_path('theme/' . getOption('theme', 'demo') . '/pc/view'));
-
-
-            if (\View::exists('paginator')) {
-
-                Paginator::defaultView('paginator');
-
-            }
-
 
             \Route::get("/", make(\Ycore\Http\Controllers\Pc\Index::class, 'index'))->middleware(StaticRender::class)->name('pc.index');
 
@@ -46,9 +37,6 @@ class YRoute
             } catch (\Exception $exception) {
 
             }
-
-
-//            dd(base_path('theme/demo/pc/route/route.php'));
 
 
             if (file_exists(base_path('theme/' . getOption('theme', 'demo') . '/pc/route/route.php'))) {
@@ -71,14 +59,6 @@ class YRoute
     {
 
 
-        \View::addLocation(base_path('theme/' . getOption('theme', 'demo') . '/mobile/view'));
-
-        if (\View::exists('paginator')) {
-
-            Paginator::defaultView('paginator');
-
-        }
-
         try {
 
             $domain = parse_url(getOption('m_domain'))['host'] ?? "";
@@ -90,6 +70,7 @@ class YRoute
 
 
         \Route::domain($domain)->middleware([UserAccess::class, ArticleSpecial::class])->group(function () use ($callback) {
+
 
             \Route::get("/", make(\Ycore\Http\Controllers\Mobile\Index::class, 'index'))->middleware(StaticRender::class)->name('mobile.index');
 
