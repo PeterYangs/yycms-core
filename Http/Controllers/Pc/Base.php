@@ -12,6 +12,7 @@ class Base extends YyCms
     {
         parent::__construct();
 
+        \View::addLocation(base_path('theme/' . getOption('theme', 'demo') . '/pc/view'));
 
     }
 
@@ -19,7 +20,7 @@ class Base extends YyCms
     function getViewPath()
     {
 
-        return base_path('theme/'.getOption('theme','demo').'/pc/view');
+        return base_path('theme/' . getOption('theme', 'demo') . '/pc/view');
     }
 
 

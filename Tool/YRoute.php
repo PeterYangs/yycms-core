@@ -15,9 +15,6 @@ class YRoute
     {
 
 
-        \View::addLocation(base_path('theme/' . getOption('theme', 'demo') . '/pc/view'));
-
-
         if (\View::exists('paginator')) {
 
             Paginator::defaultView('paginator');
@@ -71,7 +68,6 @@ class YRoute
     public static function mobileRoute($callback)
     {
 
-        \View::addLocation(base_path('theme/' . getOption('theme', 'demo') . '/mobile/view'));
 
         if (\View::exists('paginator')) {
 
