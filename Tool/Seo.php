@@ -67,6 +67,16 @@ class Seo
         $title = "";
 
 
+        $hookTitle = Hook::applyFilter('seo_title_detail', $article, $article->category);
+
+
+        if ($hookTitle !== null && $hookTitle !== "") {
+
+
+            return $hookTitle;
+        }
+
+
         //游戏和应用标题设置
         if (getObjPlus($article, 'category.pid') === config('category.game') || getObjPlus($article,
                 'category.pid') === config('category.app')) {
@@ -271,11 +281,12 @@ class Seo
      * @param array $expandData
      */
     static function isChangeArticleSeoTitle(
-        int $articleId,
-        array $articleData,
+        int    $articleId,
+        array  $articleData,
         string $expandTableName,
-        array $expandData
-    ) {
+        array  $expandData
+    )
+    {
 
         $seoTitleChangeItem = SeoTitleChange::first();
 

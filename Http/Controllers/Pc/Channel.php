@@ -17,7 +17,8 @@ class Channel extends Base
      */
     function channel()
     {
-        $cid = request()->get('cid');
+        $cid = request()->route('cid');
+
 
         $category = Category::where('id', $cid)->with('category_route')->firstOrFail();
 

@@ -14,4 +14,7 @@ the_image  文章头图过滤器
 参数2  $img_domain  图片域名
 返回值   完整的图片链接
 
-//
+seo_title_detail  文章详情seo标题生成过滤器（注意，只在生成新文章时生效，返回null则按默认seo规则生成）
+参数1 $article  文章对象
+参数2 $category 分类对象
+返回值   seo标题

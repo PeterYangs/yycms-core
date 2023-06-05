@@ -2190,6 +2190,11 @@ function getArticleByTagId($tagId, $size = 10, $page = 1, $path = "/tag/list-[PA
 }
 
 
+/**
+ * 加载当前主题的function
+ * @return void
+ * @throws JsonException
+ */
 function loadTheme()
 {
 
@@ -2203,5 +2208,22 @@ function loadTheme()
 }
 
 
+/**
+ * 加载自定义视图
+ * @param string $view
+ * @param string $seoTitle
+ * @param string $seoKeyword
+ * @param string $seoDesc
+ * @param $data
+ * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+ */
+function customView(string $view, string $seoTitle = "", string $seoKeyword = "", string $seoDesc = "", $data = [])
+{
+
+    $data['_seo_title'] = $seoTitle;
+    $data['_seo_keyword'] = $seoKeyword;
+    $data['_seo_desc'] = $seoDesc;
 
 
+    return view($view, $data);
+}

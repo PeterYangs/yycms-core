@@ -57,7 +57,7 @@ class CreateRoute extends Command
                         }
 
 
-                        $pcRoute .= "Route::get('/{$vv->route}', make(\Ycore\Http\Controllers\Pc\Detail::class , 'detail', ['cid' => {$vo->id},'is_auto'=>1]))";
+                        $pcRoute .= "Route::get('/{$vv->route}', make(\Ycore\Http\Controllers\Pc\Detail::class , 'detail', []))->setDefaults(['cid' => {$vo->id},'is_auto'=>1,'_type'=>'detail'])";
 
                     }
 
@@ -68,7 +68,7 @@ class CreateRoute extends Command
                             \Cache::put('category:detail:mobile_' . $vo->id, $vv->route);
                         }
 
-                        $mobileRoute .= "Route::get('/{$vv->route}', make(\Ycore\Http\Controllers\Mobile\Detail::class , 'detail', ['cid' => {$vo->id},'is_auto'=>1]))";
+                        $mobileRoute .= "Route::get('/{$vv->route}', make(\Ycore\Http\Controllers\Mobile\Detail::class , 'detail', []))->setDefaults(['cid' => {$vo->id},'is_auto'=>1,'_type'=>'detail'])";
 
                     }
 
@@ -87,7 +87,7 @@ class CreateRoute extends Command
                         }
 
 
-                        $pcRoute .= "Route::get('/{$vv->route}', make(\Ycore\Http\Controllers\Pc\Channel::class , 'channel', ['cid' => {$vo->id},'is_auto'=>1]))";
+                        $pcRoute .= "Route::get('/{$vv->route}', make(\Ycore\Http\Controllers\Pc\Channel::class , 'channel', []))->setDefaults(['cid' => {$vo->id},'is_auto'=>1,'_type'=>'channel'])";
 
                     }
 
@@ -99,7 +99,7 @@ class CreateRoute extends Command
                         }
 
 
-                        $mobileRoute .= "Route::get('/{$vv->route}', make(\Ycore\Http\Controllers\Mobile\Channel::class , 'channel', ['cid' => {$vo->id},'is_auto'=>1]))";
+                        $mobileRoute .= "Route::get('/{$vv->route}', make(\Ycore\Http\Controllers\Mobile\Channel::class , 'channel', []))->setDefaults(['cid' => {$vo->id},'is_auto'=>1,'_type'=>'channel'])";
 
                     }
 

@@ -13,7 +13,7 @@ class Detail extends Base
 
         $id = request()->route('id', 0);
 
-        $cid = (int)request()->input('cid');
+        $cid = (int)request()->route('cid');
 
 
         $item = ArticleDetailModel()->where('id', $id)

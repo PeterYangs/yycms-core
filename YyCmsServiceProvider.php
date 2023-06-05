@@ -55,6 +55,8 @@ class YyCmsServiceProvider extends ServiceProvider
     public function boot()
     {
 
+        //加载公共模板
+        \View::addLocation(__DIR__."/Http/View");
 
         $this->publishes([
             __DIR__ . '/config/yycms.php' => config_path('yycms.php'),

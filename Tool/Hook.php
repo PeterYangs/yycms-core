@@ -21,7 +21,6 @@ class Hook
 
         if (array_key_exists($filterName, self::$filters)) {
 
-//            dd($arg);
 
             return call_user_func_array(self::$filters[$filterName], $arg);
         }
