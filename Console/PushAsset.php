@@ -3,6 +3,7 @@
 namespace Ycore\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\File;
 use Symfony\Component\Process\Process;
 use Ycore\Events\ArticleUpdate;
 use Ycore\Models\Article;
@@ -37,10 +38,50 @@ class PushAsset extends Command
 
         $theme = $this->argument('theme');
 
+        if (!File::exists('theme/' . $theme)) {
 
-//        dd($theme);
 
-//        \Storage::disk()
+            $this->error("主题:" . $theme . ",不存在！");
+
+            return 0;
+        }
+
+
+        $pcThemePath = base_path('theme/' . $theme . "/pc/asset");
+
+        $mobileThemePath = base_path('theme/' . $theme . "/mobile/asset");
+
+
+        File::deleteDirectories(base_path('public/pc'));
+        File::deleteDirectories(base_path('public/mobile'));
+
+
+        foreach (File::allFiles($pcThemePath) as $file) {
+
+
+            if (!File::exists(base_path('public/pc') . "/" . $file->getRelativePath())) {
+
+                mkdir(base_path('public/pc') . "/" . $file->getRelativePath(), 0755, true);
+            }
+
+
+            File::put(base_path('public/pc') . "/" . $file->getRelativePath() . "/" . $file->getFilename(), $file->getContents());
+
+        }
+
+
+        foreach (File::allFiles($mobileThemePath) as $file) {
+
+
+            if (!File::exists(base_path('public/mobile') . "/" . $file->getRelativePath())) {
+
+                mkdir(base_path('public/mobile') . "/" . $file->getRelativePath(), 0755, true);
+            }
+
+
+            File::put(base_path('public/mobile') . "/" . $file->getRelativePath() . "/" . $file->getFilename(), $file->getContents());
+
+        }
 
 
         return 0;
