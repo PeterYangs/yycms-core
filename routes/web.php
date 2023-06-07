@@ -9,9 +9,114 @@ use Ycore\Tool\YRoute;
 
 YRoute::pcRoute(function () {
 
+
+    //网站地图
+    Route::get('/sitemap/{sitemap}.xml', function ($sitemap) {
+
+
+        try {
+
+            return response()->file(storage_path('sitemap/pc/' . $sitemap . ".xml"),
+                ['content-type' => 'text/xml; charset=utf-8']);
+
+        } catch (\Exception $exception) {
+
+
+            abort(404);
+        }
+
+
+    })->where(['sitemap' => '[0-9a-z]+']);
+
+
+    Route::get("/sitemap{index}.xml", function ($index) {
+
+
+        try {
+
+            return response()->file(storage_path('sitemap/pc/sitemap' . $index . ".xml"),
+                ['content-type' => 'text/xml; charset=utf-8']);
+
+        } catch (\Exception $exception) {
+
+
+            abort(404);
+        }
+
+
+    })->where(['index' => '[0-9]+']);
+
+
+    //搜狗验证文件
+    Route::get('/sogousiteverification.txt', function () {
+
+        return response()->file(public_path('sougou/pc/sogousiteverification.txt'));
+    });
+
+
+    //全站链接
+    Route::get('/links/links.txt', function () {
+
+
+        return response()->file(storage_path('link/pc.txt'), ['content-type' => 'text/plain']);
+    });
+
+
 });
 
 YRoute::mobileRoute(function () {
+
+    //网站地图
+    Route::get('/sitemap/{sitemap}.xml', function ($sitemap) {
+
+
+        try {
+
+
+            return response()->file(storage_path('sitemap/mobile/' . $sitemap . ".xml"),
+                ['content-type' => 'text/xml; charset=utf-8']);
+
+        } catch (\Exception $exception) {
+
+
+            abort(404);
+        }
+
+
+    })->where(['sitemap' => '[0-9a-z]+']);
+
+
+    Route::get("/sitemap{index}.xml", function ($index) {
+
+
+        try {
+
+            return response()->file(storage_path('sitemap/mobile/sitemap' . $index . ".xml"),
+                ['content-type' => 'text/xml; charset=utf-8']);
+
+        } catch (\Exception $exception) {
+
+
+            abort(404);
+        }
+
+
+    })->where(['index' => '[0-9]+']);
+
+
+    //搜狗验证文件
+    Route::get('/sogousiteverification.txt', function () {
+
+        return response()->file(public_path('sougou/mobile/sogousiteverification.txt'));
+    });
+
+    //全站链接
+    Route::get('/links/links.txt', function () {
+
+
+        return response()->file(storage_path('link/mobile.txt'), ['content-type' => 'text/plain']);
+    });
+
 
 });
 
