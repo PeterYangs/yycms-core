@@ -87,7 +87,8 @@ class Article extends Base
         'status',
         'push_status',
         'special_id',
-        'select_order'
+        'select_order',
+        'key'
     ];
 
     protected $appends = ['ex'];
@@ -192,6 +193,28 @@ class Article extends Base
         );
 
     }
+
+
+    function key(): Attribute
+    {
+        return new Attribute(
+
+            set: function ($value) {
+
+                if (!$value) {
+
+
+                    return null;
+                }
+
+
+                return $value;
+
+            }
+
+        );
+    }
+
 
     function category()
     {
