@@ -199,12 +199,13 @@ class Article extends Base
     {
         return new Attribute(
 
-            set: function ($value) {
+            //没有设置key就默认设置成主键id
+            set: function ($value, $attrs) {
 
                 if (!$value) {
 
 
-                    return null;
+                    return $attrs['id'];
                 }
 
 

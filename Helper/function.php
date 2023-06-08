@@ -792,7 +792,8 @@ function getDetailUrl($item): string
 
     $id = $item->id;
 
-    $detail_name = str_replace('{id}', $id, $detail_name);
+
+    $detail_name = str_replace('{key}', $item->key, str_replace('{id}', $id, $detail_name));
 
     return $prefix . '/' . $detail_name;
 
@@ -847,7 +848,7 @@ function getDetailUrlForCli(Article $item, string $mode = 'pc'): string
 
     $id = $item->id;
 
-    $detail_name = str_replace('{id}', $id, $detail_name);
+    $detail_name = str_replace('{key}', $item->key, str_replace('{id}', $id, $detail_name));
 
     return $prefix . '/' . $detail_name;
 

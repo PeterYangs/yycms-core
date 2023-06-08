@@ -108,7 +108,7 @@ class CategoryRouteController extends Controller
     {
 
 
-        \Artisan::call('CreateChannelRoute');
+        \Artisan::call('CreateRoute');
 
         return Json::code(1, 'success');
     }

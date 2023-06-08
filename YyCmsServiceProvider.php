@@ -6,6 +6,7 @@ use Illuminate\Pagination\Paginator;
 use Ycore\Console\AutoAssociationObject;
 use Ycore\Console\CreateRoute;
 use Ycore\Console\PushAsset;
+use Ycore\Console\SyncArticleKey;
 use Ycore\Models\Options;
 use Ycore\Service\Ai\ChatGpt;
 use Ycore\Service\Search\Search;
@@ -57,7 +58,7 @@ class YyCmsServiceProvider extends ServiceProvider
     {
 
         //加载公共模板
-        \View::addLocation(__DIR__."/Http/View");
+        \View::addLocation(__DIR__ . "/Http/View");
 
         $this->publishes([
             __DIR__ . '/config/yycms.php' => config_path('yycms.php'),
@@ -203,45 +204,46 @@ class YyCmsServiceProvider extends ServiceProvider
     {
 
 
-        if ($this->app->runningInConsole()) {
+//        if ($this->app->runningInConsole()) {
 
-            $this->commands([
-                Test2::class,
-                AutoPush::class,
-                BatchPush::class,
-                ChangePushTime::class,
-                CleanCache::class,
-                CleanUserAccess::class,
-                CreateAdmin::class,
-                CreateArticle::class,
-                CreateChannelRoute::class,
-                CreateGitHookScript::class,
-                FindTag::class,
-                GetAccess::class,
-                GitCheckoutHook::class,
-                HomeStatic::class,
-                MakeAllLink::class,
-                MakeXml::class,
-                MatchApk::class,
-                MysqlBackup::class,
-                PushCustom::class,
-                PushRandomStoreToArticle::class,
-                SearchAccess::class,
-                SetSeoTitle::class,
-                Spider::class,
-                SpiderTable::class,
-                StaticTool::class,
-                SyncExpand::class,
-                Test::class,
-                TimingArticlePush::class,
-                Init::class,
-                AutoAssociationObject::class,
-                CreateRoute::class,
-                PushAsset::class
+        $this->commands([
+            Test2::class,
+            AutoPush::class,
+            BatchPush::class,
+            ChangePushTime::class,
+            CleanCache::class,
+            CleanUserAccess::class,
+            CreateAdmin::class,
+            CreateArticle::class,
+            CreateChannelRoute::class,
+            CreateGitHookScript::class,
+            FindTag::class,
+            GetAccess::class,
+            GitCheckoutHook::class,
+            HomeStatic::class,
+            MakeAllLink::class,
+            MakeXml::class,
+            MatchApk::class,
+            MysqlBackup::class,
+            PushCustom::class,
+            PushRandomStoreToArticle::class,
+            SearchAccess::class,
+            SetSeoTitle::class,
+            Spider::class,
+            SpiderTable::class,
+            StaticTool::class,
+            SyncExpand::class,
+            Test::class,
+            TimingArticlePush::class,
+            Init::class,
+            AutoAssociationObject::class,
+            CreateRoute::class,
+            PushAsset::class,
+            SyncArticleKey::class
 
-            ]);
+        ]);
 
-        }
+//        }
 
     }
 

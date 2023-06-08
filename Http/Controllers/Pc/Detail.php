@@ -13,11 +13,27 @@ class Detail extends Base
 
         $id = request()->route('id', 0);
 
+        $key = request()->route('key', "");
+
+        if ($id) {
+
+            $query = ArticleDetailModel()->where('id', $id);
+        }
+
+        if ($key) {
+
+            $query = ArticleDetailModel()->where('key', $key);
+        }
+
+        if (!$id && !$key) {
+
+            abort(404);
+        }
+
         $cid = (int)request()->route('cid');
 
 
-        $item = ArticleDetailModel()->where('id', $id)
-            ->with('article_tag')
+        $item = $query->with('article_tag')
             ->where('category_id', $cid)
             ->firstOrFail();
 
