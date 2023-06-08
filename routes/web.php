@@ -230,5 +230,5 @@ Route::get("search-article-baidu-check", function () {
 Route::get('beian', function () {
 
 
-    return view('beian');
+    return view('_beian');
 });
