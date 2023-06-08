@@ -205,7 +205,7 @@ class YyCmsServiceProvider extends ServiceProvider
     {
 
 
-        if ($this->app->runningInConsole()) {
+//        if ($this->app->runningInConsole()) {
 
             $this->commands([
                 Test2::class,
@@ -245,7 +245,7 @@ class YyCmsServiceProvider extends ServiceProvider
 
             ]);
 
-        }
+//        }
 
     }
 
