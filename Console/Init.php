@@ -82,6 +82,15 @@ class Init extends Command
 
             $this->info("数据库初始化成功！");
 
+            $is_test = $this->ask("需要生成测试数据吗？(y/n)", "y");
+
+            if (strtolower($is_test) === "y") {
+
+
+                $this->call("create:article", ['num' => 30]);
+
+            }
+
         }
 
 
@@ -134,18 +143,6 @@ class Init extends Command
         $this->call("CreateRoute");
 
         $this->info("路由文件生成成功！");
-
-
-
-
-        $is_test = $this->ask("需要生成测试数据吗？(y/n)", "y");
-
-        if (strtolower($is_test) === "y") {
-
-
-            $this->call("create:article", ['num' => 30]);
-
-        }
 
 
         $bar = $this->output->createProgressBar(5);
