@@ -9,6 +9,7 @@
 namespace Ycore\Http\Controllers\Admin;
 
 
+use Illuminate\Support\Facades\Artisan;
 use Ycore\Tool\Json;
 use Illuminate\Http\Request;
 
@@ -80,7 +81,7 @@ class SiteSettingController extends AuthCheckController
         foreach ($list as $value) {
 
 
-            $data[$value] = getOption($value,"");
+            $data[$value] = getOption($value, "");
 
         }
 
@@ -95,8 +96,7 @@ class SiteSettingController extends AuthCheckController
         $is_beian = \request()->input('is_beian', 0);
 
 
-
-        setOption('is_beian',$is_beian);
+        setOption('is_beian', $is_beian);
 
 
         \Artisan::call('HomeStatic');
@@ -104,6 +104,47 @@ class SiteSettingController extends AuthCheckController
 
         return Json::code(1, 'success');
 
+    }
+
+
+    function themeList()
+    {
+
+
+        return Json::code(1, "success", themeList());
+    }
+
+
+    function switchTheme()
+    {
+
+        $theme = \request()->input('theme');
+
+        if (!$theme) {
+
+            return Json::code(2, "请填写主题！");
+        }
+
+        $themes = themeList();
+
+        if (!in_array($theme, $themes)) {
+
+            return Json::code(2, "该主题不存在！");
+        }
+
+        Artisan::call("SwitchTheme " . $theme);
+
+
+        return Json::code(1, 'success');
+
+    }
+
+
+    function theme()
+    {
+
+
+        return Json::code(1, 'success', getOption('theme', 'demo'));
     }
 
 

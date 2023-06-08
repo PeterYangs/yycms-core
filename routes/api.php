@@ -235,6 +235,9 @@ Route::middleware([])->group(function () {
             Route::post('settingUpdate', [SiteSettingController::class, 'settingUpdate']);
             Route::any('getSetting', [SiteSettingController::class, 'getSetting']);
             Route::post('setBeian', [SiteSettingController::class, 'setBeian']);
+            Route::post('themeList', [SiteSettingController::class, 'themeList']);
+            Route::post('switchTheme', [SiteSettingController::class, 'switchTheme']);
+            Route::post('theme', [SiteSettingController::class, 'theme']);
         });
 
 

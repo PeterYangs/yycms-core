@@ -1,6 +1,7 @@
 <?php
 
 
+use Illuminate\Support\Facades\File;
 use Ycore\Events\ArticleUpdate;
 use Ycore\Http\Controllers\Admin\CategoryController;
 use Ycore\Models\Article;
@@ -2227,3 +2228,24 @@ function customView(string $view, string $seoTitle = "", string $seoKeyword = ""
 
     return view($view, $data);
 }
+
+
+/**
+ * 主题列表
+ * @return array
+ */
+function themeList(): array
+{
+
+
+    $dirs = File::directories(base_path('theme'));
+
+
+    return array_map(function ($item) {
+
+
+        return basename($item);
+    }, $dirs);
+
+}
+

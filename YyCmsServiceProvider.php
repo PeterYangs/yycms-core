@@ -5,7 +5,9 @@ namespace Ycore;
 use Illuminate\Pagination\Paginator;
 use Ycore\Console\AutoAssociationObject;
 use Ycore\Console\CreateRoute;
+use Ycore\Console\NewTheme;
 use Ycore\Console\PushAsset;
+use Ycore\Console\SwitchTheme;
 use Ycore\Models\Options;
 use Ycore\Service\Ai\ChatGpt;
 use Ycore\Service\Search\Search;
@@ -57,7 +59,7 @@ class YyCmsServiceProvider extends ServiceProvider
     {
 
         //加载公共模板
-        \View::addLocation(__DIR__."/Http/View");
+        \View::addLocation(__DIR__ . "/Http/View");
 
         $this->publishes([
             __DIR__ . '/config/yycms.php' => config_path('yycms.php'),
@@ -237,7 +239,9 @@ class YyCmsServiceProvider extends ServiceProvider
                 Init::class,
                 AutoAssociationObject::class,
                 CreateRoute::class,
-                PushAsset::class
+                PushAsset::class,
+                NewTheme::class,
+                SwitchTheme::class,
 
             ]);
 
