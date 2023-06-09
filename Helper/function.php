@@ -462,43 +462,27 @@ function getArticleByCategoryName(
 //	) * RAND() + (SELECT MIN(id) FROM article)");
 
 
-//        $maxId=Article::where('push_time',">","2022-07-10 00:00:00")->max('id');
-//        $minId=Article::where('push_time',">","2022-07-10 00:00:00")->min('id');
+        $maxId = Cache::remember("article_max_id", now()->addDays(7), function () {
 
 
-//        $maxId=16000;
+            return Article::max('id');
+
+        });
+
+        $minId = Cache::remember("article_min_id", now()->addDays(7), function () {
 
 
-//        $maxId = Cache::remember("article_max_id", 0, function () {
-//
-//
-//            return Article::max('id');
-//
-//        });
-//
-//
-//        $minId = Cache::remember("article_min_id", 0, function () {
-//
-//
-//            return Article::min('id');
-//
-//        });
-//
-//
-//        $query->join(
-//            DB::raw("(SELECT ROUND(RAND() * ( {$maxId} - {$minId} )+ $minId ) AS xid) as t2"),
-//            'article.id', '>=', 't2.xid'
-//        );
+            return Article::min('id');
+
+        });
+
+        $query->join(
+            DB::raw("(SELECT ROUND(RAND() * ( {$maxId} - {$minId} )+ $minId ) AS xid) as t2"),
+            'article.id', '>=', 't2.xid'
+        );
 
 
-//        $query->where('id',">",$randomId);
-
-//        $
-
-
-//        $query->where('push_time',">","2022-07-10 00:00:00");
-
-        $query->inRandomOrder();
+//        $query->inRandomOrder();
 
 
     } else {
