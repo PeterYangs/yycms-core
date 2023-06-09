@@ -1539,8 +1539,6 @@ function getExGameList(Article $article, int $limit = 0): \Illuminate\Database\E
 function getExGameListWithPage(Article $article, string $pageUrl = "", int $page = 1, int $size = 10)
 {
 
-//    $query = ArticleListModel()->whereIn('id', array_column(getObjPlus($article, 'ex.association_object'), 'id'));
-
 
     $mainId = $article->id;
 
@@ -1562,7 +1560,7 @@ function getExGameListWithPage(Article $article, string $pageUrl = "", int $page
 
 
 /**
- * 获取文章相关新闻(根据tag和单一obj查询)
+ * 获取文章相关文章(根据tag和单一obj查询)
  * Create by Peter Yang
  * 2022-08-05 20:02:12
  * @param Article $article
@@ -1596,11 +1594,17 @@ function getRelated(Article $article, array|int|string $categoryName, int $limit
         $obj
     ) {
 
-        $query->whereIn('id', ArticleTag::whereIn("tag_id", $tagList)->where('article_id', '!=',
-            $article->id)->get()->pluck('article_id')->all())->orWhereRaw('EXISTS(select * from ' . $ex_table . ' where article.id = ' . $ex_table . '.article_id and ' . config('static.news_game_field') . ' = ?)',
-            [$article->id]);
+        //查询其他文章中是否有关联当前文章
+        $query->whereRaw('id in (SELECT ' . $ex_table . '.article_id FROM ' . $ex_table . ' WHERE ' . config('static.news_game_field') . ' = ? )', [$article->id]);
 
-        //查询绑定同一个(游戏/应用)的文章
+        //查找同一个标签的文章
+        if (count($tagList) > 0) {
+
+            $query->orWhereRaw("id in (select article_tag.article_id from article_tag where article_tag.tag_id in (" . join(",", $tagList) . ") and article_tag.article_id != " . $article->id . ")");
+        }
+
+
+        //查询当前文章绑定的文章是否也被其他文章绑定
         if ($obj) {
 
             $query->orwhereRaw('EXISTS(select * from ' . $ex_table . ' where article.id = ' . $ex_table . '.article_id and ' . config('static.news_game_field') . ' = ?)',
@@ -1621,17 +1625,23 @@ function getRelated(Article $article, array|int|string $categoryName, int $limit
  * @param Article $article
  * @param int $categoryId
  * @param int $limit
- * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+ * @return \Illuminate\Support\Collection|\Tightenco\Collect\Support\Collection
  */
 function getRelatedByTag(Article $article, int|string|array $categoryName, int $limit = 5)
 {
 
     $tagList = $article->article_tag->pluck('tag_id')->all();
 
+    if (count($tagList) <= 0) {
 
-    $query = ArticleListModel()->where('id', "!=", $article->id)->whereIn('id',
-        ArticleTag::whereIn("tag_id", $tagList)->where('article_id', '!=',
-            $article->id)->get()->pluck('article_id')->all())->limit($limit);
+
+        return collect([]);
+    }
+
+
+    $query = ArticleListModel()->where('id', "!=", $article->id)
+        ->whereRaw("id in (select article_tag.article_id from article_tag where article_tag.tag_id in (" . join(",", $tagList) . ") and article_tag.article_id != " . $article->id . ")")
+        ->limit($limit);
 
 
     $category = getCategoryIds($categoryName);
