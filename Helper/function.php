@@ -2243,3 +2243,86 @@ function themeList(): array
 
 }
 
+
+/**
+ * 是否显示首页
+ * @param $paginator
+ * @return bool
+ */
+function showFirstPage($paginator): bool
+{
+
+
+    return !$paginator->onFirstPage();
+}
+
+
+/**
+ * 是否显示最后一页
+ * @param $paginator
+ * @return bool
+ */
+function showLastPage($paginator): bool
+{
+
+
+    return $paginator->lastPage() !== $paginator->currentPage();
+}
+
+
+/**
+ * 渲染页码
+ * @param $paginator
+ * @param  $showSize
+ *
+ */
+function viewPage($paginator, $showSize = 8): \Tightenco\Collect\Support\Collection|\Illuminate\Support\Collection
+{
+
+
+    //最大页码数
+    $maxPage = ceil($paginator->total() / $paginator->perPage());
+
+
+    if ($paginator->currentPage() < $showSize) {
+
+        //显示的起始页码
+        $startPage = 1;
+
+    } else {
+
+        $startPage = ((int)($paginator->currentPage() / $showSize)) * $showSize;
+
+    }
+
+
+    if ($startPage === $paginator->currentPage() && ($startPage - 1) !== 0) {
+
+        $startPage--;
+    }
+
+
+    $add = $startPage + $showSize;
+
+
+    if ($add > $maxPage) {
+
+
+        $add = $maxPage;
+    }
+
+
+    $list = \collect([]);
+
+    for ($i = $startPage; $i <= $add; $i++) {
+
+
+        $list->push($i);
+
+    }
+
+
+    return $list;
+}
+
+
