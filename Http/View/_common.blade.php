@@ -51,6 +51,7 @@
     </script>
 @endif
 
+
 {{--js隐藏和设备跳转--}}
 @if(request()->host() === parse_url(getOption('m_domain'))['host'])
 
@@ -61,7 +62,7 @@
 
         if (isAndroid == true || isiOS == true) {
         } else {
-            window.location.href = '{{getOption("domain").request()->getRequestUri()}}';
+            window.location.href = '{{getOption("domain").(parse_url(request()->fullUrlWithoutQuery('admin_key'))['path']??"").((parse_url(request()->fullUrlWithoutQuery('admin_key'))['query']??"")?"?".parse_url(request()->fullUrlWithoutQuery('admin_key'))['query']??"":"")}}';
         }
     </script>
 
@@ -105,7 +106,7 @@
         var uaTest = /Android|webOS|iPhone|Windows Phone|ucweb|iPod|BlackBerry|ucbrowser|SymbianOS/i.test(navigator.userAgent.toLowerCase());
         var touchTest = 'ontouchend' in document;
         if (uaTest && touchTest) {
-            window.location.href = '{{getOption("m_domain").request()->getRequestUri()}}';
+            window.location.href = '{{getOption("m_domain").(parse_url(request()->fullUrlWithoutQuery('admin_key'))['path']??"").((parse_url(request()->fullUrlWithoutQuery('admin_key'))['query']??"")?"?".parse_url(request()->fullUrlWithoutQuery('admin_key'))['query']??"":"")}}';
         }
     </script>
 
