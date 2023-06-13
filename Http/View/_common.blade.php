@@ -1,3 +1,4 @@
+{{--详情页的点击计数--}}
 @if(isset($data) && $data instanceof \Ycore\Models\Article)
 
     <script>
@@ -15,6 +16,7 @@
 
 @endif
 
+{{--备案页面--}}
 @if(request()->path() === "/" && getOption('is_beian'))
     <script>
 
@@ -49,7 +51,7 @@
     </script>
 @endif
 
-
+{{--js隐藏和设备跳转--}}
 @if(request()->host() === parse_url(getOption('m_domain'))['host'])
 
     <script>
@@ -143,6 +145,35 @@
 
     @endif
 
+@endif
+
+{{--时间因子--}}
+@if(isset($data) && $data instanceof \Ycore\Models\Article && request()->route('_type') === "detail")
+    <script type="application/ld+json">
+    {
+        "@context": "https://ziyuan.baidu.com/contexts/cambrian.jsonld",
+        "@id": "{{getDetailUrl($data)}}",
+        "title": "{{getSeoTitleForDetail($data)}}-{{getOption('site_name')}}",
+        "images": ["{{getImage($data)}}"],
+        "description": "{{getSeoDescForDetail($data)}}",
+        "pubDate": "{{getPushTime($data,"Y-m-d\TH:i:s")}}",
+        "upDate": "{{date("Y-m-d\TH:i:s",strtotime($data->updated_at))}}"
+    }
+    </script>
+@endif
+
+
+@if(request()->path() === "/")
+    <script type="application/ld+json">
+    {
+        "@context": "https://ziyuan.baidu.com/contexts/cambrian.jsonld",
+        "@id": "{{request()->fullUrl()}}",
+        "title": "{{getOption('seo_title')}}-{{getOption('site_name')}}",
+        "description": "{{getOption('seo_desc')}}",
+        "pubDate": "{{date("Y-m-d\TH:i:s",strtotime(optional(ArticleListModel()->orderBy('push_time','asc')->first())->push_time))}}",
+        "upDate": "{{date("Y-m-d\TH:i:s",strtotime(optional(ArticleListModel()->orderBy("push_time",'desc')->first())->push_time))}}"
+    }
+    </script>
 @endif
 
 
