@@ -77,13 +77,20 @@ class GetAdminStatic extends Command
 
             }
 
+
+            if (!File::exists(public_path('yycms'))) {
+
+
+                mkdir(public_path('yycms'), 0755);
+            }
+
             File::put(public_path('yycms.zip'), $rsp->body());
 
             File::deleteDirectories(public_path('yycms'));
 
-            File::delete(public_path('yycms.zip'));
-
             $this->unzip_file(public_path('yycms.zip'), public_path('yycms'));
+
+            File::delete(public_path('yycms.zip'));
 
 
         }
