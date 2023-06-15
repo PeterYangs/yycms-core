@@ -2,6 +2,7 @@
 
 
 use Illuminate\Support\Facades\File;
+use Ycore\Core\Core;
 use Ycore\Events\ArticleUpdate;
 use Ycore\Http\Controllers\Admin\CategoryController;
 use Ycore\Models\Article;
@@ -2324,5 +2325,18 @@ function viewPage($paginator, $showSize = 8): \Tightenco\Collect\Support\Collect
 
     return $list;
 }
+
+
+/**
+ * 获取核心版本号
+ * @return string
+ */
+function getCoreVersion(): string
+{
+
+    return Core::VERSION;
+}
+
+
 
 
