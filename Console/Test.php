@@ -2,9 +2,11 @@
 
 namespace Ycore\Console;
 
+use Illuminate\Database\Schema\Blueprint;
 use Ycore\Events\WebsitePush;
 use Ycore\Http\Controllers\Admin\CategoryController;
 use Ycore\Models\Article;
+use Ycore\Models\ArticleExpand;
 use Ycore\Tool\ArticleGenerator;
 use Illuminate\Console\Command;
 use Ycore\Tool\ChatGpt;
@@ -34,6 +36,9 @@ class Test extends Command
      */
     public function handle(Ai $ai)
     {
+
+
+
 
 
 //        dd(resolve(Ai::class));
@@ -75,15 +80,15 @@ class Test extends Command
 
 //        dd(123);
 //
-        $ag = new ArticleGenerator();
-//
-//
-        $ag->fill([
-            'title' => '原神官方版啊11',
-            'category_id' => 6,
-            'content' => '<p>这是一个内容休闲益智游戏</p>',
-            'img' => 'test_img/7.png'
-        ], ['size' => "123M"])->create(true, true, true);
+//        $ag = new ArticleGenerator();
+////
+////
+//        $ag->fill([
+//            'title' => '原神官方版啊11',
+//            'category_id' => 6,
+//            'content' => '<p>这是一个内容休闲益智游戏</p>',
+//            'img' => 'test_img/7.png'
+//        ], ['size' => "123M"])->create(true, true, true);
 
 //
 //        $ag->fill([
@@ -96,4 +101,7 @@ class Test extends Command
 
         return 0;
     }
+
+
+
 }

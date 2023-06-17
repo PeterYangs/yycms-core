@@ -82,6 +82,12 @@ class Init extends Command
 
             $this->info("数据库初始化成功！");
 
+            //生成拓展表
+            $this->call("CreateExpandTable");
+
+            $this->info("生成拓展表成功！");
+
+
             $is_test = $this->ask("需要生成测试数据吗？(y/n)", "y");
 
             if (strtolower($is_test) === "y") {

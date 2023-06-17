@@ -4,6 +4,7 @@ namespace Ycore;
 
 use Illuminate\Pagination\Paginator;
 use Ycore\Console\AutoAssociationObject;
+use Ycore\Console\CreateExpandTable;
 use Ycore\Console\CreateRoute;
 use Ycore\Console\GetAdminStatic;
 use Ycore\Console\NewTheme;
@@ -242,6 +243,7 @@ class YyCmsServiceProvider extends ServiceProvider
             NewTheme::class,
             SwitchTheme::class,
             GetAdminStatic::class,
+            CreateExpandTable::class
 
         ]);
 
