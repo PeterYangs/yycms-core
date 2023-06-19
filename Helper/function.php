@@ -13,6 +13,7 @@ use Ycore\Models\Category;
 use Ycore\Models\Collect;
 use Ycore\Models\CollectTag;
 use Ycore\Models\Options;
+use Ycore\Models\Tag;
 use Ycore\Tool\Hook;
 use Ycore\Tool\Json;
 use Ycore\Tool\Seo;
@@ -2146,12 +2147,12 @@ function autoAssociationObject(Article $article): bool
  * 根据标签id查询标签详情
  * @param $tagId
  * @param $notFoundReturn404
- * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|\Ycore\Models\Base|\Ycore\Models\Tag|null
+ * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|\Ycore\Models\Base|Tag|null
  */
 function getTagById($tagId, $notFoundReturn404 = false)
 {
 
-    $tag = \Ycore\Models\Tag::where('id', $tagId)->first();
+    $tag = Tag::where('id', $tagId)->first();
 
     if (!$tag && $notFoundReturn404) {
 
@@ -2335,6 +2336,36 @@ function getCoreVersion(): string
 {
 
     return Core::VERSION;
+}
+
+/**
+ * 获取标签链接
+ * @param Tag $tag
+ * @return string
+ * @throws JsonException
+ */
+function getTagLink(Tag $tag): string
+{
+
+    $platform = "pc";
+
+    if ((parse_url(getOption("m_domain"))['host'] ?? "") === request()->getHost()) {
+
+        $platform = 'mobile';
+    }
+
+    $tagLink = Hook::applyFilter('tag_link', $platform, $tag->id);
+
+    if ($tagLink !== null && $tagLink !== "") {
+
+        return $tagLink;
+
+    } else {
+
+        return url("/tag/" . $tag->id);
+
+    }
+
 }
 
 

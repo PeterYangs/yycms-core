@@ -219,6 +219,7 @@ class Seo
      * @param Article $article
      * @param string $content
      * @return string
+     * @throws \JsonException
      */
     static function setTagLinkForContent(Article $article, string $content)
     {
@@ -263,17 +264,8 @@ class Seo
 
         foreach ($tagList as $value) {
 
-            if (str_replace("." . env('TOP_DOMAIN'), '', request()->getHttpHost()) === config('static.mobile_prefix')) {
 
-
-                $replaceList[$value->title] = route('mobile.tag', ['tag' => $value->id]);
-
-            } else {
-
-
-                $replaceList[$value->title] = route('pc.tag', ['tag' => $value->id]);
-
-            }
+            $replaceList[$value->title] = getTagLink($value);
 
         }
 
