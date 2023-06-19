@@ -230,6 +230,19 @@ class Seo
 
             $tagList = \Cache::get('tag_list', []);
 
+            if (count($tagList) <= 0) {
+
+                $list = Tag::select([
+                    'id',
+                    'title'
+                ])->whereRaw("exists (select * from `article_tag` where `tag`.`id` = `article_tag`.`tag_id` limit 1)")->get();
+
+                \Cache::put('tag_list', $list);
+
+                $tagList = $list;
+
+            }
+
         } else {
 
 
