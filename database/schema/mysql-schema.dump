@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50726
 File Encoding         : 65001
 
-Date: 2023-06-17 16:36:30
+Date: 2023-06-19 10:43:12
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -104,7 +104,7 @@ CREATE TABLE `article_expand` (
   `category_id` int(11) NOT NULL COMMENT '分类id',
   PRIMARY KEY (`id`),
   UNIQUE KEY `article_expand_category_id_unique` (`category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='文章拓展表';
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='文章拓展表';
 
 -- ----------------------------
 -- Records of article_expand
@@ -117,6 +117,7 @@ INSERT INTO `article_expand` VALUES ('14', '2022-06-24 16:12:27', '2022-06-24 16
 INSERT INTO `article_expand` VALUES ('15', '2022-09-08 17:07:18', '2022-09-08 17:07:18', '32');
 INSERT INTO `article_expand` VALUES ('16', '2022-09-23 09:46:55', '2022-09-23 09:46:55', '35');
 INSERT INTO `article_expand` VALUES ('17', '2022-09-24 14:12:46', '2022-09-24 14:12:46', '37');
+INSERT INTO `article_expand` VALUES ('18', '2023-06-19 10:30:30', '2023-06-19 10:30:30', '39');
 
 -- ----------------------------
 -- Table structure for article_expand_detail
@@ -137,7 +138,7 @@ CREATE TABLE `article_expand_detail` (
   `default_condition` varchar(1000) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '默认查询条件,json存储',
   `show_field` varchar(1000) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '选择返回字段,json存储',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='文章拓展详情表';
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='文章拓展详情表';
 
 -- ----------------------------
 -- Records of article_expand_detail
@@ -168,6 +169,7 @@ INSERT INTO `article_expand_detail` VALUES ('52', '2022-09-23 09:46:55', '2022-1
 INSERT INTO `article_expand_detail` VALUES ('53', '2022-09-23 09:46:55', '2022-09-23 09:46:55', '16', 'author', '作者', '1', '', '', '', '', '', '');
 INSERT INTO `article_expand_detail` VALUES ('54', '2022-09-23 09:46:55', '2022-09-23 09:46:55', '16', 'source', '来源', '1', '', '', '', '', '', '');
 INSERT INTO `article_expand_detail` VALUES ('55', '2022-09-24 14:12:46', '2022-11-13 19:17:45', '17', 'association_object', '关联游戏', '7', '', 'Article', '[{\"label\":\"名称\",\"key\":\"title\"}]', '[{\"field\":\"title\",\"condition\":\"like\",\"placeholder\":\"分类名称\"}]', '[{\"field\":\"category.pid\",\"condition\":\"=\",\"value\":\"3\"}]', '[\"id\",\"title\"]');
+INSERT INTO `article_expand_detail` VALUES ('56', '2023-06-19 10:30:30', '2023-06-19 10:30:30', '18', 'association_object', '关联新闻', '7', '', 'Article', '[{\"label\":\"名称\",\"key\":\"title\"},{\"label\":\"分类名称\",\"key\":\"category.name\"}]', '[{\"field\":\"title\",\"condition\":\"like\",\"placeholder\":\"描述\"}]', '[{\"field\":\"category.pid\",\"condition\":\"=\",\"value\":\"20\"}]', '[\"id\",\"title\"]');
 
 -- ----------------------------
 -- Table structure for article_tag
@@ -237,7 +239,7 @@ CREATE TABLE `category` (
   `sort` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序值,越小越靠前',
   `ai_command` varchar(3000) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'ai生成命令',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='分类表';
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='分类表';
 
 -- ----------------------------
 -- Records of category
@@ -271,12 +273,12 @@ INSERT INTO `category` VALUES ('27', '2022-08-31 13:48:03', '2022-08-31 13:48:03
 INSERT INTO `category` VALUES ('28', '2022-09-06 20:10:39', '2022-11-13 17:09:36', '1', '2', '冒险解谜', '', '', '', '冒险解谜手机游戏下载-好玩的冒险解谜手机游戏下载', '冒险解谜热门游戏推荐,冒险解谜游戏,火爆的冒险解谜游戏下载', '60下载为各位玩家提供最全、最热、最好玩的安卓、苹果冒险解谜游戏下载，更多冒险解谜热门游戏，尽在60下载。', '1', '4', '');
 INSERT INTO `category` VALUES ('29', '2022-09-06 20:24:20', '2022-11-13 18:51:11', '3', '2', '影音播放', '', '', '', '热门影音播放应用下载-免费的影音播放应用', '热门影音播放应用下载,免费影音播放应用下载,影音播放应用', '60下载为广大用户提供了最热门、最好用的影音播放应用下载，免费为广大用户提供安卓影音播放app下载！', '1', '1', '');
 INSERT INTO `category` VALUES ('31', '2022-09-06 20:27:33', '2022-11-13 18:52:01', '3', '2', '购物支付', '', '', '', '热门购物支付应用下载-免费的购物支付应用', '热门购物支付应用下载,免费购物支付应用下载,购物支付应用', '60下载为广大用户提供了最热门、最好用的购物支付应用下载，免费为广大用户提供安卓购物支付app下载！', '1', '6', '');
-INSERT INTO `category` VALUES ('32', '2022-09-08 15:52:57', '2022-09-23 09:22:09', '0', '1', '游戏礼包', '', '', '', '', '', '', '0', '0', '');
 INSERT INTO `category` VALUES ('33', '2022-09-23 09:26:01', '2022-11-13 17:10:14', '1', '2', '恋爱养成', '', '', '', '恋爱养成手机游戏下载-好玩的恋爱养成手机游戏下载', '恋爱养成热门游戏推荐,恋爱养成游戏,火爆的恋爱养成游戏下载', '60下载为各位玩家提供最全、最热、最好玩的安卓、苹果恋爱养成游戏下载，更多恋爱养成热门游戏，尽在60下载。', '1', '99', '');
 INSERT INTO `category` VALUES ('34', '2022-09-23 09:29:14', '2022-11-13 18:53:03', '3', '2', '生活服务', '', '', '', '热门生活服务应用下载-免费的生活服务应用', '热门生活服务应用下载,免费生活服务应用下载,生活服务应用', '60下载为广大用户提供了最热门、最好用的生活服务应用下载，免费为广大用户提供安卓生活服务app下载！', '1', '99', '');
 INSERT INTO `category` VALUES ('35', '2022-09-23 09:42:38', '2022-11-13 19:10:47', '0', '1', '应用合集', '', '', '', '应用合集', '应用合集,应用专区,手机应用专区,手机应用合集', '60下载把当下最常用和最热的应用都做成了专题合集的形式，方便广大玩家查阅、下载。', '1', '0', '');
 INSERT INTO `category` VALUES ('36', '2022-09-23 10:10:11', '2022-11-13 19:03:05', '20', '2', '软件教程', '', '', '', '手机软件教程', '游戏攻略,应用教程,游戏资讯', '60下载为广大玩家提供热门手机游戏攻略大全和热门应用软件教程，玩游戏，找攻略，就来60下载吧！', '1', '0', '');
 INSERT INTO `category` VALUES ('37', '2022-09-24 14:10:32', '2022-11-13 19:12:23', '0', '1', '应用排行榜', '', '', '', '应用排行榜-常用应用排行榜', '手机应用下载,热门应用排行榜,应用排行榜', '60下载为您提供手机应用排行榜，应用下载排行、安卓应用排行榜，最热门应用排行尽在60下载。', '1', '0', '');
+INSERT INTO `category` VALUES ('39', '2023-06-19 10:27:40', '2023-06-19 10:28:43', '0', '1', '资讯合集', '', '', '', '资讯合集', '资讯合集', '资讯合集', '1', '0', '');
 
 -- ----------------------------
 -- Table structure for category_map
@@ -317,212 +319,216 @@ CREATE TABLE `category_route` (
   `is_main` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '是否是主路由',
   PRIMARY KEY (`id`),
   UNIQUE KEY `category_route_route_type_unique` (`route`,`type`)
-) ENGINE=InnoDB AUTO_INCREMENT=208 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='分类路由表';
+) ENGINE=InnoDB AUTO_INCREMENT=212 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='分类路由表';
 
 -- ----------------------------
 -- Records of category_route
 -- ----------------------------
-INSERT INTO `category_route` VALUES ('1', '2022-08-30 17:26:37', '2022-08-30 17:26:37', '1', '游戏栏目', 'game', '', '', 'pc.game', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('2', '2022-08-30 17:42:00', '2022-08-30 17:42:00', '1', '游戏栏目', 'game', '', '', 'mobile.game', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('3', '2022-08-30 17:42:00', '2022-09-06 20:12:03', '1', '游戏分页', 'game/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('4', '2022-08-30 17:42:00', '2022-09-06 20:12:03', '1', '游戏分页', 'game/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('5', '2022-08-30 18:37:48', '2022-09-06 20:12:50', '2', '栏目', 'jsby', '', '', '', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('6', '2022-08-30 18:37:48', '2022-09-06 20:12:50', '2', '栏目', 'jsby', '', '', '', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('7', '2022-08-30 18:37:48', '2022-09-06 20:12:50', '2', '详情', 'jsby/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('8', '2022-08-30 18:37:48', '2022-09-06 20:12:50', '2', '详情', 'jsby/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('9', '2022-08-30 18:37:48', '2022-09-06 20:12:50', '2', '分页', 'jsby/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('10', '2022-08-30 18:37:48', '2022-09-06 20:12:50', '2', '分页', 'jsby/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('11', '2022-08-30 18:43:43', '2022-09-06 20:13:23', '6', '栏目', 'dzgt', '', '', '', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('12', '2022-08-30 18:43:43', '2022-09-06 20:13:23', '6', '栏目', 'dzgt', '', '', '', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('13', '2022-08-30 18:43:43', '2022-09-06 20:13:23', '6', '详情', 'dzgt/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('14', '2022-08-30 18:43:43', '2022-09-06 20:13:23', '6', '详情', 'dzgt/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('15', '2022-08-30 18:43:43', '2022-09-06 20:13:23', '6', '分页', 'dzgt/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('16', '2022-08-30 18:43:43', '2022-09-06 20:13:23', '6', '分页', 'dzgt/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('17', '2022-08-30 18:47:19', '2022-09-06 20:14:38', '7', '栏目', 'yyjz', '', '', '', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('18', '2022-08-30 18:47:19', '2022-09-06 20:14:38', '7', '栏目', 'yyjz', '', '', '', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('19', '2022-08-30 18:47:19', '2022-09-06 20:14:38', '7', '详情', 'yyjz/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('20', '2022-08-30 18:47:19', '2022-09-06 20:14:38', '7', '详情', 'yyjz/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('21', '2022-08-30 18:47:19', '2022-09-06 20:14:38', '7', '分页', 'yyjz/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('22', '2022-08-30 18:47:19', '2022-09-06 20:14:38', '7', '分页', 'yyjz/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('23', '2022-08-30 18:50:35', '2022-09-06 20:15:24', '8', '栏目', 'scjs', '', '', '', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('24', '2022-08-30 18:50:35', '2022-09-06 20:15:24', '8', '栏目', 'scjs', '', '', '', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('25', '2022-08-30 18:50:35', '2022-09-06 20:15:24', '8', '详情', 'scjs/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('26', '2022-08-30 18:50:35', '2022-09-06 20:15:24', '8', '详情', 'scjs/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('27', '2022-08-30 18:50:35', '2022-09-06 20:15:24', '8', '分页', 'scjs/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('28', '2022-08-30 18:50:35', '2022-09-06 20:15:24', '8', '分页', 'scjs/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('29', '2022-08-30 20:03:25', '2022-09-06 20:16:05', '9', 'entert', 'xxyl', '', '', '', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('30', '2022-08-30 20:03:25', '2022-09-06 20:16:05', '9', 'entert', 'xxyl', '', '', '', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('31', '2022-08-30 20:03:25', '2022-09-06 20:16:05', '9', '详情', 'xxyl/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('32', '2022-08-30 20:03:25', '2022-09-06 20:16:05', '9', '详情', 'xxyl/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('33', '2022-08-30 20:03:25', '2022-09-06 20:16:05', '9', '分页', 'xxyl/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('34', '2022-08-30 20:03:25', '2022-09-06 20:16:05', '9', '分页', 'xxyl/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('35', '2022-08-30 20:23:10', '2022-09-06 20:16:44', '10', '栏目', 'mnjy', '', '', '', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('36', '2022-08-30 20:23:10', '2022-09-06 20:16:44', '10', '栏目', 'mnjy', '', '', '', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('37', '2022-08-30 20:23:10', '2022-09-06 20:16:44', '10', '详情', 'mnjy/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('38', '2022-08-30 20:23:10', '2022-09-06 20:16:44', '10', '详情', 'mnjy/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('39', '2022-08-30 20:23:10', '2022-09-06 20:16:44', '10', '分页', 'mnjy/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('40', '2022-08-30 20:23:10', '2022-09-06 20:16:44', '10', '分页', 'mnjy/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('41', '2022-08-30 20:27:48', '2022-09-06 20:17:16', '11', '栏目', 'tyjj', '', '', '', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('42', '2022-08-30 20:27:48', '2022-09-06 20:17:16', '11', '栏目', 'tyjj', '', '', '', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('43', '2022-08-30 20:27:48', '2022-10-22 15:52:25', '11', '详情', 'tyjj/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('44', '2022-08-30 20:27:48', '2022-10-22 15:52:25', '11', '详情', 'tyjj/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('45', '2022-08-30 20:27:48', '2022-09-06 20:17:16', '11', '分页', 'tyjj/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('46', '2022-08-30 20:27:48', '2022-09-06 20:17:16', '11', '分页', 'tyjj/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('47', '2022-08-30 20:32:13', '2022-09-06 20:17:48', '12', '栏目', 'kpyx', '', '', '', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('48', '2022-08-30 20:32:13', '2022-09-06 20:17:48', '12', '栏目', 'kpyx', '', '', '', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('49', '2022-08-30 20:32:13', '2022-09-06 20:17:48', '12', '详情', 'kpyx/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('50', '2022-08-30 20:32:13', '2022-09-06 20:17:48', '12', '详情', 'kpyx/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('51', '2022-08-30 20:32:13', '2022-09-06 20:17:48', '12', '分页', 'kpyx/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('52', '2022-08-30 20:32:13', '2022-09-06 20:17:48', '12', '分页', 'kpyx/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('53', '2022-08-30 20:37:11', '2022-09-06 20:18:27', '13', '栏目', 'fxsj', '', '', '', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('54', '2022-08-30 20:37:11', '2022-09-06 20:18:27', '13', '栏目', 'fxsj', '', '', '', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('55', '2022-08-30 20:37:11', '2022-09-06 20:18:27', '13', '详情', 'fxsj/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('56', '2022-08-30 20:37:11', '2022-09-06 20:18:27', '13', '详情', 'fxsj/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('57', '2022-08-30 20:37:11', '2022-09-06 20:18:27', '13', '分页', 'fxsj/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('58', '2022-08-30 20:37:11', '2022-09-06 20:18:27', '13', '分页', 'fxsj/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('59', '2022-08-30 20:39:12', '2022-08-30 20:39:12', '3', '栏目', 'app', '', '', 'pc.app', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('60', '2022-08-30 20:39:12', '2022-08-30 20:39:12', '3', '栏目', 'app', '', '', 'mobile.app', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('61', '2022-08-31 09:39:48', '2022-09-06 20:21:03', '3', '分页', 'app/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('62', '2022-08-31 09:39:48', '2022-09-06 20:21:03', '3', '分页', 'app/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('63', '2022-08-31 09:42:34', '2022-09-27 17:00:56', '4', '栏目', 'lycx', '', '', '', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('64', '2022-08-31 09:42:34', '2022-09-27 17:00:56', '4', '栏目', 'lycx', '', '', '', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('65', '2022-08-31 09:42:34', '2022-09-27 17:00:56', '4', '详情', 'lycx/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('66', '2022-08-31 09:42:34', '2022-09-27 17:00:56', '4', '详情', 'lycx/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('67', '2022-08-31 09:42:34', '2022-09-27 17:00:56', '4', '分页', 'lycx/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('68', '2022-08-31 09:42:34', '2022-09-27 17:00:56', '4', '分页', 'lycx/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('69', '2022-08-31 09:51:07', '2022-09-27 17:01:19', '14', '栏目', 'jrlc', '', '', '', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('70', '2022-08-31 09:51:07', '2022-09-27 17:01:19', '14', '栏目', 'jrlc', '', '', '', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('71', '2022-08-31 09:51:07', '2022-09-27 17:01:19', '14', '详情', 'jrlc/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('72', '2022-08-31 09:51:07', '2022-09-27 17:01:19', '14', '详情', 'jrlc/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('73', '2022-08-31 09:51:07', '2022-09-27 17:01:19', '14', '分页', 'jrlc/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('74', '2022-08-31 09:51:07', '2022-09-27 17:01:19', '14', '分页', 'jrlc/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('75', '2022-08-31 09:55:13', '2022-09-27 17:01:38', '15', '栏目', 'sjlt', '', '', '', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('76', '2022-08-31 09:55:13', '2022-09-27 17:01:38', '15', '栏目', 'sjlt', '', '', '', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('77', '2022-08-31 09:55:13', '2022-09-27 17:01:38', '15', '详情', 'sjlt/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('78', '2022-08-31 09:55:13', '2022-09-27 17:01:38', '15', '详情', 'sjlt/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('79', '2022-08-31 09:55:13', '2022-09-27 17:01:38', '15', '分页', 'sjlt/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('80', '2022-08-31 09:55:13', '2022-09-27 17:01:38', '15', '分页', 'sjlt/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('81', '2022-08-31 09:59:07', '2022-09-27 17:02:08', '16', '栏目', 'gzxx', '', '', '', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('82', '2022-08-31 09:59:07', '2022-09-27 17:02:08', '16', '栏目', 'gzxx', '', '', '', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('83', '2022-08-31 09:59:07', '2022-09-27 17:02:08', '16', '详情', 'gzxx/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('84', '2022-08-31 09:59:07', '2022-09-27 17:02:08', '16', '详情', 'gzxx/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('85', '2022-08-31 09:59:07', '2022-09-27 17:02:08', '16', '分页', 'gzxx/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('86', '2022-08-31 09:59:07', '2022-09-27 17:02:08', '16', '分页', 'gzxx/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('87', '2022-08-31 10:01:05', '2022-09-27 17:02:32', '17', '栏目', 'xwyd', '', '', '', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('88', '2022-08-31 10:01:05', '2022-09-27 17:02:32', '17', '栏目', 'xwyd', '', '', '', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('89', '2022-08-31 10:01:05', '2022-09-27 17:02:32', '17', '详情', 'xwyd/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('90', '2022-08-31 10:01:05', '2022-09-27 17:02:32', '17', '详情', 'xwyd/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('91', '2022-08-31 10:01:05', '2022-09-27 17:02:32', '17', '分页', 'xwyd/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('92', '2022-08-31 10:01:05', '2022-09-27 17:02:32', '17', '分页', 'xwyd/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('93', '2022-08-31 10:03:28', '2022-09-27 17:02:56', '18', '栏目', 'sytx', '', '', '', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('94', '2022-08-31 10:03:28', '2022-09-27 17:02:56', '18', '栏目', 'sytx', '', '', '', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('95', '2022-08-31 10:03:28', '2022-09-27 17:02:56', '18', '详情', 'sytx/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('96', '2022-08-31 10:03:28', '2022-09-27 17:02:56', '18', '详情', 'sytx/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('97', '2022-08-31 10:03:28', '2022-09-27 17:02:56', '18', '分页', 'sytx/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('98', '2022-08-31 10:03:28', '2022-09-27 17:02:56', '18', '分页', 'sytx/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('99', '2022-08-31 10:05:36', '2022-09-27 17:03:13', '19', '栏目', 'xtgj', '', '', '', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('100', '2022-08-31 10:05:36', '2022-09-27 17:03:13', '19', '栏目', 'xtgj', '', '', '', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('101', '2022-08-31 10:05:36', '2022-09-27 17:03:13', '19', '详情', 'xtgj/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('102', '2022-08-31 10:05:36', '2022-09-27 17:03:13', '19', '详情', 'xtgj/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('103', '2022-08-31 10:05:36', '2022-09-27 17:03:13', '19', '分页', 'xtgj/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('104', '2022-08-31 10:05:36', '2022-09-27 17:03:13', '19', '分页', 'xtgj/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('105', '2022-08-31 10:07:58', '2022-09-08 15:39:46', '20', '栏目', 'zixun', '', '', 'pc.news', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('106', '2022-08-31 10:07:58', '2022-09-08 15:39:46', '20', '栏目', 'zixun', '', '', 'mobile.news', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('107', '2022-08-31 10:07:58', '2022-09-08 15:39:46', '20', '分页', 'zixun/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('108', '2022-08-31 10:07:58', '2022-09-08 15:39:46', '20', '分页', 'zixun/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('109', '2022-08-31 10:10:22', '2022-09-08 15:40:35', '21', '栏目', 'xydt', '', '', 'pc.dynamic', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('110', '2022-08-31 10:10:22', '2022-09-08 15:40:35', '21', '栏目', 'xydt', '', '', 'mobile.dynamic', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('111', '2022-08-31 10:10:22', '2022-09-08 15:40:35', '21', '详情', 'xydt/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('112', '2022-08-31 10:10:22', '2022-09-08 15:40:35', '21', '详情', 'xydt/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('113', '2022-08-31 10:10:22', '2022-09-08 15:40:35', '21', '分页', 'xydt/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('114', '2022-08-31 10:10:22', '2022-09-08 15:40:35', '21', '分页', 'xydt/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('115', '2022-08-31 10:13:28', '2022-09-08 15:40:56', '22', '栏目', 'sygl', '', '', 'pc.raiders', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('116', '2022-08-31 10:13:28', '2022-09-08 15:40:56', '22', '栏目', 'sygl', '', '', 'mobile.raiders', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('117', '2022-08-31 10:13:28', '2022-09-08 15:40:56', '22', '详情', 'sygl/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('118', '2022-08-31 10:13:28', '2022-09-08 15:40:56', '22', '详情', 'sygl/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('119', '2022-08-31 10:13:28', '2022-09-08 15:40:56', '22', '分页', 'sygl/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('120', '2022-08-31 10:13:28', '2022-09-08 15:40:56', '22', '分页', 'sygl/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('121', '2022-08-31 10:16:15', '2022-09-08 15:41:13', '23', '栏目', 'yxzx', '', '', 'pc.latest', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('122', '2022-08-31 10:16:15', '2022-09-08 15:41:13', '23', '栏目', 'yxzx', '', '', 'mobile.latest', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('123', '2022-08-31 10:16:15', '2022-09-08 15:41:13', '23', '详情', 'yxzx/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('124', '2022-08-31 10:16:15', '2022-09-08 15:41:13', '23', '详情', 'yxzx/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('125', '2022-08-31 10:16:15', '2022-09-08 15:41:13', '23', '分页', 'yxzx/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('126', '2022-08-31 10:16:15', '2022-09-08 15:41:13', '23', '分页', 'yxzx/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('127', '2022-08-31 10:18:09', '2022-09-08 15:41:42', '24', '栏目', 'sycp', '', '', 'pc.evale', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('128', '2022-08-31 10:18:09', '2022-09-08 15:41:42', '24', '栏目', 'sycp', '', '', 'mobile.evale', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('129', '2022-08-31 10:18:09', '2022-09-08 15:41:42', '24', '详情', 'sycp/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('130', '2022-08-31 10:18:09', '2022-09-08 15:41:42', '24', '详情', 'sycp/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('131', '2022-08-31 10:18:09', '2022-09-08 15:41:42', '24', '分页', 'sycp/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('132', '2022-08-31 10:18:09', '2022-09-08 15:41:42', '24', '分页', 'sycp/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('133', '2022-08-31 10:20:26', '2022-09-08 15:42:08', '25', '栏目', 'phb', '', '', 'pc.rank', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('134', '2022-08-31 10:20:26', '2022-09-08 15:42:08', '25', '栏目', 'phb', '', '', 'mobile.rank', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('135', '2022-08-31 10:20:26', '2022-10-10 10:41:06', '25', '详情', 'phb/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('136', '2022-08-31 10:20:26', '2022-10-10 10:41:06', '25', '详情', 'phb/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('137', '2022-08-31 10:23:12', '2022-09-08 15:42:31', '26', '栏目', 'hj', '', '', 'pc.collect', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('138', '2022-08-31 10:23:12', '2022-09-08 15:42:31', '26', '栏目', 'hj', '', '', 'mobile.collect', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('139', '2022-08-31 10:23:12', '2022-09-08 15:42:31', '26', '详情', 'hj/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('140', '2022-08-31 10:23:12', '2022-09-08 15:42:31', '26', '详情', 'hj/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('141', '2022-08-31 10:23:12', '2022-09-08 15:42:31', '26', '分页', 'hj/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('142', '2022-08-31 10:23:12', '2022-09-08 15:42:31', '26', '分页', 'hj/list-{page}.html', '', '', '', '', '2', '0');
+INSERT INTO `category_route` VALUES ('1', '2022-08-30 17:26:37', '2023-06-17 17:08:17', '1', '游戏栏目', 'game', '', '', 'pc.game', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('2', '2022-08-30 17:42:00', '2023-06-17 17:08:17', '1', '游戏栏目', 'game', '', '', 'mobile.game', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('3', '2022-08-30 17:42:00', '2023-06-17 17:08:17', '1', '游戏分页', 'game/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('4', '2022-08-30 17:42:00', '2023-06-17 17:08:17', '1', '游戏分页', 'game/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('5', '2022-08-30 18:37:48', '2023-06-17 17:08:50', '2', '栏目', 'jsby', '', '', '', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('6', '2022-08-30 18:37:48', '2023-06-17 17:08:50', '2', '栏目', 'jsby', '', '', '', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('7', '2022-08-30 18:37:48', '2023-06-17 17:08:50', '2', '详情', 'jsby/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('8', '2022-08-30 18:37:48', '2023-06-17 17:08:50', '2', '详情', 'jsby/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('9', '2022-08-30 18:37:48', '2023-06-17 17:08:50', '2', '分页', 'jsby/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('10', '2022-08-30 18:37:48', '2023-06-17 17:08:50', '2', '分页', 'jsby/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('11', '2022-08-30 18:43:43', '2023-06-17 17:09:04', '6', '栏目', 'dzgt', '', '', '', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('12', '2022-08-30 18:43:43', '2023-06-17 17:09:04', '6', '栏目', 'dzgt', '', '', '', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('13', '2022-08-30 18:43:43', '2023-06-17 17:09:04', '6', '详情', 'dzgt/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('14', '2022-08-30 18:43:43', '2023-06-17 17:09:04', '6', '详情', 'dzgt/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('15', '2022-08-30 18:43:43', '2023-06-17 17:09:04', '6', '分页', 'dzgt/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('16', '2022-08-30 18:43:43', '2023-06-17 17:09:04', '6', '分页', 'dzgt/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('17', '2022-08-30 18:47:19', '2023-06-17 17:09:22', '7', '栏目', 'yyjz', '', '', '', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('18', '2022-08-30 18:47:19', '2023-06-17 17:09:22', '7', '栏目', 'yyjz', '', '', '', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('19', '2022-08-30 18:47:19', '2023-06-17 17:09:22', '7', '详情', 'yyjz/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('20', '2022-08-30 18:47:19', '2023-06-17 17:09:22', '7', '详情', 'yyjz/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('21', '2022-08-30 18:47:19', '2023-06-17 17:09:22', '7', '分页', 'yyjz/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('22', '2022-08-30 18:47:19', '2023-06-17 17:09:22', '7', '分页', 'yyjz/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('23', '2022-08-30 18:50:35', '2023-06-17 17:09:35', '8', '栏目', 'scjs', '', '', '', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('24', '2022-08-30 18:50:35', '2023-06-17 17:09:35', '8', '栏目', 'scjs', '', '', '', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('25', '2022-08-30 18:50:35', '2023-06-17 17:09:35', '8', '详情', 'scjs/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('26', '2022-08-30 18:50:35', '2023-06-17 17:09:35', '8', '详情', 'scjs/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('27', '2022-08-30 18:50:35', '2023-06-17 17:09:35', '8', '分页', 'scjs/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('28', '2022-08-30 18:50:35', '2023-06-17 17:09:35', '8', '分页', 'scjs/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('29', '2022-08-30 20:03:25', '2023-06-19 10:00:46', '9', 'entert', 'xxyl', '', '', '', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('30', '2022-08-30 20:03:25', '2023-06-19 10:00:46', '9', 'entert', 'xxyl', '', '', '', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('31', '2022-08-30 20:03:25', '2023-06-19 10:00:46', '9', '详情', 'xxyl/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('32', '2022-08-30 20:03:25', '2023-06-19 10:00:46', '9', '详情', 'xxyl/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('33', '2022-08-30 20:03:25', '2023-06-19 10:00:46', '9', '分页', 'xxyl/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('34', '2022-08-30 20:03:25', '2023-06-19 10:00:46', '9', '分页', 'xxyl/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('35', '2022-08-30 20:23:10', '2023-06-19 10:01:10', '10', '栏目', 'mnjy', '', '', '', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('36', '2022-08-30 20:23:10', '2023-06-19 10:01:10', '10', '栏目', 'mnjy', '', '', '', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('37', '2022-08-30 20:23:10', '2023-06-19 10:01:10', '10', '详情', 'mnjy/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('38', '2022-08-30 20:23:10', '2023-06-19 10:01:10', '10', '详情', 'mnjy/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('39', '2022-08-30 20:23:10', '2023-06-19 10:01:10', '10', '分页', 'mnjy/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('40', '2022-08-30 20:23:10', '2023-06-19 10:01:10', '10', '分页', 'mnjy/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('41', '2022-08-30 20:27:48', '2023-06-19 10:01:28', '11', '栏目', 'tyjj', '', '', '', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('42', '2022-08-30 20:27:48', '2023-06-19 10:01:28', '11', '栏目', 'tyjj', '', '', '', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('43', '2022-08-30 20:27:48', '2023-06-19 10:01:28', '11', '详情', 'tyjj/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('44', '2022-08-30 20:27:48', '2023-06-19 10:01:28', '11', '详情', 'tyjj/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('45', '2022-08-30 20:27:48', '2023-06-19 10:01:28', '11', '分页', 'tyjj/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('46', '2022-08-30 20:27:48', '2023-06-19 10:01:28', '11', '分页', 'tyjj/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('47', '2022-08-30 20:32:13', '2023-06-19 10:01:42', '12', '栏目', 'kpyx', '', '', '', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('48', '2022-08-30 20:32:13', '2023-06-19 10:01:42', '12', '栏目', 'kpyx', '', '', '', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('49', '2022-08-30 20:32:13', '2023-06-19 10:01:42', '12', '详情', 'kpyx/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('50', '2022-08-30 20:32:13', '2023-06-19 10:01:42', '12', '详情', 'kpyx/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('51', '2022-08-30 20:32:13', '2023-06-19 10:01:42', '12', '分页', 'kpyx/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('52', '2022-08-30 20:32:13', '2023-06-19 10:01:42', '12', '分页', 'kpyx/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('53', '2022-08-30 20:37:11', '2023-06-19 10:01:56', '13', '栏目', 'fxsj', '', '', '', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('54', '2022-08-30 20:37:11', '2023-06-19 10:01:56', '13', '栏目', 'fxsj', '', '', '', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('55', '2022-08-30 20:37:11', '2023-06-19 10:01:56', '13', '详情', 'fxsj/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('56', '2022-08-30 20:37:11', '2023-06-19 10:01:56', '13', '详情', 'fxsj/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('57', '2022-08-30 20:37:11', '2023-06-19 10:01:56', '13', '分页', 'fxsj/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('58', '2022-08-30 20:37:11', '2023-06-19 10:01:56', '13', '分页', 'fxsj/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('59', '2022-08-30 20:39:12', '2023-06-19 10:03:02', '3', '栏目', 'app', '', '', 'pc.app', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('60', '2022-08-30 20:39:12', '2023-06-19 10:03:02', '3', '栏目', 'app', '', '', 'mobile.app', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('61', '2022-08-31 09:39:48', '2023-06-19 10:03:02', '3', '分页', 'app/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('62', '2022-08-31 09:39:48', '2023-06-19 10:03:02', '3', '分页', 'app/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('63', '2022-08-31 09:42:34', '2023-06-19 10:03:20', '4', '栏目', 'lycx', '', '', '', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('64', '2022-08-31 09:42:34', '2023-06-19 10:03:20', '4', '栏目', 'lycx', '', '', '', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('65', '2022-08-31 09:42:34', '2023-06-19 10:03:20', '4', '详情', 'lycx/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('66', '2022-08-31 09:42:34', '2023-06-19 10:03:20', '4', '详情', 'lycx/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('67', '2022-08-31 09:42:34', '2023-06-19 10:03:20', '4', '分页', 'lycx/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('68', '2022-08-31 09:42:34', '2023-06-19 10:03:20', '4', '分页', 'lycx/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('69', '2022-08-31 09:51:07', '2023-06-19 10:03:34', '14', '栏目', 'jrlc', '', '', '', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('70', '2022-08-31 09:51:07', '2023-06-19 10:03:34', '14', '栏目', 'jrlc', '', '', '', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('71', '2022-08-31 09:51:07', '2023-06-19 10:03:34', '14', '详情', 'jrlc/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('72', '2022-08-31 09:51:07', '2023-06-19 10:03:34', '14', '详情', 'jrlc/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('73', '2022-08-31 09:51:07', '2023-06-19 10:03:34', '14', '分页', 'jrlc/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('74', '2022-08-31 09:51:07', '2023-06-19 10:03:34', '14', '分页', 'jrlc/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('75', '2022-08-31 09:55:13', '2023-06-19 10:03:56', '15', '栏目', 'sjlt', '', '', '', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('76', '2022-08-31 09:55:13', '2023-06-19 10:03:56', '15', '栏目', 'sjlt', '', '', '', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('77', '2022-08-31 09:55:13', '2023-06-19 10:03:56', '15', '详情', 'sjlt/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('78', '2022-08-31 09:55:13', '2023-06-19 10:03:56', '15', '详情', 'sjlt/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('79', '2022-08-31 09:55:13', '2023-06-19 10:03:56', '15', '分页', 'sjlt/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('80', '2022-08-31 09:55:13', '2023-06-19 10:03:56', '15', '分页', 'sjlt/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('81', '2022-08-31 09:59:07', '2023-06-19 10:04:12', '16', '栏目', 'gzxx', '', '', '', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('82', '2022-08-31 09:59:07', '2023-06-19 10:04:12', '16', '栏目', 'gzxx', '', '', '', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('83', '2022-08-31 09:59:07', '2023-06-19 10:04:12', '16', '详情', 'gzxx/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('84', '2022-08-31 09:59:07', '2023-06-19 10:04:12', '16', '详情', 'gzxx/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('85', '2022-08-31 09:59:07', '2023-06-19 10:04:12', '16', '分页', 'gzxx/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('86', '2022-08-31 09:59:07', '2023-06-19 10:04:12', '16', '分页', 'gzxx/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('87', '2022-08-31 10:01:05', '2023-06-19 10:04:29', '17', '栏目', 'xwyd', '', '', '', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('88', '2022-08-31 10:01:05', '2023-06-19 10:04:29', '17', '栏目', 'xwyd', '', '', '', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('89', '2022-08-31 10:01:05', '2023-06-19 10:04:29', '17', '详情', 'xwyd/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('90', '2022-08-31 10:01:05', '2023-06-19 10:04:29', '17', '详情', 'xwyd/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('91', '2022-08-31 10:01:05', '2023-06-19 10:04:29', '17', '分页', 'xwyd/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('92', '2022-08-31 10:01:05', '2023-06-19 10:04:29', '17', '分页', 'xwyd/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('93', '2022-08-31 10:03:28', '2023-06-19 10:05:03', '18', '栏目', 'sytx', '', '', '', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('94', '2022-08-31 10:03:28', '2023-06-19 10:05:03', '18', '栏目', 'sytx', '', '', '', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('95', '2022-08-31 10:03:28', '2023-06-19 10:05:03', '18', '详情', 'sytx/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('96', '2022-08-31 10:03:28', '2023-06-19 10:05:03', '18', '详情', 'sytx/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('97', '2022-08-31 10:03:28', '2023-06-19 10:05:03', '18', '分页', 'sytx/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('98', '2022-08-31 10:03:28', '2023-06-19 10:05:03', '18', '分页', 'sytx/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('99', '2022-08-31 10:05:36', '2023-06-19 10:05:27', '19', '栏目', 'xtgj', '', '', '', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('100', '2022-08-31 10:05:36', '2023-06-19 10:05:27', '19', '栏目', 'xtgj', '', '', '', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('101', '2022-08-31 10:05:36', '2023-06-19 10:05:27', '19', '详情', 'xtgj/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('102', '2022-08-31 10:05:36', '2023-06-19 10:05:27', '19', '详情', 'xtgj/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('103', '2022-08-31 10:05:36', '2023-06-19 10:05:27', '19', '分页', 'xtgj/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('104', '2022-08-31 10:05:36', '2023-06-19 10:05:27', '19', '分页', 'xtgj/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('105', '2022-08-31 10:07:58', '2023-06-19 10:17:01', '20', '栏目', 'zixun', '', '', 'pc.news', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('106', '2022-08-31 10:07:58', '2023-06-19 10:17:01', '20', '栏目', 'zixun', '', '', 'mobile.news', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('107', '2022-08-31 10:07:58', '2023-06-19 10:17:01', '20', '分页', 'zixun/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('108', '2022-08-31 10:07:58', '2023-06-19 10:17:01', '20', '分页', 'zixun/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('109', '2022-08-31 10:10:22', '2023-06-19 10:17:14', '21', '栏目', 'xydt', '', '', 'pc.dynamic', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('110', '2022-08-31 10:10:22', '2023-06-19 10:17:14', '21', '栏目', 'xydt', '', '', 'mobile.dynamic', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('111', '2022-08-31 10:10:22', '2023-06-19 10:17:14', '21', '详情', 'xydt/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('112', '2022-08-31 10:10:22', '2023-06-19 10:17:14', '21', '详情', 'xydt/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('113', '2022-08-31 10:10:22', '2023-06-19 10:17:14', '21', '分页', 'xydt/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('114', '2022-08-31 10:10:22', '2023-06-19 10:17:14', '21', '分页', 'xydt/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('115', '2022-08-31 10:13:28', '2023-06-19 10:17:36', '22', '栏目', 'sygl', '', '', 'pc.raiders', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('116', '2022-08-31 10:13:28', '2023-06-19 10:17:36', '22', '栏目', 'sygl', '', '', 'mobile.raiders', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('117', '2022-08-31 10:13:28', '2023-06-19 10:17:36', '22', '详情', 'sygl/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('118', '2022-08-31 10:13:28', '2023-06-19 10:17:36', '22', '详情', 'sygl/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('119', '2022-08-31 10:13:28', '2023-06-19 10:17:36', '22', '分页', 'sygl/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('120', '2022-08-31 10:13:28', '2023-06-19 10:17:36', '22', '分页', 'sygl/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('121', '2022-08-31 10:16:15', '2023-06-19 10:18:04', '23', '栏目', 'yxzx', '', '', 'pc.latest', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('122', '2022-08-31 10:16:15', '2023-06-19 10:18:04', '23', '栏目', 'yxzx', '', '', 'mobile.latest', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('123', '2022-08-31 10:16:15', '2023-06-19 10:18:04', '23', '详情', 'yxzx/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('124', '2022-08-31 10:16:15', '2023-06-19 10:18:04', '23', '详情', 'yxzx/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('125', '2022-08-31 10:16:15', '2023-06-19 10:18:04', '23', '分页', 'yxzx/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('126', '2022-08-31 10:16:15', '2023-06-19 10:18:04', '23', '分页', 'yxzx/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('127', '2022-08-31 10:18:09', '2023-06-19 10:18:21', '24', '栏目', 'sycp', '', '', 'pc.evale', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('128', '2022-08-31 10:18:09', '2023-06-19 10:18:21', '24', '栏目', 'sycp', '', '', 'mobile.evale', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('129', '2022-08-31 10:18:09', '2023-06-19 10:18:21', '24', '详情', 'sycp/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('130', '2022-08-31 10:18:09', '2023-06-19 10:18:21', '24', '详情', 'sycp/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('131', '2022-08-31 10:18:09', '2023-06-19 10:18:21', '24', '分页', 'sycp/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('132', '2022-08-31 10:18:09', '2023-06-19 10:18:21', '24', '分页', 'sycp/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('133', '2022-08-31 10:20:26', '2023-06-19 10:19:09', '25', '栏目', 'phb', '', '', 'pc.rank', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('134', '2022-08-31 10:20:26', '2023-06-19 10:19:09', '25', '栏目', 'phb', '', '', 'mobile.rank', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('135', '2022-08-31 10:20:26', '2023-06-19 10:19:09', '25', '详情', 'phb/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('136', '2022-08-31 10:20:26', '2023-06-19 10:19:09', '25', '详情', 'phb/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('137', '2022-08-31 10:23:12', '2023-06-19 10:19:24', '26', '栏目', 'hj', '', '', 'pc.collect', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('138', '2022-08-31 10:23:12', '2023-06-19 10:19:24', '26', '栏目', 'hj', '', '', 'mobile.collect', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('139', '2022-08-31 10:23:12', '2023-06-19 10:19:24', '26', '详情', 'hj/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('140', '2022-08-31 10:23:12', '2023-06-19 10:19:24', '26', '详情', 'hj/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('141', '2022-08-31 10:23:12', '2023-06-19 10:19:24', '26', '分页', 'hj/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('142', '2022-08-31 10:23:12', '2023-06-19 10:19:24', '26', '分页', 'hj/list-{page}.html', '', '', '', 'list', '2', '0');
 INSERT INTO `category_route` VALUES ('143', '2022-08-31 13:48:03', '2022-08-31 13:48:03', '27', 'pc栏目', 'demo', '', '', '', 'list', '1', '0');
 INSERT INTO `category_route` VALUES ('144', '2022-08-31 13:48:03', '2022-08-31 13:48:03', '27', 'mobile栏目', 'demo', '', '', '', 'list', '2', '0');
 INSERT INTO `category_route` VALUES ('145', '2022-08-31 13:48:03', '2022-08-31 13:48:03', '27', 'pc详情', 'demo/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('146', '2022-09-06 20:10:39', '2022-09-06 20:10:39', '28', 'pc栏目', 'mxjm', '', '', '', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('147', '2022-09-06 20:10:39', '2022-09-06 20:10:39', '28', 'mobile栏目', 'mxjm', '', '', '', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('148', '2022-09-06 20:10:39', '2022-09-06 20:10:39', '28', 'pc详情', 'mxjm/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('149', '2022-09-06 20:10:39', '2022-09-06 20:10:39', '28', 'mobile详情', 'mxjm/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('150', '2022-09-06 20:20:17', '2022-09-06 20:20:17', '28', 'pc分页', 'mxjm/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('151', '2022-09-06 20:20:17', '2022-09-06 20:20:17', '28', 'mobile分页', 'mxjm/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('152', '2022-09-06 20:24:20', '2022-09-06 20:24:20', '29', 'pc栏目', 'yybf', '', '', '', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('153', '2022-09-06 20:24:20', '2022-09-06 20:24:20', '29', 'mobile栏目', 'yybf', '', '', '', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('154', '2022-09-06 20:24:20', '2022-09-06 20:24:20', '29', 'pc详情', 'yybf/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('155', '2022-09-06 20:24:20', '2022-09-06 20:24:20', '29', 'mobile详情', 'yybf/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('156', '2022-09-06 20:24:20', '2022-09-06 20:24:20', '29', 'pc分页', 'yybf/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('157', '2022-09-06 20:24:20', '2022-09-06 20:24:20', '29', 'mobile分页', 'yybf/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('164', '2022-09-06 20:27:33', '2022-09-06 20:27:33', '31', 'pc栏目', 'gwzf', '', '', '', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('165', '2022-09-06 20:27:33', '2022-09-06 20:27:33', '31', 'mobile栏目', 'gwzf', '', '', '', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('166', '2022-09-06 20:27:33', '2022-09-06 20:27:33', '31', 'pc详情', 'gwzf/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('167', '2022-09-06 20:27:33', '2022-09-06 20:27:33', '31', 'mobile详情', 'gwzf/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('168', '2022-09-06 20:27:33', '2022-09-06 20:27:33', '31', 'pc分页', 'gwzf/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('169', '2022-09-06 20:27:33', '2022-09-06 20:27:33', '31', 'mobile分页', 'gwzf/list-{page}.html', '', '', '', '', '2', '0');
+INSERT INTO `category_route` VALUES ('146', '2022-09-06 20:10:39', '2023-06-19 10:02:11', '28', 'pc栏目', 'mxjm', '', '', '', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('147', '2022-09-06 20:10:39', '2023-06-19 10:02:11', '28', 'mobile栏目', 'mxjm', '', '', '', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('148', '2022-09-06 20:10:39', '2023-06-19 10:02:11', '28', 'pc详情', 'mxjm/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('149', '2022-09-06 20:10:39', '2023-06-19 10:02:11', '28', 'mobile详情', 'mxjm/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('150', '2022-09-06 20:20:17', '2023-06-19 10:02:11', '28', 'pc分页', 'mxjm/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('151', '2022-09-06 20:20:17', '2023-06-19 10:02:11', '28', 'mobile分页', 'mxjm/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('152', '2022-09-06 20:24:20', '2023-06-19 10:05:52', '29', 'pc栏目', 'yybf', '', '', '', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('153', '2022-09-06 20:24:20', '2023-06-19 10:05:52', '29', 'mobile栏目', 'yybf', '', '', '', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('154', '2022-09-06 20:24:20', '2023-06-19 10:05:52', '29', 'pc详情', 'yybf/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('155', '2022-09-06 20:24:20', '2023-06-19 10:05:52', '29', 'mobile详情', 'yybf/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('156', '2022-09-06 20:24:20', '2023-06-19 10:05:52', '29', 'pc分页', 'yybf/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('157', '2022-09-06 20:24:20', '2023-06-19 10:05:52', '29', 'mobile分页', 'yybf/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('164', '2022-09-06 20:27:33', '2023-06-19 10:06:05', '31', 'pc栏目', 'gwzf', '', '', '', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('165', '2022-09-06 20:27:33', '2023-06-19 10:06:05', '31', 'mobile栏目', 'gwzf', '', '', '', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('166', '2022-09-06 20:27:33', '2023-06-19 10:06:05', '31', 'pc详情', 'gwzf/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('167', '2022-09-06 20:27:33', '2023-06-19 10:06:05', '31', 'mobile详情', 'gwzf/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('168', '2022-09-06 20:27:33', '2023-06-19 10:06:05', '31', 'pc分页', 'gwzf/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('169', '2022-09-06 20:27:33', '2023-06-19 10:06:05', '31', 'mobile分页', 'gwzf/list-{page}.html', '', '', '', 'list', '2', '0');
 INSERT INTO `category_route` VALUES ('170', '2022-09-08 15:52:57', '2022-09-08 15:52:57', '32', 'pc栏目', 'lb', '', '', '', 'list', '1', '0');
 INSERT INTO `category_route` VALUES ('171', '2022-09-08 15:52:57', '2022-09-08 15:52:57', '32', 'mobile栏目', 'lb', '', '', '', 'list', '2', '0');
 INSERT INTO `category_route` VALUES ('172', '2022-09-08 15:52:57', '2022-09-08 15:52:57', '32', 'pc详情', 'lb/{id}.html', '', '', '', 'detail', '1', '0');
 INSERT INTO `category_route` VALUES ('173', '2022-09-08 15:52:57', '2022-09-08 15:52:57', '32', 'mobile详情', 'lb/{id}.html', '', '', '', 'detail', '2', '0');
 INSERT INTO `category_route` VALUES ('174', '2022-09-08 15:52:57', '2022-09-08 15:52:57', '32', 'pc分页', 'lb/list-{page}.html', '', '', '', '', '1', '0');
 INSERT INTO `category_route` VALUES ('175', '2022-09-08 15:52:57', '2022-09-08 15:52:57', '32', 'mobile分页', 'lb/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('176', '2022-09-23 09:26:01', '2022-09-23 09:26:01', '33', 'pc栏目', 'layc', '', '', '', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('177', '2022-09-23 09:26:01', '2022-09-23 09:26:01', '33', 'mobile栏目', 'layc', '', '', '', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('178', '2022-09-23 09:26:01', '2022-09-23 09:26:01', '33', 'pc详情', 'layc/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('179', '2022-09-23 09:26:01', '2022-09-23 09:26:01', '33', 'mobile详情', 'layc/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('180', '2022-09-23 09:26:01', '2022-09-23 09:26:01', '33', '分页', 'layc/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('181', '2022-09-23 09:26:01', '2022-09-23 09:26:01', '33', '分页', 'layc/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('182', '2022-09-23 09:29:14', '2022-09-27 17:08:02', '34', 'pc栏目', 'shfw', '', '', '', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('183', '2022-09-23 09:29:14', '2022-09-27 17:08:02', '34', 'mobile栏目', 'shfw', '', '', '', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('184', '2022-09-23 09:29:14', '2022-09-27 17:08:02', '34', 'pc详情', 'shfw/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('185', '2022-09-23 09:29:14', '2022-09-27 17:08:02', '34', 'mobile详情', 'shfw/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('186', '2022-09-23 09:29:14', '2022-09-27 17:08:02', '34', '分页', 'shfw/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('187', '2022-09-23 09:29:14', '2022-09-27 17:08:02', '34', '分页', 'shfw/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('188', '2022-09-23 09:42:38', '2022-10-27 16:52:27', '35', 'pc栏目', 'yyhj', '', '', 'pc.app_collect', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('189', '2022-09-23 09:42:38', '2022-10-27 16:52:27', '35', 'mobile栏目', 'yyhj', '', '', 'mobile.app_collect', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('190', '2022-09-23 09:42:38', '2022-09-28 15:55:34', '35', 'pc详情', 'yyhj/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('191', '2022-09-23 09:42:38', '2022-09-28 15:55:34', '35', 'mobile详情', 'yyhj/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('192', '2022-09-23 09:42:38', '2022-09-28 15:55:34', '35', '分页', 'yyhj/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('193', '2022-09-23 09:42:38', '2022-09-28 15:55:34', '35', '分页', 'yyhj/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('194', '2022-09-23 10:10:11', '2022-11-04 10:21:06', '36', 'pc栏目', 'rjjc', '', '', 'pc.app_news', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('195', '2022-09-23 10:10:11', '2022-11-04 10:21:06', '36', 'mobile栏目', 'rjjc', '', '', 'mobile.app_news', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('196', '2022-09-23 10:10:11', '2022-09-23 10:10:11', '36', 'pc详情', 'rjjc/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('197', '2022-09-23 10:10:11', '2022-09-23 10:10:11', '36', 'mobile详情', 'rjjc/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('198', '2022-09-23 10:10:11', '2022-12-05 15:49:09', '36', '分页', 'rjjc/list-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('199', '2022-09-23 10:10:11', '2022-12-05 15:49:09', '36', '分页', 'rjjc/list-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('200', '2022-09-24 14:10:32', '2022-11-18 11:27:53', '37', 'pc栏目', 'yyph', '', '', 'pc.app_rank', 'list', '1', '0');
-INSERT INTO `category_route` VALUES ('201', '2022-09-24 14:10:32', '2022-11-18 11:27:53', '37', 'mobile栏目', 'yyph', '', '', 'mobile.app_rank', 'list', '2', '0');
-INSERT INTO `category_route` VALUES ('202', '2022-09-24 14:10:32', '2022-10-10 10:41:32', '37', 'pc详情', 'yyph/{id}.html', '', '', '', 'detail', '1', '0');
-INSERT INTO `category_route` VALUES ('203', '2022-09-24 14:10:32', '2022-10-10 10:41:32', '37', 'mobile详情', 'yyph/{id}.html', '', '', '', 'detail', '2', '0');
-INSERT INTO `category_route` VALUES ('204', '2022-09-29 11:43:57', '2022-09-29 11:43:57', '26', '详情分页', 'hj/{id}-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('205', '2022-09-29 11:43:57', '2022-09-29 11:43:57', '26', '详情分页', 'hj/{id}-{page}.html', '', '', '', '', '2', '0');
-INSERT INTO `category_route` VALUES ('206', '2022-09-29 11:46:09', '2022-09-29 11:46:09', '35', '详情分页', 'yyhj/{id}-{page}.html', '', '', '', '', '1', '0');
-INSERT INTO `category_route` VALUES ('207', '2022-09-29 11:46:09', '2022-09-29 11:46:09', '35', '详情分页', 'yyhj/{id}-{page}.html', '', '', '', '', '2', '0');
+INSERT INTO `category_route` VALUES ('176', '2022-09-23 09:26:01', '2023-06-19 10:02:49', '33', 'pc栏目', 'layc', '', '', '', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('177', '2022-09-23 09:26:01', '2023-06-19 10:02:49', '33', 'mobile栏目', 'layc', '', '', '', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('178', '2022-09-23 09:26:01', '2023-06-19 10:02:49', '33', 'pc详情', 'layc/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('179', '2022-09-23 09:26:01', '2023-06-19 10:02:49', '33', 'mobile详情', 'layc/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('180', '2022-09-23 09:26:01', '2023-06-19 10:02:49', '33', '分页', 'layc/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('181', '2022-09-23 09:26:01', '2023-06-19 10:02:49', '33', '分页', 'layc/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('182', '2022-09-23 09:29:14', '2023-06-19 10:06:22', '34', 'pc栏目', 'shfw', '', '', '', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('183', '2022-09-23 09:29:14', '2023-06-19 10:06:22', '34', 'mobile栏目', 'shfw', '', '', '', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('184', '2022-09-23 09:29:14', '2023-06-19 10:06:22', '34', 'pc详情', 'shfw/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('185', '2022-09-23 09:29:14', '2023-06-19 10:06:22', '34', 'mobile详情', 'shfw/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('186', '2022-09-23 09:29:14', '2023-06-19 10:06:22', '34', '分页', 'shfw/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('187', '2022-09-23 09:29:14', '2023-06-19 10:06:22', '34', '分页', 'shfw/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('188', '2022-09-23 09:42:38', '2023-06-19 10:22:29', '35', 'pc栏目', 'yyhj', '', '', 'pc.app_collect', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('189', '2022-09-23 09:42:38', '2023-06-19 10:22:29', '35', 'mobile栏目', 'yyhj', '', '', 'mobile.app_collect', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('190', '2022-09-23 09:42:38', '2023-06-19 10:22:29', '35', 'pc详情', 'yyhj/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('191', '2022-09-23 09:42:38', '2023-06-19 10:22:29', '35', 'mobile详情', 'yyhj/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('192', '2022-09-23 09:42:38', '2023-06-19 10:22:29', '35', '分页', 'yyhj/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('193', '2022-09-23 09:42:38', '2023-06-19 10:22:29', '35', '分页', 'yyhj/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('194', '2022-09-23 10:10:11', '2023-06-19 10:18:34', '36', 'pc栏目', 'rjjc', '', '', 'pc.app_news', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('195', '2022-09-23 10:10:11', '2023-06-19 10:18:34', '36', 'mobile栏目', 'rjjc', '', '', 'mobile.app_news', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('196', '2022-09-23 10:10:11', '2023-06-19 10:18:34', '36', 'pc详情', 'rjjc/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('197', '2022-09-23 10:10:11', '2023-06-19 10:18:34', '36', 'mobile详情', 'rjjc/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('198', '2022-09-23 10:10:11', '2023-06-19 10:18:34', '36', '分页', 'rjjc/list-{page}.html', '', '', '', 'list', '1', '0');
+INSERT INTO `category_route` VALUES ('199', '2022-09-23 10:10:11', '2023-06-19 10:18:34', '36', '分页', 'rjjc/list-{page}.html', '', '', '', 'list', '2', '0');
+INSERT INTO `category_route` VALUES ('200', '2022-09-24 14:10:32', '2023-06-19 10:22:46', '37', 'pc栏目', 'yyph', '', '', 'pc.app_rank', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('201', '2022-09-24 14:10:32', '2023-06-19 10:22:46', '37', 'mobile栏目', 'yyph', '', '', 'mobile.app_rank', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('202', '2022-09-24 14:10:32', '2023-06-19 10:22:46', '37', 'pc详情', 'yyph/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('203', '2022-09-24 14:10:32', '2023-06-19 10:22:46', '37', 'mobile详情', 'yyph/{id}.html', '', '', '', 'detail', '2', '1');
+INSERT INTO `category_route` VALUES ('204', '2022-09-29 11:43:57', '2023-06-19 10:19:24', '26', '详情分页', 'hj/{id}-{page}.html', '', '', '', 'detail', '1', '0');
+INSERT INTO `category_route` VALUES ('205', '2022-09-29 11:43:57', '2023-06-19 10:19:24', '26', '详情分页', 'hj/{id}-{page}.html', '', '', '', 'detail', '2', '0');
+INSERT INTO `category_route` VALUES ('206', '2022-09-29 11:46:09', '2023-06-19 10:22:29', '35', '详情分页', 'yyhj/{id}-{page}.html', '', '', '', 'detail', '1', '0');
+INSERT INTO `category_route` VALUES ('207', '2022-09-29 11:46:09', '2023-06-19 10:22:29', '35', '详情分页', 'yyhj/{id}-{page}.html', '', '', '', 'detail', '2', '0');
+INSERT INTO `category_route` VALUES ('208', '2023-06-19 10:27:40', '2023-06-19 10:27:40', '39', 'pc栏目', 'zxhj', '', '', 'pc.zxhj', 'list', '1', '1');
+INSERT INTO `category_route` VALUES ('209', '2023-06-19 10:27:40', '2023-06-19 10:27:40', '39', 'mobile栏目', 'zxhj', '', '', 'mobile.zxhj', 'list', '2', '1');
+INSERT INTO `category_route` VALUES ('210', '2023-06-19 10:27:40', '2023-06-19 10:27:40', '39', 'pc详情', 'zxhj/{id}.html', '', '', '', 'detail', '1', '1');
+INSERT INTO `category_route` VALUES ('211', '2023-06-19 10:27:40', '2023-06-19 10:27:40', '39', 'mobile详情', 'zxhj/{id}.html', '', '', '', 'detail', '2', '1');
 
 -- ----------------------------
 -- Table structure for collect
@@ -869,15 +875,15 @@ CREATE TABLE `options` (
   `autoload` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '是否自动加载,1是0否',
   PRIMARY KEY (`id`),
   UNIQUE KEY `options_key_unique` (`key`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='网站配置表';
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='网站配置表';
 
 -- ----------------------------
 -- Records of options
 -- ----------------------------
 INSERT INTO `options` VALUES ('1', null, null, 'site_name', '60下载', 'string', '1');
 INSERT INTO `options` VALUES ('2', null, null, 'icp', 'xx', 'string', '1');
-INSERT INTO `options` VALUES ('3', null, null, 'domain', 'xx', 'string', '1');
-INSERT INTO `options` VALUES ('4', null, null, 'm_domain', 'x', 'string', '1');
+INSERT INTO `options` VALUES ('3', null, '2023-06-17 17:01:02', 'domain', 'http://www.core.com', 'string', '1');
+INSERT INTO `options` VALUES ('4', null, '2023-06-17 17:01:08', 'm_domain', 'http://m.core.com', 'string', '1');
 INSERT INTO `options` VALUES ('5', null, null, 'pc_token', '', 'string', '1');
 INSERT INTO `options` VALUES ('6', null, '2023-03-07 17:08:37', 'seo_title', '手机游戏安卓苹果下载_手机游戏下载门户', 'string', '1');
 INSERT INTO `options` VALUES ('7', null, null, 'seo_keyword', '手机游戏,手游排行榜,手机游戏下载,手游网,60下载', 'string', '1');
@@ -888,6 +894,7 @@ INSERT INTO `options` VALUES ('11', '2023-03-07 17:08:37', '2023-03-07 17:08:37'
 INSERT INTO `options` VALUES ('12', '2023-03-07 17:08:37', '2023-03-07 17:08:37', 'code', '', 'string', '1');
 INSERT INTO `options` VALUES ('13', '2023-03-07 17:08:37', '2023-03-07 17:08:37', 'sm_token', '', 'string', '1');
 INSERT INTO `options` VALUES ('14', '2023-03-07 17:08:37', '2023-03-07 17:08:37', 'id', '', 'string', '1');
+INSERT INTO `options` VALUES ('15', '2023-06-17 17:01:52', '2023-06-17 17:01:52', 'theme', '52', 'int', '1');
 
 -- ----------------------------
 -- Table structure for page

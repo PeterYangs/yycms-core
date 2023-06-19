@@ -87,6 +87,12 @@ class Init extends Command
 
             $this->info("生成拓展表成功！");
 
+            $this->info("正在生成路由文件。。。");
+
+            $this->call("CreateRoute");
+
+            $this->info("路由文件生成成功！");
+
 
             $is_test = $this->ask("需要生成测试数据吗？(y/n)", "y");
 
@@ -96,6 +102,14 @@ class Init extends Command
                 $this->call("create:article", ['num' => 30]);
 
             }
+
+        } else {
+
+            $this->info("正在生成路由文件。。。");
+
+            $this->call("CreateRoute");
+
+            $this->info("路由文件生成成功！");
 
         }
 
@@ -142,13 +156,6 @@ class Init extends Command
 
             break;
         }
-
-
-        $this->info("正在生成路由文件。。。");
-
-        $this->call("CreateRoute");
-
-        $this->info("路由文件生成成功！");
 
 
         $bar = $this->output->createProgressBar(5);
