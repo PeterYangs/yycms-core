@@ -42,6 +42,7 @@ class Kernel
         //日志清理
         $schedule->command('CleanUserAccess')->dailyAt("01:05");
 
+
         //自动采集
         $schedule->command('Spider')->hourly();
         $schedule->command('SpiderTable')->hourly();
