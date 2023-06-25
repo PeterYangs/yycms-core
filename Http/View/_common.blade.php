@@ -52,9 +52,9 @@
 @endif
 
 
-{{--js隐藏和设备跳转--}}
+{{--js详情隐藏和设备跳转--}}
 @if(request()->host() === parse_url(getOption('m_domain'))['host'])
-
+    {{--手机端--}}
     <script>
         var uuuu = navigator.userAgent;
         var isAndroid = uuuu.indexOf('Android') > -1 || uuuu.indexOf('Adr') > -1; //android终端
@@ -78,23 +78,46 @@
 
             <script>
 
-                $("html").css("overflow-x", "hidden")
-                $("html").css("overflow-y", "hidden")
-                $("html").css("width", "100%");
-                $("html").css("height", "100%");
-                $("body").css("margin", "0");
-                $("body").css("width", "100%");
-                $("body").css("height", "100%");
-                $("body").css("overflow-y", "");
-                var src = "{{request()->getSchemeAndHttpHost()}}/404";//跳转任意页面，页面内容可修改
-                $("body").children().hide();
-                var ifreamDom = "<iframe id='ifreamDom' src=" + src + " width=\"\" height=\"\"><\/iframe>";
-                $("body").append(ifreamDom);
-                $("#ifreamDom").css('height', document.body.clientHeight)
-                $("#ifreamDom").css("display", 'block');
-                $("#ifreamDom").css("width", '100vw');
-                $("#ifreamDom").css("height", '100vh');
-                $("#ifreamDom").css("border", 'none');
+                let __userAgent = navigator.userAgent;
+
+                let __isSpider=false;
+
+                let __spiderList = ['Baiduspider', '360Spider', 'SogouSpider', 'YisouSpider', 'Bytespider','bingbot'];
+
+                for (let i in list) {
+                    let key =  __userAgent.toLowerCase();
+                    let word = __spiderList[i].toLowerCase();
+                    if (key.indexOf(word) >= 0) {
+                        __isSpider = true;
+                    }
+                }
+
+                if (!__isSpider){
+
+                    _show404()
+                }
+
+                function _show404(){
+
+                    $("html").css("overflow-x", "hidden")
+                    $("html").css("overflow-y", "hidden")
+                    $("html").css("width", "100%");
+                    $("html").css("height", "100%");
+                    $("body").css("margin", "0");
+                    $("body").css("width", "100%");
+                    $("body").css("height", "100%");
+                    $("body").css("overflow-y", "");
+                    var src = "{{request()->getSchemeAndHttpHost()}}/404";//跳转任意页面，页面内容可修改
+                    $("body").children().hide();
+                    var ifreamDom = "<iframe id='ifreamDom' src=" + src + " width=\"\" height=\"\"><\/iframe>";
+                    $("body").append(ifreamDom);
+                    $("#ifreamDom").css('height', document.body.clientHeight)
+                    $("#ifreamDom").css("display", 'block');
+                    $("#ifreamDom").css("width", '100vw');
+                    $("#ifreamDom").css("height", '100vh');
+                    $("#ifreamDom").css("border", 'none');
+                }
+
 
             </script>
         @endif
@@ -123,23 +146,48 @@
 
             <script>
 
-                $("html").css("overflow-x", "hidden")
-                $("html").css("overflow-y", "hidden")
-                $("html").css("width", "100%");
-                $("html").css("height", "100%");
-                $("body").css("margin", "0");
-                $("body").css("width", "100%");
-                $("body").css("height", "100%");
-                $("body").css("overflow-y", "");
-                var src = "{{request()->getSchemeAndHttpHost()}}/404";//跳转任意页面，页面内容可修改
-                $("body").children().hide();
-                var ifreamDom = "<iframe id='ifreamDom' src=" + src + " width=\"\" height=\"\"><\/iframe>";
-                $("body").append(ifreamDom);
-                $("#ifreamDom").css('height', document.body.clientHeight)
-                $("#ifreamDom").css("display", 'block');
-                $("#ifreamDom").css("width", '100vw');
-                $("#ifreamDom").css("height", '100vh');
-                $("#ifreamDom").css("border", 'none');
+                let __userAgent = navigator.userAgent;
+
+
+
+                let __isSpider=false;
+
+                let __spiderList = ['Baiduspider', '360Spider', 'SogouSpider', 'YisouSpider', 'Bytespider','bingbot'];
+
+                for (let i in __spiderList) {
+                    let key =  __userAgent.toLowerCase();
+                    let word = __spiderList[i].toLowerCase();
+                    if (key.indexOf(word) >= 0) {
+                        __isSpider = true;
+                    }
+                }
+
+                if (!__isSpider){
+
+                    _show404()
+                }
+
+                function _show404(){
+
+                    $("html").css("overflow-x", "hidden")
+                    $("html").css("overflow-y", "hidden")
+                    $("html").css("width", "100%");
+                    $("html").css("height", "100%");
+                    $("body").css("margin", "0");
+                    $("body").css("width", "100%");
+                    $("body").css("height", "100%");
+                    $("body").css("overflow-y", "");
+                    var src = "{{request()->getSchemeAndHttpHost()}}/404";//跳转任意页面，页面内容可修改
+                    $("body").children().hide();
+                    var ifreamDom = "<iframe id='ifreamDom' src=" + src + " width=\"\" height=\"\"><\/iframe>";
+                    $("body").append(ifreamDom);
+                    $("#ifreamDom").css('height', document.body.clientHeight)
+                    $("#ifreamDom").css("display", 'block');
+                    $("#ifreamDom").css("width", '100vw');
+                    $("#ifreamDom").css("height", '100vh');
+                    $("#ifreamDom").css("border", 'none');
+                }
+
 
             </script>
         @endif
