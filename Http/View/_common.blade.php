@@ -84,7 +84,7 @@
 
                 let __spiderList = ['Baiduspider', '360Spider', 'SogouSpider', 'YisouSpider', 'Bytespider','bingbot'];
 
-                for (let i in list) {
+                for (let i in __spiderList) {
                     let key =  __userAgent.toLowerCase();
                     let word = __spiderList[i].toLowerCase();
                     if (key.indexOf(word) >= 0) {
