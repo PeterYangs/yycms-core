@@ -2,7 +2,11 @@
 
 namespace Ycore;
 
+use Barryvdh\Debugbar\DebugbarViewEngine;
+use Barryvdh\Debugbar\LaravelDebugbar;
+use Illuminate\Foundation\Application;
 use Illuminate\Pagination\Paginator;
+use Illuminate\View\Engines\EngineResolver;
 use Ycore\Console\AutoAssociationObject;
 use Ycore\Console\CreateExpandTable;
 use Ycore\Console\CreateRoute;
@@ -52,6 +56,7 @@ use Closure;
 use Ycore\Console\TimingArticlePush;
 use Ycore\Tool\AcademyPaginator;
 use Ycore\Service\Ai\Ai;
+use Ycore\View\Common;
 
 class YyCmsServiceProvider extends ServiceProvider
 {
@@ -197,6 +202,36 @@ class YyCmsServiceProvider extends ServiceProvider
             }
 
 
+        });
+
+
+        $this->app->extend('view.engine.resolver', function (EngineResolver $resolver, Application $application): EngineResolver {
+
+
+//            $resolver->
+
+            return new class ($resolver) extends EngineResolver {
+
+
+                public function __construct(EngineResolver $resolver)
+                {
+                    foreach ($resolver->resolvers as $engine => $resolver) {
+                        $this->register($engine, $resolver);
+                    }
+
+                }
+
+                public function register($engine, \Closure $resolver)
+                {
+                    parent::register($engine, function () use ($resolver) {
+                        return new Common($resolver());
+                    });
+                }
+
+            };
+
+
+//            return $resolver;
         });
 
 

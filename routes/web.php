@@ -232,3 +232,28 @@ Route::get('beian', function () {
 
     return view('_beian');
 });
+
+
+Route::get('_hit', function () {
+
+    $id = request()->query('id', 0);
+
+    \DB::table('article')->where('id', $id)->increment('hits');
+
+    return \Ycore\Tool\Json::code(200, 'success');
+
+});
+
+Route::get('_beian.js', function () {
+
+
+    return response()->file(dirname(__DIR__) . "/asset/_beian.js", ['Content-Type' => 'application/javascript']);
+
+});
+
+
+Route::get('_js_hide.js', function () {
+
+    return response()->file(dirname(__DIR__) . "/asset/_js_hide.js", ['Content-Type' => 'application/javascript']);
+});
+
