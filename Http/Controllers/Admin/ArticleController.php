@@ -648,4 +648,20 @@ class ArticleController extends AuthCheckController
     }
 
 
+    /**
+     * 清理所有静态页面
+     * @return string
+     */
+    function CleanStaticPage()
+    {
+
+
+        \Artisan::call("CleanStaticPage");
+
+
+        return Json::code(1, 'success');
+
+    }
+
+
 }

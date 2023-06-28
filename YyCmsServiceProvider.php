@@ -8,6 +8,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Pagination\Paginator;
 use Illuminate\View\Engines\EngineResolver;
 use Ycore\Console\AutoAssociationObject;
+use Ycore\Console\CleanStaticPage;
 use Ycore\Console\CreateExpandTable;
 use Ycore\Console\CreateRoute;
 use Ycore\Console\GetAdminStatic;
@@ -278,7 +279,8 @@ class YyCmsServiceProvider extends ServiceProvider
             NewTheme::class,
             SwitchTheme::class,
             GetAdminStatic::class,
-            CreateExpandTable::class
+            CreateExpandTable::class,
+            CleanStaticPage::class
 
         ]);
 

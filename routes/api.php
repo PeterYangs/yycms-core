@@ -193,7 +193,7 @@ Route::middleware([])->group(function () {
             Route::any('removeArticleAssociationObject', [ArticleController::class, 'removeArticleAssociationObject']);
             Route::any('down', [ArticleController::class, 'down']);
             Route::any('up', [ArticleController::class, 'up']);
-
+            Route::post('CleanStaticPage',[ArticleController::class,'CleanStaticPage']);
         });
 
 

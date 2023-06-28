@@ -45,7 +45,6 @@ class FindTag extends Command
 
                 $articles = Article::where('title', "like", "%" . $item->title . "%")->get();
 
-//                dd($articles);
 
                 if ($articles->count() > 0) {
 
