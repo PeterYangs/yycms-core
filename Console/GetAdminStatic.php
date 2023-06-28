@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Process;
 use Ycore\Core\Core;
 use Ycore\Events\ArticleUpdate;
@@ -78,19 +79,27 @@ class GetAdminStatic extends Command
             }
 
 
+            if (!File::isWritable(public_path('yycms'))) {
+
+
+                throw new \Exception("根目录下 yycms目录无写入权限！");
+            }
+
             if (!File::exists(public_path('yycms'))) {
 
 
                 mkdir(public_path('yycms'), 0755);
             }
 
-            File::put(public_path('yycms.zip'), $rsp->body());
 
-            File::deleteDirectories(public_path('yycms'));
+            Storage::put("yycms.zip", $rsp->body());
 
-            $this->unzip_file(public_path('yycms.zip'), public_path('yycms'));
+            File::cleanDirectory(public_path('yycms'));
 
-            File::delete(public_path('yycms.zip'));
+            $this->unzip_file(Storage::path('yycms.zip'), public_path('yycms'));
+
+
+            Storage::delete('yycms.zip');
 
             if (app()->runningInConsole()) {
 

@@ -87,7 +87,16 @@ class HomeController extends AuthCheckController
     function update()
     {
 
-        \Artisan::call("GetAdminStatic");
+        try {
+
+            \Artisan::call("GetAdminStatic");
+
+        } catch (\Exception $exception) {
+
+
+            return Json::code(2, $exception->getMessage());
+        }
+
 
         return Json::code(1, 'success');
     }

@@ -4,6 +4,7 @@ namespace Ycore\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redis;
 use Symfony\Component\Process\Process;
 
@@ -169,6 +170,13 @@ class Init extends Command
             sleep(1);
 
         }
+
+        if (!File::isWritable(public_path('yycms'))) {
+
+
+            $this->error("根目录下 yycms目录无写入权限！请给写入权限");
+        }
+
 
         $bar->finish();
 
