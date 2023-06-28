@@ -240,7 +240,7 @@ Route::get('_hit', function () {
 
     \DB::table('article')->where('id', $id)->increment('hits');
 
-    return \Ycore\Tool\Json::code(200, 'success');
+//    return \Ycore\Tool\Json::code(200, 'success');
 
 });
 

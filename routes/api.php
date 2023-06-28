@@ -246,6 +246,9 @@ Route::middleware([])->group(function () {
             Route::any('spiderTable', [HomeController::class, 'spiderTable']);
             Route::any('access', [HomeController::class, 'access']);
             Route::any('search', [HomeController::class, 'search']);
+            Route::any('CheckUpdate', [HomeController::class, 'CheckUpdate']);
+            Route::any('update', [HomeController::class, 'update']);
+            Route::any('ignoreUpdate', [HomeController::class, 'ignoreUpdate']);
         });
 
 

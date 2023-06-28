@@ -92,6 +92,11 @@ class GetAdminStatic extends Command
 
             File::delete(public_path('yycms.zip'));
 
+            if (app()->runningInConsole()) {
+
+                $this->info("更新成功！");
+            }
+
 
         } else {
 
