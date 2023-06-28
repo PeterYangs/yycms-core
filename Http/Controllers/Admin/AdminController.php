@@ -166,6 +166,8 @@ class AdminController extends AuthCheckController
 
         $user_info['admin_key']=env('ADMIN_KEY');
 
+        $user_info['site_name']=getOption("site_name","");
+
         return Json::code(1,'success',$user_info);
 
 
