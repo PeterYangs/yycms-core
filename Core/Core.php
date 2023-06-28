@@ -9,6 +9,6 @@ class Core
     const VERSION = "v0.1.18";
 
     //后台静态文件对应版本号
-    const ADMIN_VERSION = "v0.1.17";
+    const ADMIN_VERSION = "v0.1.18";
 
 }

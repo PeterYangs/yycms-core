@@ -13,7 +13,7 @@
     "require": {
         "ext-zip": "*",
         "peteryang/querylist": "^4.2",
-      "ext-curl": "*"
+        "ext-curl": "*"
     },
     "autoload": {
         "psr-4": {
@@ -31,5 +31,10 @@
                 "Ycore\\YyCmsEventProvider"
             ]
         }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "@php artisan vendor:publish --provider=\"Ycore\\YyCmsServiceProvider\" --force --tag=yycms"
+        ]
     }
 }

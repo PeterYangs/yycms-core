@@ -71,7 +71,7 @@ class Init extends Command
         }
 
         //发布资源
-        $this->call("vendor:publish", ['--provider' => "Ycore\YyCmsServiceProvider"]);
+        $this->call("vendor:publish", ['--provider' => "Ycore\YyCmsServiceProvider", "--force" => true]);
 
 
         if (!\Schema::hasTable('migrations')) {

@@ -55,19 +55,6 @@ return [
             ]
         ],
     ],
-    'static' => [
-        'open' => env('STATIC_OPEN', false),
 
-        //新闻关联游戏字段
-        'news_game_field' => 'obj',
-        //安卓下载链接字段
-        'android_download_link' => 'android',
-        //苹果下载链接字段
-        'ios_download_link' => 'ios'
-    ],
-    'test' => [
-
-        'name' => 123
-    ]
 
 ];

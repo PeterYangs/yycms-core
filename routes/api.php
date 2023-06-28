@@ -30,6 +30,7 @@ use Ycore\Http\Controllers\Admin\StaticController;
 use Ycore\Http\Controllers\Admin\StoreArticleController;
 use Ycore\Http\Controllers\Admin\TagController;
 use Ycore\Http\Controllers\Admin\UploadController;
+use Ycore\Http\Controllers\Admin\WebsitePushController;
 
 Route::middleware([])->group(function () {
 
@@ -355,6 +356,16 @@ Route::middleware([])->group(function () {
             Route::post('open', [AutoPushController::class, 'open']);
             Route::post('destroy', [AutoPushController::class, 'destroy']);
             Route::post('detail', [AutoPushController::class, 'detail']);
+
+
+        });
+
+
+        Route::group(['prefix' => 'website_push'], function () {
+
+
+            Route::post('list', [WebsitePushController::class, 'list']);
+
 
 
         });
