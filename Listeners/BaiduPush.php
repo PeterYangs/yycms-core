@@ -34,25 +34,6 @@ class BaiduPush
     {
         //
 
-        //判断是否超出推送配额标记
-        if ($isOver = \Cache::get("isOver")) {
-
-
-            if ($isOver === date("Y-m-d", $this->now)) {
-
-
-                \Log::channel('push')->error("超出当天配额了(文章id-" . $event->articleId . ")");
-
-                return;
-
-            } else {
-
-                //不一致清除超出配额标记
-                \Cache::forget("isOver");
-            }
-
-        }
-
 
         //调试模式不推送
         if (!(env('APP_DEBUG') === false && env('APP_ENV') === "production")) {
@@ -92,7 +73,47 @@ class BaiduPush
 
         if ($domain) {
 
-            $this->push($pcUrl, $domain, $baidu_token);
+
+            //判断是否超出推送配额标记
+            if ($isOver = \Cache::get("_pc_is_over")) {
+
+
+                if ($isOver === date("Y-m-d", $this->now)) {
+
+
+                    \Log::channel('push')->error("超出当天配额了(文章链接-" . $pcUrl . ")");
+
+                    return;
+
+                } else {
+
+                    //不一致清除超出配额标记
+                    \Cache::forget("_pc_is_over");
+                }
+
+            }
+
+
+            try {
+
+                $result = $this->push($pcUrl, $domain, $baidu_token);
+
+                if (str_contains($result, "over quota")) {
+
+
+                    //设置超出当天配额标记
+                    \Cache::put('_pc_is_over', date("Y-m-d", $this->now), 60 * 60 * 24);
+
+                }
+
+
+                \Ycore\Models\WebsitePush::create(['article_id' => $articleId, 'link' => $pcUrl, 'spider' => 'baidu', 'platform' => 'pc']);
+
+            } catch (\Exception $exception) {
+
+
+            }
+
 
         }
 
@@ -102,14 +123,54 @@ class BaiduPush
 
         if ($m_domain) {
 
-            $this->push($mobileUrl, $m_domain, $baidu_token);
+
+            //判断是否超出推送配额标记
+            if ($isOver = \Cache::get("_mobile_is_over")) {
+
+
+                if ($isOver === date("Y-m-d", $this->now)) {
+
+
+                    \Log::channel('push')->error("超出当天配额了(文章链接-" . $mobileUrl . ")");
+
+                    return;
+
+                } else {
+
+                    //不一致清除超出配额标记
+                    \Cache::forget("_mobile_is_over");
+                }
+
+            }
+
+
+            try {
+
+                $result = $this->push($mobileUrl, $m_domain, $baidu_token);
+
+                if (str_contains($result, "over quota")) {
+
+
+                    //设置超出当天配额标记
+                    \Cache::put('_mobile_is_over', date("Y-m-d", $this->now), 60 * 60 * 24);
+
+                }
+
+                \Ycore\Models\WebsitePush::create(['article_id' => $articleId, 'link' => $mobileUrl, 'spider' => 'baidu', 'platform' => 'mobile']);
+
+            } catch (\Exception $exception) {
+
+
+            }
+
+
         }
 
 
     }
 
 
-    function push(string $url, $domain, $token)
+    function push(string $url, $domain, $token): string
     {
         $urls = array(
             $url,
@@ -131,24 +192,25 @@ class BaiduPush
 
             $msg = curl_error($ch);
 
+            curl_close($ch);
+
             \Log::channel('push')->error($msg);
+
+
+            throw new \Exception($msg);
+
 
         } else {
 
 
-            if (str_contains($result, "over quota")) {
-
-
-                //设置超出当天配额标记
-                \Cache::put('isOver', date("Y-m-d", $this->now), 60 * 60 * 24);
-
-            }
-
             \Log::channel('push')->info($result . "-----" . $url);
+
+            curl_close($ch);
+
+            return $result;
+
         }
 
-
-        curl_close($ch);
 
     }
 
