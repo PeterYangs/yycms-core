@@ -40,6 +40,14 @@ class GetAdminStatic extends Command
     public function handle()
     {
 
+
+        if (!File::isWritable(public_path('yycms'))) {
+
+
+            throw new \Exception("根目录下 yycms目录无写入权限！");
+        }
+
+
         $adminVersion = "";
 
         try {
@@ -78,12 +86,6 @@ class GetAdminStatic extends Command
 
             }
 
-
-            if (!File::isWritable(public_path('yycms'))) {
-
-
-                throw new \Exception("根目录下 yycms目录无写入权限！");
-            }
 
             if (!File::exists(public_path('yycms'))) {
 
