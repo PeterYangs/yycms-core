@@ -12,6 +12,7 @@ use Ycore\Console\CleanStaticPage;
 use Ycore\Console\CreateExpandTable;
 use Ycore\Console\CreateRoute;
 use Ycore\Console\GetAdminStatic;
+use Ycore\Console\GetLibrary;
 use Ycore\Console\NewTheme;
 use Ycore\Console\PushAsset;
 use Ycore\Console\SwitchTheme;
@@ -280,7 +281,8 @@ class YyCmsServiceProvider extends ServiceProvider
             SwitchTheme::class,
             GetAdminStatic::class,
             CreateExpandTable::class,
-            CleanStaticPage::class
+            CleanStaticPage::class,
+            GetLibrary::class,
 
         ]);
 
