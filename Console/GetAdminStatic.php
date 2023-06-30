@@ -41,12 +41,18 @@ class GetAdminStatic extends Command
     {
 
 
+        if (!File::exists(public_path('yycms'))) {
+
+
+            File::makeDirectory(public_path('yycms'), 755);
+
+        }
+
         if (!File::isWritable(public_path('yycms'))) {
 
 
             throw new \Exception("根目录下 yycms目录无写入权限！");
         }
-
 
         $adminVersion = "";
 

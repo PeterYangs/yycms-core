@@ -3,6 +3,7 @@
 namespace Ycore\Http\Controllers\Admin;
 
 
+use Illuminate\Support\Facades\Http;
 use Ycore\Core\Core;
 use Ycore\Tool\Json;
 
@@ -39,6 +40,7 @@ class HomeController extends AuthCheckController
     /**
      * 检查更新
      * @return string
+     * @throws \Exception
      */
     function CheckUpdate()
     {
@@ -49,6 +51,28 @@ class HomeController extends AuthCheckController
 
             return Json::code(1, 'success', false);
         }
+
+
+        $rep = Http::withOptions(['verify' => false])->get("http://121.199.20.221:8198/releases");
+
+        if ($rep->status() !== 200) {
+
+            throw new \Exception("获取更新失败(" . $rep->body() . ")");
+
+        }
+
+        $data = json_decode($rep->body(), true);
+
+        $tag = $data['tag_name'];
+
+
+        if ($tag !== Core::VERSION) {
+
+
+            return Json::code(1, 'success', true);
+
+        }
+
 
         $adminVersion = "";
 
@@ -88,6 +112,8 @@ class HomeController extends AuthCheckController
     {
 
         try {
+
+            \Artisan::call("GetLibrary");
 
             \Artisan::call("GetAdminStatic");
 
