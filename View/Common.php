@@ -4,6 +4,7 @@ namespace Ycore\View;
 
 use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Contracts\View\Engine;
+use mysql_xdevapi\Exception;
 use QL\QueryList;
 use Ycore\Models\Article;
 use Ycore\Models\Special;
@@ -26,6 +27,7 @@ class Common implements Engine
 
     }
 
+
     public function get($path, array $data = [])
     {
         // TODO: Implement get() method.
@@ -33,8 +35,19 @@ class Common implements Engine
         //只能被设置一次
         static $isSet = false;
 
-        //获取原始html
-        $html = $this->engine->get($path, $data);
+        $html = "";
+
+        try {
+            //获取原始html
+            $html = $this->engine->get($path, $data);
+
+        } catch (\Exception $exception) {
+
+
+            throw $exception->getPrevious();
+
+
+        }
 
 
         $htmlDoc = QueryList::html($html);
