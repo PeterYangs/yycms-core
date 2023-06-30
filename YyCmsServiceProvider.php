@@ -13,6 +13,7 @@ use Ycore\Console\CreateExpandTable;
 use Ycore\Console\CreateRoute;
 use Ycore\Console\GetAdminStatic;
 use Ycore\Console\GetLibrary;
+use Ycore\Console\GetUpdate;
 use Ycore\Console\NewTheme;
 use Ycore\Console\PushAsset;
 use Ycore\Console\SwitchTheme;
@@ -73,7 +74,7 @@ class YyCmsServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/config/menu.php' => config_path('menu.php'),
             __DIR__ . "/database/schema/mysql-schema.dump" => database_path('schema/mysql-schema.dump')
-        ],'yycms');
+        ], 'yycms');
 
 
         $this->loadMigrationsFrom(__DIR__ . "/database/migrations");
@@ -209,11 +210,7 @@ class YyCmsServiceProvider extends ServiceProvider
 
         $this->app->extend('view.engine.resolver', function (EngineResolver $resolver, Application $application): EngineResolver {
 
-
-//            $resolver->
-
             return new class ($resolver) extends EngineResolver {
-
 
                 public function __construct(EngineResolver $resolver)
                 {
@@ -232,10 +229,7 @@ class YyCmsServiceProvider extends ServiceProvider
 
             };
 
-
-//            return $resolver;
         });
-
 
     }
 
@@ -283,6 +277,7 @@ class YyCmsServiceProvider extends ServiceProvider
             CreateExpandTable::class,
             CleanStaticPage::class,
             GetLibrary::class,
+            GetUpdate::class
 
         ]);
 
