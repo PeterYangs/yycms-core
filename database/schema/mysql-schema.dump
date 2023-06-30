@@ -894,7 +894,7 @@ INSERT INTO `options` VALUES ('11', '2023-03-07 17:08:37', '2023-03-07 17:08:37'
 INSERT INTO `options` VALUES ('12', '2023-03-07 17:08:37', '2023-03-07 17:08:37', 'code', '', 'string', '1');
 INSERT INTO `options` VALUES ('13', '2023-03-07 17:08:37', '2023-03-07 17:08:37', 'sm_token', '', 'string', '1');
 INSERT INTO `options` VALUES ('14', '2023-03-07 17:08:37', '2023-03-07 17:08:37', 'id', '', 'string', '1');
-INSERT INTO `options` VALUES ('15', '2023-06-17 17:01:52', '2023-06-17 17:01:52', 'theme', '52', 'int', '1');
+INSERT INTO `options` VALUES ('15', '2023-06-17 17:01:52', '2023-06-17 17:01:52', 'theme', 'demo', 'int', '1');
 
 -- ----------------------------
 -- Table structure for page
