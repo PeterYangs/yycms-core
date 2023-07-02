@@ -35,7 +35,7 @@ class Auth
 
 
         //无验证标记
-        if ($data && $data['type'] ?? "" === 'no_check') {
+        if ($data && ($data['type'] ?? "") === 'no_check') {
 
             return $next($request);
         }
