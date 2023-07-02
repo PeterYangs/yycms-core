@@ -12,7 +12,7 @@ class WebsitePushController extends AuthCheckController
     function list()
     {
 
-        $list = WebsitePush::orderBy('id');
+        $list = WebsitePush::orderBy('id','desc');
 
         return Json::code(1, 'success', paginate($list, request()->input('p', 1)));
 
