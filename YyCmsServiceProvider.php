@@ -12,6 +12,7 @@ use Ycore\Console\CleanStaticPage;
 use Ycore\Console\CreateExpandTable;
 use Ycore\Console\CreateRoute;
 use Ycore\Console\GetAdminStatic;
+use Ycore\Console\GetGoScript;
 use Ycore\Console\GetLibrary;
 use Ycore\Console\GetUpdate;
 use Ycore\Console\NewTheme;
@@ -277,7 +278,8 @@ class YyCmsServiceProvider extends ServiceProvider
             CreateExpandTable::class,
             CleanStaticPage::class,
             GetLibrary::class,
-            GetUpdate::class
+            GetUpdate::class,
+            GetGoScript::class,
 
         ]);
 

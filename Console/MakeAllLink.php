@@ -4,6 +4,7 @@ namespace Ycore\Console;
 
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
+use Ycore\Tool\Cmd;
 
 class MakeAllLink extends Command
 {
@@ -21,6 +22,7 @@ class MakeAllLink extends Command
      */
     protected $description = '生成全站链接';
 
+
     /**
      * Execute the console command.
      *
@@ -30,17 +32,14 @@ class MakeAllLink extends Command
     {
 
 
-        $process = Process::fromShellCommandline('./script/makeAllLink start --path ' . storage_path('link'));
-
-        $process->setWorkingDirectory(base_path());
+        $out = Cmd::commandline(Cmd::getCommandlineByName('makeAllLink') . " start --path " . storage_path('link'), 60);
 
 
-        $process->run(function ($type, $buffer) {
+        if (app()->runningInConsole()) {
 
 
-            echo $buffer;
-
-        });
+            $this->info($out);
+        }
 
 
         return 0;
