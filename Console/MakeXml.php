@@ -4,6 +4,7 @@ namespace Ycore\Console;
 
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
+use Ycore\Tool\Cmd;
 
 class MakeXml extends Command
 {
@@ -30,17 +31,14 @@ class MakeXml extends Command
     {
 
 
-        $process = Process::fromShellCommandline('./script/makeXml');
-
-        $process->setWorkingDirectory(base_path());
+        $out = Cmd::commandline(Cmd::getCommandlineByName('goScript') . " makeXml", 90);
 
 
-        $process->run(function ($type, $buffer) {
+        if (app()->runningInConsole()) {
 
 
-            echo $buffer;
-
-        });
+            $this->info($out);
+        }
 
 
         return 0;

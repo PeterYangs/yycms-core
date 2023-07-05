@@ -32,9 +32,7 @@ class Cmd
 
         });
 
-
-        return str_replace("\n", "", $msg);
-
+        return $msg;
     }
 
 
@@ -49,13 +47,13 @@ class Cmd
         if (in_array(PHP_OS, ['WIN32', 'WINNT', 'Windows'])) {
 
 
-            return ".\script\\" . $name . ".exe";
+            return ".\storage\\app\\public\\" . $name . ".exe";
         }
 
         if (in_array(PHP_OS, ['Darwin', 'FreeBSD', 'Linux'])) {
 
 
-            return "./script/" . $name;
+            return "./storage/app/public/" . $name;
         }
 
         return "";

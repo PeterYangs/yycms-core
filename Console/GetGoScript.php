@@ -32,8 +32,7 @@ class GetGoScript extends Command
 
 
         $list = [
-            ['name' => 'makeAllLink', 'version' => 'v0.0.1', 'download_url' => 'https://gitee.com/mryy1996/make-all-link/releases/download/{tag}/makeAllLink'],
-            ['name' => 'makeXml', 'version' => 'v0.0.1', 'download_url' => 'https://gitee.com/mryy1996/make-xml/releases/download/{tag}/makeXml'],
+            ['name' => 'goScript', 'version' => 'v0.0.1', 'download_url' => 'https://gitee.com/mryy1996/go-script/releases/download/{tag}/goScript'],
         ];
 
         $client = new Client();
@@ -42,7 +41,7 @@ class GetGoScript extends Command
         foreach ($list as $value) {
 
 
-            $version = Cmd::commandline(Cmd::getCommandlineByName($value['name']) . " --version");
+            $version = str_replace("\n", "", Cmd::commandline(Cmd::getCommandlineByName($value['name']) . " --version"));
 
 
             if ($version !== $value['version']) {
@@ -54,7 +53,7 @@ class GetGoScript extends Command
 
                 try {
 
-                    $client->get($url, ['sink' => base_path('script/' . basename($url)), 'verify' => false, 'timeout' => 90]);
+                    $client->get($url, ['sink' => base_path('storage/app/public/' . basename($url)), 'verify' => false, 'timeout' => 90]);
 
 
                     $this->info($value['name'] . "已更新到" . $value['version'] . "!");
@@ -62,7 +61,7 @@ class GetGoScript extends Command
                     //设置可执行权限
                     if (in_array(PHP_OS, ['Darwin', 'FreeBSD', 'Linux'])) {
 
-                        Cmd::commandline("chmod +x " . base_path('script/' . basename($url)));
+                        Cmd::commandline("chmod +x " . base_path('storage/app/public/' . basename($url)));
                     }
 
 

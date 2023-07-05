@@ -158,6 +158,12 @@ class Init extends Command
             break;
         }
 
+        $this->info("正在更新系统脚本。。");
+
+        $this->call("GetGoScript");
+
+        $this->info("系统脚本更新成功！");
+
 
         $bar = $this->output->createProgressBar(5);
 
