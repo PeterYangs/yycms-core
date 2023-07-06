@@ -19,7 +19,7 @@ class ChatGpt implements Ai
             throw new \Exception("chatgpt地址配置错误，请检查");
         }
 
-        $rsp = \Http::timeout(90)->get(str_replace("{keyword}", urlencode($keyword), $address));
+        $rsp = \Http::timeout(90)->retry(3,100)->get(str_replace("{keyword}", urlencode($keyword), $address));
 
 
         if ($rsp->status() !== 200) {
