@@ -41,8 +41,15 @@ class GetGoScript extends Command
         foreach ($list as $value) {
 
 
-            $version = str_replace("\n", "", Cmd::commandline(Cmd::getCommandlineByName($value['name']) . " --version"));
+            $version = "";
 
+            try {
+
+                $version = str_replace("\n", "", Cmd::commandline(Cmd::getCommandlineByName($value['name']) . " --version"));
+
+            } catch (\Exception $exception) {
+
+            }
 
             if ($version !== $value['version']) {
 
