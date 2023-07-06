@@ -32,7 +32,7 @@ class GetGoScript extends Command
 
 
         $list = [
-            ['name' => 'goScript', 'version' => 'v0.0.1', 'download_url' => 'https://gitee.com/mryy1996/go-script/releases/download/{tag}/goScript'],
+            ['name' => 'goScript', 'version' => 'v0.0.2', 'download_url' => 'https://gitee.com/mryy1996/go-script/releases/download/{tag}/goScript'],
         ];
 
         $client = new Client();

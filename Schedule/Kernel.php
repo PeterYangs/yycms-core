@@ -11,15 +11,9 @@ class Kernel
     public function schedule(Schedule $schedule)
     {
 
+        //go脚本自动更新
+        $schedule->command("GetGoScript")->hourly();
 
-//        $schedule->call(function () {
-//
-//
-//            echo "11111" . PHP_EOL;
-//
-//        })->everyMinute();
-//
-//        return;
 
         //采集文章发布到正式文章
 //        $schedule->command('PushRandomStoreToArticle')->everyFifteenMinutes();

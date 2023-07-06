@@ -4,6 +4,7 @@ namespace Ycore\Console;
 
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
+use Ycore\Tool\Cmd;
 
 class BatchPush extends Command
 {
@@ -29,25 +30,8 @@ class BatchPush extends Command
     public function handle()
     {
 
-//        dd(storage_path('link'));
 
-
-
-
-
-        $process = Process::fromShellCommandline('./script/baiduPush start -d --path '.storage_path('link'));
-
-        $process->setWorkingDirectory(base_path());
-
-
-        $process->run(function ($type, $buffer) {
-
-
-            echo $buffer;
-
-        });
-
-
+        Cmd::commandline(Cmd::getCommandlineByName("goScript") . " baiduPush --path " . storage_path('link'), 60 * 60 * 24, true);
 
 
         return 0;

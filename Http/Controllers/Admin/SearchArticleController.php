@@ -7,6 +7,7 @@ use Ycore\Events\WebsitePush;
 use Ycore\Models\Article;
 use Ycore\Models\SearchArticle;
 use Ycore\Models\StoreArticle;
+use Ycore\Tool\Cmd;
 use Ycore\Tool\Expand;
 use Ycore\Tool\Json;
 use Ycore\Tool\Search;
@@ -64,16 +65,19 @@ class SearchArticleController extends AuthCheckController
 
             case "今日头条":
 
-                $cmd = './script/toutiao -k ' . $keyword . " -c " . $category_id;
 
-                $process = Process::fromShellCommandline($cmd);
-
-                $process->setWorkingDirectory(base_path());
+                $cmd = Cmd::getCommandlineByName("goScript") . " toutiao --k " . $keyword . " --c " . $category_id;
 
 
-                $process->run();
+                try {
 
-                $out = $process->getOutput();
+                    $out = Cmd::commandline($cmd, 60 * 3);
+
+                } catch (\Exception $exception) {
+
+
+                    return Json::code(2, $exception->getMessage(), $cmd);
+                }
 
 
                 break;
@@ -106,8 +110,6 @@ class SearchArticleController extends AuthCheckController
 
         $post = request()->post();
 
-
-//        dd($post);
 
         $id = $post['id'] ?? null;
 
@@ -164,26 +166,7 @@ class SearchArticleController extends AuthCheckController
                 } else {
 
 
-                    $process = Process::fromShellCommandline('./script/image-deal "' . $url . '" ' . $isMsk);
-
-                    $process->setWorkingDirectory(base_path());
-
-
-                    try {
-
-                        $process->mustRun();
-
-                        $fileName = $process->getOutput();
-
-
-                    } catch (\Exception $exception) {
-
-                        \Log::error($exception->getMessage());
-
-
-                        throw new \Exception($exception->getMessage());
-
-                    }
+                    $fileName = Cmd::commandline(Cmd::getCommandlineByName("goScript") . " image-deal \"" . $url . '" ' . $isMsk);
 
 
                 }
@@ -250,7 +233,7 @@ class SearchArticleController extends AuthCheckController
 
 //            echo $item->title . ":" . $exception->getMessage() . PHP_EOL;
 
-            \Log::error("推送采集文章失败:" . $searchArticle->title . "--" . $exception->getMessage());
+            \Log::error("推送采集文章失败:" . $searchArticle->title . "=》" . $exception->getMessage());
 
 
             throw new \Exception($exception->getMessage());
