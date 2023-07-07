@@ -19,6 +19,14 @@ class Cmd
     {
 
 
+        if (in_array(PHP_OS, ['Darwin', 'FreeBSD', 'Linux']) && $isBackground) {
+
+
+            $cmd = "nohup " . $cmd . " > /dev/null 2>&1 &";
+
+        }
+
+
         $process = Process::fromShellCommandline($cmd);
 
         $process->setWorkingDirectory(base_path());
@@ -29,8 +37,11 @@ class Cmd
 
         if ($isBackground) {
 
+            if (in_array(PHP_OS, ['WIN32', 'WINNT', 'Windows'])) {
 
-            $process->setOptions(['create_new_console' => true]);
+                $process->setOptions(['create_new_console' => true]);
+
+            }
 
             $process->start();
 
