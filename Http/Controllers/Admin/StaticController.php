@@ -2,6 +2,7 @@
 
 namespace Ycore\Http\Controllers\Admin;
 
+use Ycore\Tool\Cmd;
 use Ycore\Tool\Json;
 use Symfony\Component\Process\Process;
 
@@ -30,46 +31,31 @@ class StaticController extends AuthCheckController
             return Json::code(2, '类型错误');
         }
 
-//        mb_strlen()
 
         if ($ids) {
 
-            $cmd = "  ./script/staticTool start --cid " . implode(",", $ids) . " -d";
+
+            $cmd = Cmd::getCommandlineByName('goScript') . " staticTool --cid " . implode(",", $ids);
 
         } else {
 
-            $cmd = "  ./script/staticTool start  " . " -d";
+
+            $cmd = Cmd::getCommandlineByName('goScript') . " staticTool";
         }
 
 
-        $process = Process::fromShellCommandline($cmd);
-
-
-        $process->setWorkingDirectory($this->path);
-
-
-        $msg = "success";
-
         try {
 
-
-            $process->mustRun();
-
-            $msg = $process->getOutput();
+            Cmd::commandline($cmd, 10, true);
 
         } catch (\Exception $exception) {
 
 
-            $msg = $exception->getMessage();
-
-
-            return Json::code(2, $msg, $cmd);
+            return Json::code(2, $exception->getMessage());
 
         }
 
-
         return Json::code(1, "success", $cmd);
-
 
     }
 
@@ -78,33 +64,10 @@ class StaticController extends AuthCheckController
     {
 
 
-        $process = Process::fromShellCommandline("./script/staticTool process");
+        $out = Cmd::commandline(Cmd::getCommandlineByName('goScript') . " process");
 
 
-        $process->setWorkingDirectory($this->path);
-
-
-        $msg = "";
-
-        try {
-
-
-            $process->mustRun();
-
-            $msg = $process->getOutput();
-
-        } catch (\Exception $exception) {
-
-
-            $msg = $exception->getMessage();
-
-
-            return Json::code(2, $msg);
-
-        }
-
-
-        return Json::code(1, $msg);
+        return Json::code(1, $out);
 
     }
 
@@ -113,33 +76,10 @@ class StaticController extends AuthCheckController
     {
 
 
-        $process = Process::fromShellCommandline("./script/staticTool stop");
+        $out = Cmd::commandline(Cmd::getCommandlineByName('goScript') . " process-stop");
 
 
-        $process->setWorkingDirectory($this->path);
-
-
-        $msg = "";
-
-        try {
-
-
-            $process->mustRun();
-
-            $msg = $process->getOutput();
-
-        } catch (\Exception $exception) {
-
-
-            $msg = $exception->getMessage();
-
-
-            return Json::code(2, $msg);
-
-        }
-
-
-        return Json::code(1, $msg);
+        return Json::code(1, $out);
 
     }
 

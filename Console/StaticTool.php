@@ -4,6 +4,7 @@ namespace Ycore\Console;
 
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
+use Ycore\Tool\Cmd;
 
 class StaticTool extends Command
 {
@@ -29,20 +30,15 @@ class StaticTool extends Command
     public function handle()
     {
 
-//        dd(storage_path('link'));
+
+        $out = Cmd::commandline(Cmd::getCommandlineByName('goScript') . " staticTool" , 10,true);
 
 
-        $process = Process::fromShellCommandline('./script/staticTool start  -d');
-
-        $process->setWorkingDirectory(base_path());
+        if (app()->runningInConsole()) {
 
 
-        $process->run(function ($type, $buffer) {
-
-
-            echo $buffer;
-
-        });
+            $this->info($out);
+        }
 
 
         return 0;

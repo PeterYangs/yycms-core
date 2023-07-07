@@ -29,6 +29,12 @@ class Cmd
 
         if ($isBackground) {
 
+            if (in_array(PHP_OS, ['WIN32', 'WINNT', 'Windows'])) {
+
+                $process->setOptions(['create_new_console' => true]);
+
+            }
+
             $process->start();
 
             return "";
