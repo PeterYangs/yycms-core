@@ -4,6 +4,7 @@ namespace Ycore\Console;
 
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
+use Ycore\Tool\Cmd;
 
 class Spider extends Command
 {
@@ -30,21 +31,13 @@ class Spider extends Command
     {
 
 
-        $process = Process::fromShellCommandline('./script/spider');
-
-        $process->setWorkingDirectory(base_path());
+        $out = Cmd::commandline(Cmd::getCommandlineByName('goScript') . " spider", 60 * 5);
 
 
-        $process->setTimeout(60 * 5);
+        if (app()->runningInConsole()) {
 
-
-        $process->run(function ($type, $buffer) {
-
-
-            echo $buffer;
-
-        });
-
+            $this->info($out);
+        }
 
         return 0;
     }

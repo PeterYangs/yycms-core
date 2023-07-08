@@ -4,6 +4,7 @@ namespace Ycore\Http\Controllers\Admin;
 
 use Ycore\Models\Spider;
 use Ycore\Models\SpiderItem;
+use Ycore\Tool\Cmd;
 use Ycore\Tool\Json;
 use Ycore\Tool\Search;
 use Symfony\Component\Process\Process;
@@ -108,15 +109,7 @@ class SpiderController extends AuthCheckController
     function runAll()
     {
 
-
-        $process = Process::fromShellCommandline('./script/spider start --skip');
-
-        $process->setWorkingDirectory(base_path());
-
-
-        $process->run();
-
-        $out = $process->getOutput();
+        $out = Cmd::commandline(Cmd::getCommandlineByName('goScript') . " spider --skip", 60 * 5);
 
         return Json::code(1, 'success', $out);
 
@@ -132,20 +125,9 @@ class SpiderController extends AuthCheckController
 
         $id = request()->input('id');
 
-        $process = Process::fromShellCommandline('./script/spider start --id ' . $id . " --debug");
-
-        $process->setWorkingDirectory(base_path());
-
-
         try {
 
-            $process->mustRun();
-
-            $msg = $process->getOutput();
-
-
-            \Log::channel('spider')->info($msg);
-
+            $out = Cmd::commandline(Cmd::getCommandlineByName('goScript') . " spider --id " . $id . " --debug", 60 * 5);
 
         } catch (\Exception $exception) {
 
@@ -155,8 +137,7 @@ class SpiderController extends AuthCheckController
 
         }
 
-
-        return Json::code(1, $msg);
+        return Json::code(1, $out);
     }
 
 
