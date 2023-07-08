@@ -73,10 +73,10 @@ class GetAdminStatic extends Command
         }
 
 
-        if ($adminVersion != Core::ADMIN_VERSION) {
+        if ($adminVersion != Core::GetAdminVersion()) {
 
 //            $downloadUrl = "https://github.com/PeterYangs/yy-cms-admin-static/releases/download/" . Core::ADMIN_VERSION . "/dist.zip";
-            $downloadUrl = "https://gitee.com/mryy1996/yycms-admin-static/releases/download/" . Core::ADMIN_VERSION . "/dist.zip";
+            $downloadUrl = "https://gitee.com/mryy1996/yycms-admin-static/releases/download/" . Core::GetAdminVersion() . "/dist.zip";
 
 
             $rsp = Http::withOptions(['verify' => false])->timeout(60)->connectTimeout(10)->get($downloadUrl);

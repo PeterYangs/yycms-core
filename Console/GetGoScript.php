@@ -4,6 +4,7 @@ namespace Ycore\Console;
 
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
+use Ycore\Core\Core;
 use Ycore\Tool\Cmd;
 
 class GetGoScript extends Command
@@ -32,7 +33,7 @@ class GetGoScript extends Command
 
 
         $list = [
-            ['name' => 'goScript', 'version' => 'v0.0.4', 'download_url' => 'https://gitee.com/mryy1996/go-script/releases/download/{tag}/goScript'],
+            ['name' => 'goScript', 'version' => Core::GetGoVersion(), 'download_url' => 'https://gitee.com/mryy1996/go-script/releases/download/{tag}/goScript'],
         ];
 
         $client = new Client();

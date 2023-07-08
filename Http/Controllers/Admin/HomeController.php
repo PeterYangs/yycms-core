@@ -66,7 +66,7 @@ class HomeController extends AuthCheckController
         $tag = $data['tag_name'];
 
 
-        if ($tag !== Core::VERSION) {
+        if ($tag !== Core::GetVersion()) {
 
 
             return Json::code(1, 'success', true);
@@ -92,7 +92,7 @@ class HomeController extends AuthCheckController
 
         }
 
-        if ($adminVersion != Core::ADMIN_VERSION) {
+        if ($adminVersion != Core::GetAdminVersion()) {
 
 
             return Json::code(1, 'success', true);

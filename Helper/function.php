@@ -2335,7 +2335,7 @@ function viewPage($paginator, $showSize = 8): \Tightenco\Collect\Support\Collect
 function getCoreVersion(): string
 {
 
-    return Core::VERSION;
+    return Core::GetVersion();
 }
 
 /**

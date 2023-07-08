@@ -58,7 +58,7 @@ class GetLibrary extends Command
         }
 
 
-        if ($tag !== Core::VERSION) {
+        if ($tag !== Core::GetVersion()) {
 
 
             $url = $data['assets'][0]['browser_download_url'];

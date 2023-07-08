@@ -3,6 +3,7 @@
 namespace Ycore\Console;
 
 use Illuminate\Database\Schema\Blueprint;
+use Ycore\Core\Core;
 use Ycore\Events\WebsitePush;
 use Ycore\Http\Controllers\Admin\CategoryController;
 use Ycore\Models\Article;
@@ -38,6 +39,8 @@ class Test extends Command
     {
 
 
+
+        dd(Core::GetVersion());
 
 
 
