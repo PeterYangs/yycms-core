@@ -111,7 +111,7 @@ class GetAdminStatic extends Command
 
             if (app()->runningInConsole()) {
 
-                $this->info("更新成功！");
+                $this->info("admin更新成功($adminVersion)");
             }
 
 
@@ -120,7 +120,7 @@ class GetAdminStatic extends Command
 
             if (app()->runningInConsole()) {
 
-                $this->info("已是最新版本！");
+                $this->info("admin已是最新版本($adminVersion)");
             }
 
 

@@ -52,10 +52,10 @@ class GetLibrary extends Command
 
         $tag = $data['tag_name'];
 
-        if (app()->runningInConsole()) {
-
-            $this->info("当前最新版本为:" . $tag);
-        }
+//        if (app()->runningInConsole()) {
+//
+//            $this->info("当前最新版本为:" . $tag);
+//        }
 
 
         if ($tag !== Core::GetVersion()) {
@@ -81,7 +81,7 @@ class GetLibrary extends Command
 
             if (app()->runningInConsole()) {
 
-                $this->info("更新成功！");
+                $this->info("library更新成功($tag)");
             }
 
 
@@ -89,7 +89,7 @@ class GetLibrary extends Command
 
             if (app()->runningInConsole()) {
 
-                $this->info("已是最新版本");
+                $this->info("library已是最新版本($tag)");
             }
 
         }

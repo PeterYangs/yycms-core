@@ -83,7 +83,7 @@ class GetGoScript extends Command
 
             } else {
 
-                $this->info($value['name'] . "已是最新版本！");
+                $this->info($value['name'] . "已是最新版本(" . Core::GetGoVersion() . ")");
             }
 
 

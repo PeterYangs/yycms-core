@@ -34,6 +34,7 @@ class GetUpdate extends Command
 
         $this->call('GetAdminStatic');
 
+        $this->call('GetGoScript');
 
         return 0;
     }
