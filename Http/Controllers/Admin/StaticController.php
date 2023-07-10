@@ -66,6 +66,10 @@ class StaticController extends AuthCheckController
 
         $out = Cmd::commandline(Cmd::getCommandlineByName('goScript') . " process");
 
+        if (str_contains($out, "No connection")) {
+
+            return Json::code(1, "未运行");
+        }
 
         return Json::code(1, $out);
 
@@ -74,13 +78,20 @@ class StaticController extends AuthCheckController
 
     function stop()
     {
+        try {
+            $out = Cmd::commandline(Cmd::getCommandlineByName('goScript') . " process-stop");
+        } catch (\Exception $exception) {
 
 
-        $out = Cmd::commandline(Cmd::getCommandlineByName('goScript') . " process-stop");
+            return Json::code(2, $exception->getMessage());
+        }
 
+        if (str_contains($out, "No connection")) {
 
-        return Json::code(1, $out);
+            return Json::code(1, "未运行");
+        }
 
+        return Json::code(1, "停止成功");
     }
 
 

@@ -22,10 +22,14 @@ class Cmd
         if (in_array(PHP_OS, ['Darwin', 'FreeBSD', 'Linux']) && $isBackground) {
 
 
-            $cmd = "nohup " . $cmd . " > /dev/null 2>&1 &";
+            $cmd = "nohup " . $cmd . " > ".storage_path('logs/cmd.log')." 2>&1 &";
 
         }
 
+        if (in_array(PHP_OS, ['WIN32', 'WINNT', 'Windows']) && $isBackground) {
+
+            $cmd = $cmd . " > " . storage_path('logs/cmd.log');
+        }
 
         $process = Process::fromShellCommandline($cmd);
 
