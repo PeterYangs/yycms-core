@@ -171,6 +171,7 @@ Route::middleware([])->group(function () {
 
             Route::any('uploadNormal', [UploadController::class, 'uploadNormal']);
             Route::any('ueditor', [UploadController::class, 'ueditor']);
+            Route::any('uploadFile', [UploadController::class, 'uploadFile']);
 
         });
 
@@ -194,7 +195,7 @@ Route::middleware([])->group(function () {
             Route::any('removeArticleAssociationObject', [ArticleController::class, 'removeArticleAssociationObject']);
             Route::any('down', [ArticleController::class, 'down']);
             Route::any('up', [ArticleController::class, 'up']);
-            Route::post('CleanStaticPage',[ArticleController::class,'CleanStaticPage']);
+            Route::post('CleanStaticPage', [ArticleController::class, 'CleanStaticPage']);
         });
 
 
@@ -365,7 +366,6 @@ Route::middleware([])->group(function () {
 
 
             Route::post('list', [WebsitePushController::class, 'list']);
-
 
 
         });
