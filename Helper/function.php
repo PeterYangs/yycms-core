@@ -724,7 +724,7 @@ function getImagePrefix(string $url)
     }
 
 
-    return env("IMAGE_DOMAIN") . "/uploads/" . $url;
+    return rtrim(env("IMAGE_DOMAIN"), '/') . "/" . rtrim(ltrim(config('yycms.upload_prefix'), '/'), '/') . "/" . $url;
 
 }
 
@@ -1127,11 +1127,23 @@ function getContent(Article $article)
 
                 $url = $mmm[1] ?? "";
 
+                $elements->attr('src', env('IMAGE_DOMAIN') . $url);
+
+            } else {
+
+
+                if (preg_match("/^(\/uploads\/.*?)$/", $url, $mmm)) {
+
+
+                    $url = $mmm[1] ?? "";
+
+                    $elements->attr('src', env('IMAGE_DOMAIN') . $url);
+
+                }
+
 
             }
 
-
-            $elements->attr('src', env('IMAGE_DOMAIN') . $url);
 
         }
 

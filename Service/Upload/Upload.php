@@ -26,4 +26,11 @@ interface Upload
     function ueditor(array $files);
 
 
+    /**
+     * 上传远程文件
+     * @param $url
+     * @return mixed
+     */
+    function uploadRemoteFile($url);
+
 }

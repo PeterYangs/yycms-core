@@ -74,6 +74,7 @@ class YyCmsServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__ . '/config/menu.php' => config_path('menu.php'),
+            __DIR__ . '/config/yycms.php' => config_path('yycms.php'),
             __DIR__ . "/database/schema/mysql-schema.dump" => database_path('schema/mysql-schema.dump')
         ], 'yycms');
 

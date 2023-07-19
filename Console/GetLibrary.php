@@ -84,6 +84,9 @@ class GetLibrary extends Command
                 $this->info("library更新成功($tag)");
             }
 
+            //发布资源
+            $this->call("vendor:publish", ['--provider' => "Ycore\YyCmsServiceProvider", "--force" => true]);
+
 
         } else {
 

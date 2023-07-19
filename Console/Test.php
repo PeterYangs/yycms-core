@@ -8,6 +8,7 @@ use Ycore\Events\WebsitePush;
 use Ycore\Http\Controllers\Admin\CategoryController;
 use Ycore\Models\Article;
 use Ycore\Models\ArticleExpand;
+use Ycore\Service\Upload\Upload;
 use Ycore\Tool\ArticleGenerator;
 use Illuminate\Console\Command;
 use Ycore\Tool\ChatGpt;
@@ -35,13 +36,17 @@ class Test extends Command
      * @return int
      * @throws \JsonException
      */
-    public function handle(Ai $ai)
+    public function handle(Upload $upload)
     {
 
 
+        $address = $upload->uploadRemoteFile("https://img.925g.com/upload/cms/20230714/1356/4de750827714b14c49ebcd0fab509475.jpg");
 
-        dd(Core::GetVersion());
 
+        dd($address);
+
+
+//        dd(Core::GetVersion());
 
 
 //        dd(resolve(Ai::class));
@@ -104,7 +109,6 @@ class Test extends Command
 
         return 0;
     }
-
 
 
 }

@@ -2,6 +2,8 @@
 
 namespace Ycore\Service\Upload;
 
+use Illuminate\Support\Facades\Validator;
+use Ycore\Core\Core;
 use Ycore\Tool\Json;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
@@ -33,7 +35,6 @@ class LocalUpload implements Upload
             $allowList = explode(',', $allowList);
 
             if (!in_array(strtolower($ext), $allowList)) {
-//                return Json::code(2, '不允许上传该类型文件,' . $ext);
 
                 throw new \Exception('不允许上传该类型文件,' . $ext);
 
@@ -58,11 +59,11 @@ class LocalUpload implements Upload
                     ['png', 'jpg', 'jpeg']) && $size > request()->input('maxResizeByte')) {
 
 
-                Image::make(public_path('uploads/' . $fileName))->resize(request()->input('resize'), null,
+                Image::make(public_path(rtrim(config('yycms.upload_prefix'), '/') . "/" . $fileName))->resize(request()->input('resize'), null,
                     function ($constraint) {
                         $constraint->aspectRatio();
                         $constraint->upsize();
-                    })->save(public_path('uploads/' . $fileName));
+                    })->save(public_path(rtrim(config('yycms.upload_prefix'), '/') . "/" . $fileName));
 
             }
 
@@ -79,15 +80,6 @@ class LocalUpload implements Upload
         // TODO: Implement ueditor() method.
 
 
-//        dd(456);
-
-//        \Debugbar::disable();
-//
-//        $all_file = request()->allFiles();
-
-
-//        return json_encode($all_file);
-
         foreach ($files as $key => $file) {
 
 
@@ -103,14 +95,12 @@ class LocalUpload implements Upload
 
                 throw new \Exception('不允许上传该类型文件,' . $ext);
 
-//                return Json::code(2, '不允许上传该类型文件,' . $ext);
             }
 
         }
 
 
         $path = resource_path('Ueditor');
-//
 
 
         $CONFIG = json_decode(preg_replace("/\/\*[\s\S]+?\*\//", "", file_get_contents($path . "/config.json")), true);
@@ -123,7 +113,6 @@ class LocalUpload implements Upload
 
             /* 上传图片 */
             case 'uploadimage':
-//                dd($all_file);
 
                 /* 上传涂鸦 */
             case 'uploadscrawl':
@@ -168,6 +157,43 @@ class LocalUpload implements Upload
 
         return $result;
 
+
+    }
+
+    function uploadRemoteFile($url)
+    {
+        // TODO: Implement uploadRemoteFile() method.
+        $va = Validator::make(['url' => $url], [
+            'url' => 'required|url'
+        ]);
+
+        if ($va->fails()) {
+
+            throw new \Exception($va->errors()->first());
+        }
+
+        $ext = pathinfo($url, PATHINFO_EXTENSION);
+
+
+        $allowList = env('ALLOW_UPLOAD_TYPE', 'png,gif,jpg,jpeg');
+
+        $allowList = explode(',', $allowList);
+
+        if (!in_array(strtolower($ext), $allowList)) {
+
+            throw new \Exception('不允许上传该类型文件:' . $ext);
+
+        }
+
+        $fileName = date('Ymd') . '/' . uniqid('',
+                true) . '.' . $ext;
+
+        $rsp = \Http::withOptions(['verify' => false])->timeout(15)->connectTimeout(10)->get($url);
+
+        Storage::disk('upload')->put($fileName, $rsp);
+
+
+        return "/" . ltrim(rtrim(config('yycms.upload_prefix'), '/'), '/') . "/" . $fileName;
 
     }
 }
