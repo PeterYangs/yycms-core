@@ -11,6 +11,7 @@ use Ycore\Models\ArticleAssociationObject;
 use Ycore\Models\Category;
 use Ycore\Models\Collect;
 use Ycore\Models\CollectTag;
+use Ycore\Tool\Cmd;
 
 class PushAsset extends Command
 {
@@ -52,34 +53,58 @@ class PushAsset extends Command
         $mobileThemePath = base_path('theme/' . $theme . "/mobile/asset");
 
 
-        File::deleteDirectories(base_path('public/pc'));
-        File::deleteDirectories(base_path('public/mobile'));
-
-
-        foreach (File::allFiles($pcThemePath) as $file) {
-
-
-            if (!File::exists(base_path('public/pc') . "/" . $file->getRelativePath())) {
-
-                mkdir(base_path('public/pc') . "/" . $file->getRelativePath(), 0755, true);
+        //Windows平台删除软连接和创建软链接
+        if (in_array(PHP_OS, ['WIN32', 'WINNT', 'Windows'])) {
+            try {
+                Cmd::commandline('rmdir ' . base_path('public\pc'));
+            } catch (\Exception $exception) {
             }
 
+            try {
+                Cmd::commandline('mklink /J ' . base_path('public\pc') . " " . str_replace("/", "\\", $pcThemePath));
+            } catch (\Exception $exception) {
+                if (app()->runningInConsole()) {
 
-            File::put(base_path('public/pc') . "/" . $file->getRelativePath() . "/" . $file->getFilename(), $file->getContents());
+                    $this->info($exception->getMessage());
+                }
+            }
+
+            try {
+                Cmd::commandline('rmdir ' . base_path('public\mobile'));
+            } catch (\Exception $exception) {
+            }
+
+            try {
+                Cmd::commandline('mklink /J ' . base_path('public\mobile') . " " . str_replace("/", "\\", $mobileThemePath));
+            } catch (\Exception $exception) {
+            }
+
 
         }
 
+        //Linux平台删除软连接和创建软链接(未验证)
+        if (in_array(PHP_OS, ['Darwin', 'FreeBSD', 'Linux'])) {
 
-        foreach (File::allFiles($mobileThemePath) as $file) {
-
-
-            if (!File::exists(base_path('public/mobile') . "/" . $file->getRelativePath())) {
-
-                mkdir(base_path('public/mobile') . "/" . $file->getRelativePath(), 0755, true);
+            try {
+                Cmd::commandline('unlink ' . base_path('public/pc'));
+            } catch (\Exception $exception) {
             }
 
+            try {
+                Cmd::commandline("ln -s " . $pcThemePath . " " . base_path('public/pc'));
+            } catch (\Exception $exception) {
+            }
 
-            File::put(base_path('public/mobile') . "/" . $file->getRelativePath() . "/" . $file->getFilename(), $file->getContents());
+            try {
+                Cmd::commandline('unlink ' . base_path('public/mobile'));
+            } catch (\Exception $exception) {
+            }
+
+            try {
+                Cmd::commandline("ln -s " . $mobileThemePath . " " . base_path('public/mobile'));
+            } catch (\Exception $exception) {
+            }
+
 
         }
 
