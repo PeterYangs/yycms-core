@@ -156,7 +156,15 @@ class SiteSettingController extends AuthCheckController
     function pushAsset()
     {
 
-        Artisan::call("PushAsset " . getOption("theme", "demo"));
+        try {
+
+            Artisan::call("PushAsset");
+
+        } catch (\Exception $exception) {
+
+            return Json::code(2, $exception->getMessage());
+
+        }
 
 
         return Json::code(1, "success", "PushAsset " . getOption("theme", "demo"));

@@ -20,7 +20,7 @@ class PushAsset extends Command
      *
      * @var string
      */
-    protected $signature = 'PushAsset {theme}';
+    protected $signature = 'PushAsset {theme?}';
 
     /**
      * The console command description.
@@ -39,15 +39,24 @@ class PushAsset extends Command
 
         $theme = $this->argument('theme');
 
-//
+        if (!$theme) {
+
+            $theme = getOption("theme", "demo");
+        }
+
 
         if (!File::isDirectory(base_path("theme/" . $theme))) {
 
 
-            $this->error("主题:" . $theme . ",不存在！");
+            throw new \Exception("主题:" . $theme . ",不存在！");
 
 
-            return 0;
+        }
+
+
+        if (!File::isWritable(public_path())) {
+
+            throw new \Exception("public文件夹无写入权限，请给写入权限或者以管理员身份运行命令(php artisan PushAsset)");
         }
 
 
@@ -63,28 +72,14 @@ class PushAsset extends Command
             } catch (\Exception $exception) {
             }
 
-            try {
-                $str = Cmd::commandline('mklink /J ' . base_path('public\pc') . " " . str_replace("/", "\\", $pcThemePath));
-
-            } catch (\Exception $exception) {
-                if (app()->runningInConsole()) {
-
-                    $this->info($exception->getMessage());
-                } else {
-
-                    throw new \Exception($exception->getMessage());
-                }
-            }
+            Cmd::commandline('mklink /J ' . base_path('public\pc') . " " . str_replace("/", "\\", $pcThemePath));
 
             try {
                 Cmd::commandline('rmdir ' . base_path('public\mobile'));
             } catch (\Exception $exception) {
             }
 
-            try {
-                Cmd::commandline('mklink /J ' . base_path('public\mobile') . " " . str_replace("/", "\\", $mobileThemePath));
-            } catch (\Exception $exception) {
-            }
+            Cmd::commandline('mklink /J ' . base_path('public\mobile') . " " . str_replace("/", "\\", $mobileThemePath));
 
 
         }
@@ -97,20 +92,14 @@ class PushAsset extends Command
             } catch (\Exception $exception) {
             }
 
-            try {
-                Cmd::commandline("ln -s " . $pcThemePath . " " . base_path('public/pc'));
-            } catch (\Exception $exception) {
-            }
+            Cmd::commandline("ln -s " . $pcThemePath . " " . base_path('public/pc'));
 
             try {
                 Cmd::commandline('unlink ' . base_path('public/mobile'));
             } catch (\Exception $exception) {
             }
 
-            try {
-                Cmd::commandline("ln -s " . $mobileThemePath . " " . base_path('public/mobile'));
-            } catch (\Exception $exception) {
-            }
+            Cmd::commandline("ln -s " . $mobileThemePath . " " . base_path('public/mobile'));
 
 
         }
