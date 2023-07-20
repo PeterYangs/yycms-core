@@ -11,12 +11,12 @@ YRoute::pcRoute(function () {
 
 
     //网站地图
-    Route::get('/sitemap/{sitemap}.xml', function ($sitemap) {
+    Route::get("/sitemap/{name}.xml", function ($name) {
 
 
         try {
 
-            return response()->file(storage_path('sitemap/pc/' . $sitemap . ".xml"),
+            return response()->file(storage_path('sitemap/pc/' . $name . ".xml"),
                 ['content-type' => 'text/xml; charset=utf-8']);
 
         } catch (\Exception $exception) {
@@ -26,25 +26,7 @@ YRoute::pcRoute(function () {
         }
 
 
-    })->where(['sitemap' => '[0-9a-z]+']);
-
-
-    Route::get("/sitemap{index}.xml", function ($index) {
-
-
-        try {
-
-            return response()->file(storage_path('sitemap/pc/sitemap' . $index . ".xml"),
-                ['content-type' => 'text/xml; charset=utf-8']);
-
-        } catch (\Exception $exception) {
-
-
-            abort(404);
-        }
-
-
-    })->where(['index' => '[0-9]+']);
+    })->where(['name' => '[0-9A-Za-z\-]+']);
 
 
     //搜狗验证文件
@@ -67,13 +49,12 @@ YRoute::pcRoute(function () {
 YRoute::mobileRoute(function () {
 
     //网站地图
-    Route::get('/sitemap/{sitemap}.xml', function ($sitemap) {
+    Route::get("/sitemap/{name}.xml", function ($name) {
 
 
         try {
 
-
-            return response()->file(storage_path('sitemap/mobile/' . $sitemap . ".xml"),
+            return response()->file(storage_path('sitemap/mobile/' . $name . ".xml"),
                 ['content-type' => 'text/xml; charset=utf-8']);
 
         } catch (\Exception $exception) {
@@ -83,25 +64,7 @@ YRoute::mobileRoute(function () {
         }
 
 
-    })->where(['sitemap' => '[0-9a-z]+']);
-
-
-    Route::get("/sitemap{index}.xml", function ($index) {
-
-
-        try {
-
-            return response()->file(storage_path('sitemap/mobile/sitemap' . $index . ".xml"),
-                ['content-type' => 'text/xml; charset=utf-8']);
-
-        } catch (\Exception $exception) {
-
-
-            abort(404);
-        }
-
-
-    })->where(['index' => '[0-9]+']);
+    })->where(['name' => '[0-9A-Za-z\-]+']);
 
 
     //搜狗验证文件

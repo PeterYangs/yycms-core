@@ -39,10 +39,13 @@ class PushAsset extends Command
 
         $theme = $this->argument('theme');
 
-        if (!File::exists('theme/' . $theme)) {
+//
+
+        if (!File::isDirectory(base_path("theme/" . $theme))) {
 
 
             $this->error("主题:" . $theme . ",不存在！");
+
 
             return 0;
         }
@@ -61,11 +64,15 @@ class PushAsset extends Command
             }
 
             try {
-                Cmd::commandline('mklink /J ' . base_path('public\pc') . " " . str_replace("/", "\\", $pcThemePath));
+                $str = Cmd::commandline('mklink /J ' . base_path('public\pc') . " " . str_replace("/", "\\", $pcThemePath));
+
             } catch (\Exception $exception) {
                 if (app()->runningInConsole()) {
 
                     $this->info($exception->getMessage());
+                } else {
+
+                    throw new \Exception($exception->getMessage());
                 }
             }
 

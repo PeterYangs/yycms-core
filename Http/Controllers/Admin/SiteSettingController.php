@@ -148,4 +148,20 @@ class SiteSettingController extends AuthCheckController
     }
 
 
+    /**
+     * 发布当前样式
+     * @return string
+     * @throws \JsonException
+     */
+    function pushAsset()
+    {
+
+        Artisan::call("PushAsset " . getOption("theme", "demo"));
+
+
+        return Json::code(1, "success", "PushAsset " . getOption("theme", "demo"));
+
+    }
+
+
 }

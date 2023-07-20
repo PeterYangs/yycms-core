@@ -240,6 +240,7 @@ Route::middleware([])->group(function () {
             Route::post('themeList', [SiteSettingController::class, 'themeList']);
             Route::post('switchTheme', [SiteSettingController::class, 'switchTheme']);
             Route::post('theme', [SiteSettingController::class, 'theme']);
+            Route::post('PushAsset', [SiteSettingController::class, 'pushAsset']);
         });
 
 
