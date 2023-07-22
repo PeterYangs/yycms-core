@@ -117,7 +117,7 @@ class HomeController extends AuthCheckController
 
             \Artisan::call("GetAdminStatic");
 
-            \Artisan::call("migrate");
+
 
 
         } catch (\Exception $exception) {

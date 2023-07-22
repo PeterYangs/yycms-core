@@ -75,7 +75,12 @@ class GetAdminStatic extends Command
 
         if ($adminVersion != Core::GetAdminVersion()) {
 
-//            $downloadUrl = "https://github.com/PeterYangs/yy-cms-admin-static/releases/download/" . Core::ADMIN_VERSION . "/dist.zip";
+
+            if (app()->runningInConsole()) {
+
+                $this->info("正在更新admin。。。");
+            }
+
             $downloadUrl = "https://gitee.com/mryy1996/yycms-admin-static/releases/download/" . Core::GetAdminVersion() . "/dist.zip";
 
 

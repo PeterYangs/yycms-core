@@ -462,12 +462,11 @@ class ArticleController extends AuthCheckController
         $table_name = CategoryController::getExpandTableName($pid);
 
 
-//        \DB::connection()->enableQueryLog();
-
         $list = Article::with('category')->whereHas('category', function ($query) use ($pid) {
 
             $query->where('pid', $pid);
 
+            //筛选没关联上的文章
         })->whereRaw("EXISTS(select * from " . $table_name . " where article.id = " . $table_name . ".article_id and ( " . config('static.news_game_field') . "= 0 or " . config('static.news_game_field') . " is null ) )")->orderBy('select_order',
             'asc')->orderBy('id',
             'desc');
@@ -475,7 +474,6 @@ class ArticleController extends AuthCheckController
 
         $custom = \Ycore\Tool\Search::searchList($list, request()->input('search', '[]'));
 
-//        dd($custom);
 
         foreach ($custom as $key => $value) {
 
@@ -498,8 +496,6 @@ class ArticleController extends AuthCheckController
 
                 }
 
-//                dd($value['value']);
-
 
             }
 
@@ -508,8 +504,6 @@ class ArticleController extends AuthCheckController
 
 
         //->whereRaw("EXISTS( select * from article as game  where  category_id in (".implode(",",$gameIds).") and  article.title like CONCAT('%',game.title,'%') )")
-
-//        $logs = \DB::getQueryLog();
 
 
         return Json::code(1, "success", paginate($list, request()->input('p', 1)));

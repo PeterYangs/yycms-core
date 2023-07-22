@@ -52,11 +52,6 @@ class GetLibrary extends Command
 
         $tag = $data['tag_name'];
 
-//        if (app()->runningInConsole()) {
-//
-//            $this->info("当前最新版本为:" . $tag);
-//        }
-
 
         if ($tag !== Core::GetVersion()) {
 
@@ -73,6 +68,13 @@ class GetLibrary extends Command
 
             Storage::put("library.zip", $rsp->body());
 
+
+            if (!File::isWritable(base_path('library'))) {
+
+                throw new \Exception('library目录无写入权限');
+            }
+
+
             File::cleanDirectory(base_path('library'));
 
             $this->unzip_file(Storage::path('library.zip'), base_path('library'));
@@ -84,8 +86,21 @@ class GetLibrary extends Command
                 $this->info("library更新成功($tag)");
             }
 
-            //发布资源
-            $this->call("vendor:publish", ['--provider' => "Ycore\YyCmsServiceProvider", "--force" => true]);
+
+            if (File::isWritable(base_path('config'))) {
+
+                $this->info("开始写入配置！");
+                //发布资源
+                $this->call("vendor:publish", ['--provider' => "Ycore\YyCmsServiceProvider", "--force" => true]);
+
+            } else {
+
+                if (app()->runningInConsole()) {
+
+                    $this->error('config目录无写入权限，配置写入失败！');
+
+                }
+            }
 
 
         } else {
@@ -95,7 +110,30 @@ class GetLibrary extends Command
                 $this->info("library已是最新版本($tag)");
             }
 
+            if (File::isWritable(base_path('config'))) {
+
+                $this->info("开始写入配置！");
+                //发布资源
+                $this->call("vendor:publish", ['--provider' => "Ycore\YyCmsServiceProvider", "--force" => true]);
+
+            } else {
+
+
+                if (app()->runningInConsole()) {
+
+                    $this->error('config目录无写入权限，配置写入失败！');
+                }
+
+            }
+
+
         }
+
+
+
+
+        //执行数据库迁移
+        \Artisan::call("migrate");
 
 
         return 0;
