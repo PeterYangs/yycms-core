@@ -17,6 +17,8 @@ use Ycore\Console\GetLibrary;
 use Ycore\Console\GetUpdate;
 use Ycore\Console\NewTheme;
 use Ycore\Console\PushAsset;
+use Ycore\Console\SetExpandData;
+use Ycore\Console\SetExpandDataBatch;
 use Ycore\Console\SwitchTheme;
 use Ycore\Models\Options;
 use Ycore\Service\Ai\ChatGpt;
@@ -281,6 +283,8 @@ class YyCmsServiceProvider extends ServiceProvider
             GetLibrary::class,
             GetUpdate::class,
             GetGoScript::class,
+            SetExpandData::class,
+            SetExpandDataBatch::class,
 
         ]);
 

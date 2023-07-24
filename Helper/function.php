@@ -396,13 +396,11 @@ function getCategoryIds(string|array|int $categoryName, $exceptSelf = false): \I
  * @param string|array $categoryName 分类名称
  * @param int $limit 长度
  * @param int $offset offset
- * @param bool $isParent 是否查询当前id下的子分类(已弃用)
  * @param array $querys 查询条件 [ ['status', '=', '1'], ['subscribed', '<>', '1'] ]
  * @param array $notIdArray 不包括的id
  * @param string $orderField 排序字段
  * @param string $orderDirection 排序方式，desc、asc
- * @param string $expandId 拓展id
- * @param array $expandQuerys 拓展表查询条件
+ * @param array $expandQuerys 拓展表查询条件 [ ['obj','=','358'] ]
  *
  * 调用例子：getArticleByCategoryName('角色扮演',11,0,[],[],'push_time','desc','1',[ ['author','=','是真的帅'] ])
  *
@@ -412,13 +410,11 @@ function getArticleByCategoryName(
     string|array|int $categoryName,
     int              $limit = 10,
     int              $offset = 0,
-//    bool $isParent = false,
     array            $querys = [],
     array            $notIdArray = [],
     string           $orderField = 'push_time',
     string           $orderDirection = 'desc',
-    string           $expandId = '',
-    array            $expandQuerys = [],
+    array            $expandQuerys = [],//[ ['obj','=','358'] ]
     bool             $isRandom = false
 ): array|\Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection
 {
@@ -493,17 +489,22 @@ function getArticleByCategoryName(
     }
 
 
-    if ($expandId && $expandQuerys) {
+    if ($expandQuerys) {
 
 
-        $tableName = 'expand_table_' . $expandId;
+        $query->whereExists(function (\Illuminate\Database\Query\Builder $q) use ($expandQuerys) {
 
 
-        $query->whereExists(function (\Illuminate\Database\Query\Builder $q) use ($tableName, $expandQuerys) {
+            $q->select(['id'])->from('expand_data')->whereColumn("expand_data.article_id",
+                'article.id');
 
 
-            $q->select(['id'])->from($tableName)->whereColumn($tableName . ".article_id",
-                'article.id')->where($expandQuerys);
+            foreach ($expandQuerys as $key => $v) {
+
+
+                $q->where('name', $v[0])->where('value', $v[1], $v[2]);
+            }
+
 
         });
 
@@ -537,13 +538,12 @@ function getArticleByCategoryNameWithRandom(
     array        $notIdArray = [],
     string       $orderField = 'push_time',
     string       $orderDirection = 'desc',
-    string       $expandId = '',
     array        $expandQuerys = [],
 ): \Illuminate\Database\Eloquent\Collection|array|\Illuminate\Support\Collection
 {
 
     return getArticleByCategoryName($categoryName, $limit, $offset, $querys, $notIdArray, $orderField,
-        $orderDirection, $expandId, $expandQuerys, true);
+        $orderDirection, $expandQuerys, true);
 
 }
 

@@ -41,11 +41,19 @@ class Test extends Command
     public function handle(Upload $upload)
     {
 
+
+        $list = getArticleByCategoryName(20, 10, 0, [], [], 'push_time', 'desc', [['obj', '=', '23855']]);
+
+
+        dd($list->toArray());
+
+        return 0;
+
         $json = file_get_contents(base_path('123.json'));
 
 //        dd(json_decode($json,true));
 
-        $json=json_decode($json,true);
+        $json = json_decode($json, true);
 
 
         try {
@@ -78,7 +86,7 @@ class Test extends Command
 
             print_r(mb_convert_encoding($content, "UTF-8", $ch));
 
-            file_put_contents(public_path('error.html'),mb_convert_encoding($content, "UTF-8", $ch));
+            file_put_contents(public_path('error.html'), mb_convert_encoding($content, "UTF-8", $ch));
 
 
 //            print_r($exception->getResponse()->getBody()->getContents());

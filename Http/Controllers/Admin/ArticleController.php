@@ -459,16 +459,16 @@ class ArticleController extends AuthCheckController
 
         $pid = Category::where('name', $newsName)->first()->id;
 
-        $table_name = CategoryController::getExpandTableName($pid);
+//        $table_name = CategoryController::getExpandTableName($pid);
 
+//        dd("EXISTS(select * from  `expand_data` where article.id = `expand_data`.`article_id` and  `name` = '".config('static.news_game_field')."' (  value = 0 or  value is null  or value = '' ) )");
 
         $list = Article::with('category')->whereHas('category', function ($query) use ($pid) {
 
             $query->where('pid', $pid);
 
             //筛选没关联上的文章
-        })->whereRaw("EXISTS(select * from " . $table_name . " where article.id = " . $table_name . ".article_id and ( " . config('static.news_game_field') . "= 0 or " . config('static.news_game_field') . " is null ) )")->orderBy('select_order',
-            'asc')->orderBy('id',
+        })->whereRaw("EXISTS(select * from  `expand_data` where article.id = `expand_data`.`article_id` and  `name` = '" . config('static.news_game_field') . "' and (  value = 0 or  value is null  or value = '' ) )")->orderBy('id',
             'desc');
 
 
@@ -490,9 +490,15 @@ class ArticleController extends AuthCheckController
 
 //                    $list->whereRaw("EXISTS( select * from article_tag where tag_id in (select tag_id from article_tag left join article as game2 on game2.id = article_tag.article_id  where article_id = article.id  and  category_id in (".implode(",",$gameIds).")  )   )");
 //                    $list->whereRaw("EXISTS( select * from article_tag where tag_id in (select tag_id from article_tag   where article_id = article.id    )   and EXISTS( select * from article as game2 where  article.id = article_tag.article_id and game2.category_id in (".implode(",",$gameIds).")  )   )");
+
+
+//                    $list->whereRaw("(  EXISTS( select * from article as game  where  category_id in (" . implode(",",
+//                            $gameIds) . ")  and find_in_set(`game`.title,`article`.`title`)   ))");
+
+
                     $list->whereRaw("(  EXISTS( select * from article as game  where  category_id in (" . implode(",",
                             $gameIds) . ") and  article.title like CONCAT('%',game.title,'%') ) or   EXISTS( select * from article as game2 where  game2.category_id in (" . implode(",",
-                            $gameIds) . ")  and EXISTS(select * from article_tag where game2.id = article_tag.article_id and tag_id in (select tag_id from article_tag   where article_id = article.id) )  ) )");
+                            $gameIds) . ")  and EXISTS(select * from article_tag where game2.id = article_tag.article_id and tag_id in (select tag_id from article_tag   where article_id = article.id) )  ) ) ");
 
                 }
 
