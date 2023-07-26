@@ -2134,14 +2134,6 @@ function autoAssociationObject(Article $article): bool
                 }
 
 
-                if (app()->runningInConsole()) {
-
-
-                    echo $article->title . "=>" . $mainList->pluck('title')->join(",") . PHP_EOL;
-
-                }
-
-
             }
 
 

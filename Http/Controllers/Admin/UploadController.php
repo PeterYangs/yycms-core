@@ -67,7 +67,7 @@ class UploadController extends LoginCheckController
         //获取文件拓展名
         $extension = pathinfo($name)['extension'];
 
-        $allowList = env('ALLOW_UPLOAD_TYPE', 'png,gif,jpg,jpeg,apk');
+        $allowList = env('ALLOW_UPLOAD_TYPE', 'png,gif,jpg,jpeg,apk,zip');
 
         $allowList = explode(',', $allowList);
 

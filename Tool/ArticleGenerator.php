@@ -3,6 +3,7 @@
 namespace Ycore\Tool;
 
 //文章操作类
+use Throwable;
 use Ycore\Events\ArticleUpdate;
 use Ycore\Events\WebsitePush;
 use Ycore\Http\Controllers\Admin\CategoryController;
@@ -64,9 +65,9 @@ class ArticleGenerator
      * 2023-03-22 19:03:49
      * @param array $attributes 更新条件
      * @param bool $isPush 是否推送到站长
-     * @throws \Throwable
+     * @throws Throwable
      */
-    function update(array $attributes, bool $isPush = false)
+    function update(array $attributes, bool $isPush = false): Article
     {
 
 
@@ -152,8 +153,6 @@ class ArticleGenerator
 
             }
 
-//            dd($article->toArray());
-
 
             //判断是否更新seo标题
             $isChangeSeoTitle = Seo::isChangeArticleSeoTitle($article->id, $article->toArray(), $table_name, $expandDataKeyValue);
@@ -190,6 +189,7 @@ class ArticleGenerator
                 event(new WebsitePush($article->id));
             }
 
+            return $article;
 
         } catch (\Exception $exception) {
 
@@ -209,9 +209,9 @@ class ArticleGenerator
      * 2023-03-23 15:03:56
      * @param bool $isPush 是否推送到站长
      * @param bool $autoAssociationObject 是否自动处理一对多关系
-     * @throws \Throwable
+     * @throws Throwable
      */
-    function create(bool $isPush = true, bool $autoAssociationObject = true, bool $is_gpt = false)
+    function create(bool $isPush = true, bool $autoAssociationObject = true, bool $is_gpt = false): Article
     {
 
 
@@ -425,6 +425,8 @@ class ArticleGenerator
                 event(new WebsitePush($article->id));
             }
 
+
+            return $article;
 
         } catch (\Exception $exception) {
 

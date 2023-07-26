@@ -8,6 +8,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Pagination\Paginator;
 use Illuminate\View\Engines\EngineResolver;
 use Ycore\Console\AutoAssociationObject;
+use Ycore\Console\BatchImportArticleWithZip;
 use Ycore\Console\CleanStaticPage;
 use Ycore\Console\CreateExpandTable;
 use Ycore\Console\CreateRoute;
@@ -285,6 +286,7 @@ class YyCmsServiceProvider extends ServiceProvider
             GetGoScript::class,
             SetExpandData::class,
             SetExpandDataBatch::class,
+            BatchImportArticleWithZip::class,
 
         ]);
 

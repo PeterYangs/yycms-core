@@ -138,6 +138,34 @@ Route::get("/api/uploads/{path}.{ex}", function ($path, $ex) {
 
 })->where(['path' => "[/A-Za-z0-9._]+", 'ex' => "(jpg|jpeg|png|gif|webp){1}"]);
 
+
+Route::get("/uploads/{path}.{ex}", function ($path, $ex) {
+
+
+    switch (env('UPLOAD_TYPE')) {
+
+
+        case "ali_oss":
+
+
+            return response()->redirectGuest(env('IMAGE_DOMAIN') . "/uploads/" . $path . "." . $ex);
+
+
+        default:
+
+            if (Storage::disk('upload')->exists($path . "." . $ex)) {
+
+                return response()->file(Storage::disk('upload')->path($path . "." . $ex));
+            }
+
+            abort(404);
+
+    }
+
+
+})->where(['path' => "[/A-Za-z0-9._]+", 'ex' => "(jpg|jpeg|png|gif|webp){1}"]);
+
+
 //二维码
 Route::get('/qrcode/{id}', [YyCms::class, 'build'])->name('qrcode');
 
@@ -203,7 +231,6 @@ Route::get('_hit', function () {
 
     \DB::table('article')->where('id', $id)->increment('hits');
 
-//    return \Ycore\Tool\Json::code(200, 'success');
 
 });
 
