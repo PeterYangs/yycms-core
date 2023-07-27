@@ -12,6 +12,42 @@ class Channel
 
     protected $path = '';
 
+    protected $orderField = '';
+
+    protected $orderDirection = '';
+
+    /**
+     * @return string
+     */
+    public function getOrderField(): string
+    {
+        return $this->orderField;
+    }
+
+    /**
+     * @param string $orderField
+     */
+    private function setOrderField(string $orderField): void
+    {
+        $this->orderField = $orderField;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrderDirection(): string
+    {
+        return $this->orderDirection;
+    }
+
+    /**
+     * @param string $orderDirection
+     */
+    private function setOrderDirection(string $orderDirection): void
+    {
+        $this->orderDirection = $orderDirection;
+    }
+
 
     public function getSize()
     {
@@ -58,14 +94,16 @@ class Channel
     }
 
 
-    public static function channel($size = 10, $page = 1, $path = "/list-[PAGE].html")
+    public static function channel($size = 10, $page = 1, $path = "/list-[PAGE].html", $orderField = 'push_time', $orderDirection = 'desc')
     {
 
         $c = new Channel();
 
-        $c->setSize($size??10);
-        $c->setPage($page??1);
+        $c->setSize($size ?? 10);
+        $c->setPage($page ?? 1);
         $c->setPath($path);
+        $c->setOrderField($orderField);
+        $c->setOrderDirection($orderDirection);
 
 
         return $c;

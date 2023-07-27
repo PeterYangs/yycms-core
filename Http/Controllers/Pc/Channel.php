@@ -45,8 +45,6 @@ class Channel extends Base
 
         $query = ArticleListModel()->whereIn('category_id', $cid);
 
-        $query->orderBy('push_time', 'desc');
-
 
         $channel = Hook::applyFilter('channel', $category->toArray(), $category->parent ? $category->parent->toArray() : ['id' => 0], $currentRoute, 'pc', request()->input(), request()->route());
 
@@ -56,6 +54,7 @@ class Channel extends Base
 
         }
 
+        $query->orderBy($channel->getOrderField(), $channel->getOrderDirection());
 
         $data = $query->seoPaginate($channel->getSize(), ['*'], $channel->getPage(),
             $channel->getPath());
