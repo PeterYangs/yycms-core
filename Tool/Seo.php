@@ -88,7 +88,7 @@ class Seo
 
 
                 $arr = [
-                    '[title]' . getDesc($article) . '下载(暂未上线)',
+                    '[title]' . getSeoVersionDesc($article) . '下载(暂未上线)',
 
                 ];
 
@@ -108,15 +108,15 @@ class Seo
 
 
                     $arr = [
-                        '[title]' . getDesc($article) . '下载_[title]官方下载' . getVersion($article),
-                        '[title]' . getDesc($article) . '下载_[title]免费下载' . getVersion($article),
-                        '[title]' . getDesc($article) . '下载_[title]手机下载' . getVersion($article),
+                        '[title]' . getSeoVersionDesc($article) . '下载_[title]官方下载' . getVersion($article),
+                        '[title]' . getSeoVersionDesc($article) . '下载_[title]免费下载' . getVersion($article),
+                        '[title]' . getSeoVersionDesc($article) . '下载_[title]手机下载' . getVersion($article),
                     ];
 
 
                 } else {
 
-                    $oneDesc = getDesc($article);
+                    $oneDesc = getSeoVersionDesc($article);
 
                     $twoDesc = "";
 
@@ -124,7 +124,7 @@ class Seo
                     while (true) {
 
 
-                        $twoDesc = getDesc($article);
+                        $twoDesc = getSeoVersionDesc($article);
 
                         if ($oneDesc !== $twoDesc) {
 

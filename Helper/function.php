@@ -1939,7 +1939,7 @@ function getVersion(Article $article): string
 }
 
 
-function getDesc(Article $article): string
+function getSeoVersionDesc(Article $article): string
 {
     $version_str = [
         '手机版',
