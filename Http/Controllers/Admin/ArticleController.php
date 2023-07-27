@@ -31,8 +31,6 @@ class ArticleController extends AuthCheckController
         $id = $post['id'] ?? 0;
 
 
-        $now = Date::now();
-
         try {
 
             $ag = new ArticleGenerator();
@@ -44,7 +42,6 @@ class ArticleController extends AuthCheckController
 
             } else {
 
-//                dd(dealExpandToTable($post['expand']));
 
                 $ag->fill($post, dealExpandToTable($post['expand']))->create();
 

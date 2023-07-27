@@ -1502,15 +1502,20 @@ function getExGame(Article $article)
  * @param int $limit
  * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
  */
-function getExGameList(Article $article, int $limit = 0): \Illuminate\Database\Eloquent\Collection|array
+function getExGameList(Article $article, int $limit = 0, $name = ''): \Illuminate\Database\Eloquent\Collection|array
 {
 
 
     $mainId = $article->id;
 
-    $query = ArticleListModel()->whereIn('id', function ($query) use ($mainId) {
+    if ($name === '') {
 
-        $query->select('slave')->from('article_association_object')->where('main', $mainId);
+        $name = config('static.association_object', 'association_object');
+    }
+
+    $query = ArticleListModel()->whereIn('id', function ($query) use ($mainId, $name) {
+
+        $query->select('slave')->from('article_association_object')->where('main', $mainId)->where('name', $name);
 
     })->orderBy('push_time', 'desc');
 
@@ -1534,15 +1539,20 @@ function getExGameList(Article $article, int $limit = 0): \Illuminate\Database\E
  * @param int $size
  * @return Closure|mixed|object
  */
-function getExGameListWithPage(Article $article, string $pageUrl = "", int $page = 1, int $size = 10)
+function getExGameListWithPage(Article $article, string $pageUrl = "", int $page = 1, int $size = 10, $name = '')
 {
 
 
     $mainId = $article->id;
 
-    $query = ArticleListModel()->whereIn('id', function ($query) use ($mainId) {
+    if ($name === '') {
 
-        $query->select('slave')->from('article_association_object')->where('main', $mainId);
+        $name = config('static.association_object', 'association_object');
+    }
+
+    $query = ArticleListModel()->whereIn('id', function ($query) use ($mainId, $name) {
+
+        $query->select('slave')->from('article_association_object')->where('main', $mainId)->where('name', $name);
 
     });
 
@@ -1598,7 +1608,8 @@ function getRelated(Article $article, array|int|string $categoryName, int $limit
         //查找同一个标签的文章
         if (count($tagList) > 0) {
 
-            $query->orWhereRaw("id in (select article_tag.article_id from article_tag where article_tag.tag_id in (" . join(",", $tagList) . ") and article_tag.article_id != " . $article->id . ")");
+//            $query->orWhereRaw("id in (select article_tag.article_id from article_tag where article_tag.tag_id in (" . join(",", $tagList) . ") and article_tag.article_id != " . $article->id . ")");
+            $query->orWhereRaw("EXISTS(select 1 from article_tag where article_tag.tag_id in (" . join(",", $tagList) . ") and  article_tag.article_id = article.id)");
         }
 
 
@@ -1778,6 +1789,7 @@ function getHostPrefix(): string
  * 2022-09-26 14:49:45
  * @param int $mainId
  * @param array $expand_data
+ * @param string $name 字段
  */
 function dealArticleAssociationObject(int $mainId, array $expand_data)
 {
@@ -1792,8 +1804,8 @@ function dealArticleAssociationObject(int $mainId, array $expand_data)
 
 
                 ArticleAssociationObject::updateOrCreate(
-                    ['main' => $mainId, 'slave' => $v['id']],
-                    ['main' => $mainId, 'slave' => $v['id']]
+                    ['main' => $mainId, 'slave' => $v['id'], 'name' => $value['name']],
+                    ['main' => $mainId, 'slave' => $v['id'], 'name' => $value['name']]
                 );
 
             }
@@ -1807,23 +1819,32 @@ function dealArticleAssociationObject(int $mainId, array $expand_data)
 
 
 /**
- * 获取当前文章在其他文章的关联列表(如：查找当前游戏在哪些游戏合集中)
+ * 获取当前文章在其他文章的关联列表(如：查找当前游戏在哪些游戏合集中,返回游戏合集列表)
  * Create by Peter Yang
  * 2023-02-22 14:19:45
  * @param Article $article 当前文章
  * @param int $otherArticleCid 管理文章id(如游戏合集)
  * @param $limit
- * @return Article[]|\App\Models\Base[]|array|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Query\Builder[]|\Illuminate\Support\Collection|\LaravelIdea\Helper\App\Models\_IH_Article_C|\LaravelIdea\Helper\App\Models\_IH_Base_C
+ * @return Article[]|\Ycore\Models\Base[]|array|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Query\Builder[]|\Illuminate\Support\Collection|\LaravelIdea\Helper\App\Models\_IH_Article_C|\LaravelIdea\Helper\App\Models\_IH_Base_C
  */
-function getArticleInOtherArticleList(Article $article, int $otherArticleCid, $limit = 4)
+function getArticleInOtherArticleList(Article $article, int $otherArticleCid, $limit = 4, $name = '')
 {
 
+    $cids = getCategoryIds($otherArticleCid);
+
+
+    if ($name === '') {
+
+        $name = config('static.association_object', 'association_object');
+    }
+
+
     $list = ArticleAssociationObject::where('slave', $article->id)->withWhereHas('mainArticle',
-        function ($query) use ($otherArticleCid) {
+        function ($query) use ($otherArticleCid, $cids) {
 
-            $query->where('category_id', $otherArticleCid);
+            $query->whereIn('category_id', $cids);
 
-        })->limit($limit)->get();
+        })->where('name', $name)->limit($limit)->get();
 
 
     if (!$list) {
@@ -2126,7 +2147,8 @@ function autoAssociationObject(Article $article): bool
 
                     ArticleAssociationObject::create([
                         'main' => $main->id,
-                        'slave' => $article->id
+                        'slave' => $article->id,
+                        'name' => config('static.association_object', 'association_object')
                     ]);
 
                 } catch (\Exception $exception) {

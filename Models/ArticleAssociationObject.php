@@ -10,7 +10,7 @@ namespace Ycore\Models;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $main 主文章id
  * @property int $slave 关联文章id
- * @property-read \App\Models\Article|null $mainArticle
+ * @property-read \Ycore\Models\Article|null $mainArticle
  * @method static \Illuminate\Database\Eloquent\Builder|ArticleAssociationObject newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ArticleAssociationObject newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ArticleAssociationObject query()
@@ -26,7 +26,7 @@ class ArticleAssociationObject extends Base
 
     protected $table = "article_association_object";
 
-    protected $fillable = ['main', 'slave'];
+    protected $fillable = ['main', 'slave', 'name'];
 
 
     function mainArticle()
