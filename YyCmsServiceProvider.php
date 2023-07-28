@@ -18,6 +18,7 @@ use Ycore\Console\GetLibrary;
 use Ycore\Console\GetUpdate;
 use Ycore\Console\NewTheme;
 use Ycore\Console\PushAsset;
+use Ycore\Console\ResetDatabase;
 use Ycore\Console\SetExpandData;
 use Ycore\Console\SetExpandDataBatch;
 use Ycore\Console\SwitchTheme;
@@ -287,6 +288,7 @@ class YyCmsServiceProvider extends ServiceProvider
             SetExpandData::class,
             SetExpandDataBatch::class,
             BatchImportArticleWithZip::class,
+            ResetDatabase::class,
 
         ]);
 
