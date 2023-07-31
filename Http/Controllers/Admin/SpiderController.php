@@ -141,4 +141,31 @@ class SpiderController extends AuthCheckController
     }
 
 
+    /**
+     * 列表选择器检查
+     * @return string
+     */
+    function listCheck()
+    {
+
+        $post = request()->post();
+
+
+        try {
+
+            $out = Cmd::commandline(Cmd::getCommandlineByName('goScript') . ' spiderCheck --type list --host "' . $post['host'] . '" --channel "' . $post['channel'] . '" --page_start ' . $post['page_start'] . ' --list_selector "' . $post['list_selector'] . '"');
+
+        } catch (\Exception $exception) {
+
+
+            return Json::code(2, $exception->getMessage(), $exception->getMessage());
+
+        }
+
+        return Json::code(1, "success", $out);
+
+
+    }
+
+
 }

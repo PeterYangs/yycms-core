@@ -293,6 +293,7 @@ Route::middleware([])->group(function () {
             Route::any('status', [SpiderController::class, 'status']);
             Route::any('runAll', [SpiderController::class, 'runAll']);
             Route::any('debug', [SpiderController::class, 'debug']);
+            Route::any('listCheck', [SpiderController::class, 'listCheck']);
 
 
         });
