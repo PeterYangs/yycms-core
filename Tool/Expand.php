@@ -75,10 +75,16 @@ class Expand
         }
 
 
-        \DB::table('article')->where('id', $value->id)->update([
-            'expand' => json_encode($expand,
-                JSON_THROW_ON_ERROR)
-        ]);
+        $value->expand = $expand;
+
+        $value->save();
+
+        \Artisan::call('SetExpandData', ['id' => $value->id]);
+//
+//        \DB::table('article')->where('id', $value->id)->update([
+//            'expand' => json_encode($expand,
+//                JSON_THROW_ON_ERROR)
+//        ]);
 
 
     }

@@ -6,6 +6,16 @@ use Ycore\Models\Article;
 
 class ArticleObserver
 {
+
+
+    /**
+     * 在提交所有事务后处理事件。
+     *
+     * @var bool
+     */
+    public $afterCommit = true;
+
+
     /**
      * Handle the Article "created" event.
      *
