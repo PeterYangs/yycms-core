@@ -465,7 +465,8 @@ class ArticleController extends AuthCheckController
             $query->where('pid', $pid);
 
             //筛选没关联上的文章
-        })->whereRaw("EXISTS(select * from  `expand_data` where article.id = `expand_data`.`article_id` and  `name` = '" . config('static.news_game_field') . "' and (  value = 0 or  value is null  or value = '' ) )")->orderBy('id',
+        })->whereRaw("EXISTS(select * from  `expand_data` where article.id = `expand_data`.`article_id` and  `name` = '" . config('static.news_game_field') . "' and (  value = 0 or  value is null  or value = '' ) )")->orderBy('select_order',
+            'asc')->orderBy('id',
             'desc');
 
 
