@@ -2107,7 +2107,14 @@ function autoAssociationObject(Article $article): bool
     $category = Category::where('id', $article->category_id)->first();
 
 
-    $collect = Collect::whereIn('son_id', [$category->id, $category->parent->id])->first();
+    $whereArr = [$category->id];
+
+    if (optional($category->parent)->id) {
+
+        $whereArr[] = $category->parent->id;
+    }
+
+    $collect = Collect::whereIn('son_id', $whereArr)->first();
 
 
     //是否已经设置了关联
