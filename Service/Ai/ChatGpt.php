@@ -8,7 +8,7 @@ use Ycore\Models\StoreArticle;
 class ChatGpt implements Ai
 {
 
-    function do(string $keyword): string
+    function do(string $cmd): string
     {
         // TODO: Implement do() method.
 
@@ -19,7 +19,7 @@ class ChatGpt implements Ai
             throw new \Exception("chatgpt地址配置错误，请检查");
         }
 
-        $rsp = \Http::timeout(90)->retry(3,100)->get(str_replace("{keyword}", urlencode($keyword), $address));
+        $rsp = \Http::timeout(90)->retry(3,100)->get(str_replace("{keyword}", urlencode($cmd), $address));
 
 
         if ($rsp->status() !== 200) {

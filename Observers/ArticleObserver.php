@@ -30,7 +30,7 @@ class ArticleObserver
         \Cache::put('article_max_id', $article->max('id'));
         \Cache::put('article_min_id', $article->min('id'));
 
-        \Artisan::call('SetExpandData', ['id' => $article->id]);
+//        \Artisan::call('SetExpandData', ['id' => $article->id]);
 
 
     }
@@ -44,7 +44,7 @@ class ArticleObserver
     public function updated(Article $article)
     {
         //
-        \Artisan::call('SetExpandData', ['id' => $article->id]);
+//        \Artisan::call('SetExpandData', ['id' => $article->id]);
     }
 
     /**

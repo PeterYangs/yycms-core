@@ -7,6 +7,7 @@ use Ycore\Events\WebsitePush;
 use Ycore\Models\Article;
 use Ycore\Models\SearchArticle;
 use Ycore\Models\StoreArticle;
+use Ycore\Tool\ArticleGenerator;
 use Ycore\Tool\Cmd;
 use Ycore\Tool\Expand;
 use Ycore\Tool\Json;
@@ -132,14 +133,19 @@ class SearchArticleController extends AuthCheckController
     }
 
 
+    /**
+     * 发布到正式文章
+     * @param SearchArticle $searchArticle
+     * @param string $isMsk
+     * @return void
+     * @throws \Throwable
+     */
     protected function push(SearchArticle $searchArticle, string $isMsk)
     {
 
 
         $img = "";
 
-
-        $article = null;
 
         try {
 
@@ -194,10 +200,9 @@ class SearchArticleController extends AuthCheckController
 
             }
 
+            $ag = new ArticleGenerator();
 
-            \DB::beginTransaction();
-
-            $article = Article::create([
+            $ag->fill([
                 'category_id' => $searchArticle->category_id,
                 'push_time' => \Date::now(),
                 'content' => $html->getHtml(),
@@ -208,30 +213,13 @@ class SearchArticleController extends AuthCheckController
                 'seo_keyword' => $searchArticle->seo_keyword,
                 'admin_id_create' => 1,
                 'admin_id_update' => 1
+            ], []);
 
-            ]);
+            $ag->create();
 
-
-            $table = CategoryController::getExpandTableName($article->category_id);
-
-            $ex['article_id'] = $article->id;
-
-            \DB::table($table)->insert($ex);
-
-            Expand::SyncExpand($article);
-
-
-            Seo::setSeoTitle($article->id);
-
-            $searchArticle->delete();
-
-            \DB::commit();
 
         } catch (\Exception $exception) {
 
-            \DB::rollBack();
-
-//            echo $item->title . ":" . $exception->getMessage() . PHP_EOL;
 
             \Log::error("推送采集文章失败:" . $searchArticle->title . "=》" . $exception->getMessage());
 
@@ -239,32 +227,8 @@ class SearchArticleController extends AuthCheckController
             throw new \Exception($exception->getMessage());
 
 
-//            continue;
-
-//            return Json::code(2, "推送采集文章失败:" . $article->title . "--" . $exception->getMessage());
-
-        } finally {
-
-
-//            $searchArticle->delete();
-
-            //标记为已用
-//            $item->status = 2;
-//
-//            $item->save();
         }
 
-
-        if ($article !== null && env('APP_DEBUG') === false) {
-
-            //推送到站长
-            event(new WebsitePush($article->id));
-
-            //静态化
-            event(new ArticleUpdate($article->id));
-
-
-        }
 
     }
 

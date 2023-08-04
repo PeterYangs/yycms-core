@@ -14,6 +14,7 @@ use Ycore\Models\ArticleAssociationObject;
 use Ycore\Models\Category;
 use Ycore\Models\Collect;
 use Ycore\Models\CollectTag;
+use Ycore\Models\ExpandData;
 use Ycore\Service\Ai\Ai;
 
 class ArticleGenerator
@@ -161,6 +162,31 @@ class ArticleGenerator
 
 
             $article->save();
+
+
+            //设置拓展表数据
+            foreach ($article->expand as $item) {
+
+
+                ExpandData::updateOrCreate(['article_id' => $article->id, 'article_expand_detail_id' => $item['id']], [
+                    'article_id' => $article->id,
+                    'article_expand_detail_id' => $item['id'],
+                    'article_expand_id' => $item['article_expand_id'] ?? 0,
+                    'name' => $item['name'] ?? "",
+                    'desc' => $item['desc'] ?? "",
+                    'type' => $item['type'] ?? 1,
+                    'select_list' => is_array($item['select_list']) ? json_encode($item['select_list']) : $item['select_list'],
+                    'model_name' => $item['model_name'],
+                    'label' => is_array($item['label']) ? json_encode($item['label']) : $item['label'],
+                    'condition' => is_array($item['condition']) ? json_encode($item['condition']) : $item['condition'],
+                    'default_condition' => is_array($item['default_condition']) ? json_encode($item['default_condition']) : $item['default_condition'],
+                    'show_field' => is_array($item['show_field']) ? json_encode($item['show_field']) : $item['show_field'],
+                    'value' => is_array($item['value']) ? json_encode($item['value']) : $item['value'] ?? ""
+
+                ]);
+
+
+            }
 
 
             //处理一对多关联
@@ -350,6 +376,31 @@ class ArticleGenerator
 
 
             $article = Article::create($articleData);
+
+
+            //设置拓展表数据
+            foreach ($article->expand as $item) {
+
+
+                ExpandData::updateOrCreate(['article_id' => $article->id, 'article_expand_detail_id' => $item['id']], [
+                    'article_id' => $article->id,
+                    'article_expand_detail_id' => $item['id'],
+                    'article_expand_id' => $item['article_expand_id'] ?? 0,
+                    'name' => $item['name'] ?? "",
+                    'desc' => $item['desc'] ?? "",
+                    'type' => $item['type'] ?? 1,
+                    'select_list' => is_array($item['select_list']) ? json_encode($item['select_list']) : $item['select_list'],
+                    'model_name' => $item['model_name'],
+                    'label' => is_array($item['label']) ? json_encode($item['label']) : $item['label'],
+                    'condition' => is_array($item['condition']) ? json_encode($item['condition']) : $item['condition'],
+                    'default_condition' => is_array($item['default_condition']) ? json_encode($item['default_condition']) : $item['default_condition'],
+                    'show_field' => is_array($item['show_field']) ? json_encode($item['show_field']) : $item['show_field'],
+                    'value' => is_array($item['value']) ? json_encode($item['value']) : $item['value'] ?? ""
+
+                ]);
+
+
+            }
 
 
             //处理一对多关联

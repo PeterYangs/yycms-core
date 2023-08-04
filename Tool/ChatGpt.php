@@ -12,7 +12,7 @@ class ChatGpt
      * @return string
      * @throws \Exception
      */
-    public static function do(string $keyword): string
+    public static function do(string $cmd): string
     {
 
         $address = env('CHAT_GPT_ADDRESS', null);
@@ -22,7 +22,7 @@ class ChatGpt
             throw new \Exception("chatgpt地址配置错误，请检查");
         }
 
-        $rsp = \Http::timeout(90)->get(str_replace("{keyword}", urlencode($keyword), $address));
+        $rsp = \Http::timeout(90)->get(str_replace("{keyword}", urlencode($cmd), $address));
 
 
         if ($rsp->status() !== 200) {

@@ -4,12 +4,14 @@ namespace Ycore\Http\Controllers\Admin;
 
 use Ycore\Events\ArticleUpdate;
 use Ycore\Events\WebsitePush;
+use Ycore\Jobs\AiToArticle;
 use Ycore\Jobs\EmailJob;
 use Ycore\Models\Article;
 use Ycore\Models\ArticleAssociationObject;
 use Ycore\Models\ArticleExpand;
 use Ycore\Models\Category;
 use Ycore\Models\Special;
+use Ycore\Scope\ArticleScope;
 use Ycore\Tool\ArticleGenerator;
 use Ycore\Tool\Expand;
 use Ycore\Tool\Json;
@@ -134,8 +136,9 @@ class ArticleController extends AuthCheckController
         $id = (int)request()->input('id');
 
 
-        Article::destroy($id);
+        $article = Article::withoutGlobalScopes()->where('id', $id)->first();
 
+        $article->delete();
 
         return Json::code(1, 'success');
 
@@ -237,7 +240,7 @@ class ArticleController extends AuthCheckController
     function article_recover()
     {
 
-        $list = Article::onlyTrashed()->with('category')->with('admin_id_create')->with('admin_id_update')->orderBy('deleted_at',
+        $list = Article::onlyTrashed()->withoutGlobalScope(ArticleScope::class)->with('category')->with('admin_id_create')->with('admin_id_update')->orderBy('deleted_at',
             'desc');
 
         $custom = \Ycore\Tool\Search::searchList($list, request()->input('search', '[]'));
@@ -572,38 +575,24 @@ class ArticleController extends AuthCheckController
 
         $gameId = request()->input('game_id');
 
-        $newsName = "资讯";
 
         try {
 
-            \DB::beginTransaction();
+            $ag = new ArticleGenerator();
 
-            $pid = Category::where('name', $newsName)->first()->id;
+            $ag->fill([], [config('static.news_game_field') => $gameId]);
 
-            $table_name = CategoryController::getExpandTableName($pid);
-
-
-            \DB::table($table_name)->where('article_id', $newsId)->update([
-                config('static.news_game_field') => $gameId,
-            ]);
-
-
-            Expand::SyncExpand(getArticleById($newsId));
-
-
-            \DB::commit();
+            $ag->update(['id' => $newsId]);
 
 
         } catch (\Exception $exception) {
 
-            \DB::rollBack();
 
             return Json::code(2, $exception->getMessage());
 
 
         }
 
-        event(new ArticleUpdate($newsId));
 
         return Json::code(1, 'success');
 
@@ -658,6 +647,50 @@ class ArticleController extends AuthCheckController
 
 
         return Json::code(1, 'success');
+
+    }
+
+
+    /**
+     * @return string
+     */
+    function batchImportByTxt()
+    {
+
+        $post = request()->post();
+
+
+        if (!\Storage::disk('upload')->fileExists($post['file_path'])) {
+
+            return Json::code(2, '文件：' . $post['file_path'] . "不存在！");
+        }
+
+        $handle = fopen(\Storage::disk('upload')->path($post['file_path']), "r");
+
+        if (!$handle) {
+            return Json::code(2, "文件打开失败!");
+        }
+
+        $txt_list = [];
+
+        try {
+
+            while (false !== ($char = fgets($handle, 1024))) {
+
+
+                dispatch(new AiToArticle(trim(str_replace(["\r", "\n"], '', $char)), [$post['cmd']], [$post['img']], $post['category_id'], $post['push_status'], $post['special_id']));
+            }
+
+        } catch (\Exception $exception) {
+
+            return Json::code(2, $exception->getMessage());
+
+        } finally {
+            fclose($handle);
+        }
+
+
+        return Json::code(1, $txt_list, $post);
 
     }
 

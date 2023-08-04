@@ -264,7 +264,6 @@ class YyCmsServiceProvider extends ServiceProvider
             MatchApk::class,
             MysqlBackup::class,
             PushCustom::class,
-            PushRandomStoreToArticle::class,
             SearchAccess::class,
             SetSeoTitle::class,
             Spider::class,

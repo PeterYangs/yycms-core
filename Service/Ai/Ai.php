@@ -10,10 +10,10 @@ interface Ai
 
     /**
      * 直接生成
-     * @param string $keyword
+     * @param string $cmd
      * @return string
      */
-    function do(string $keyword): string;
+    function do(string $cmd): string;
 
 
     /**
