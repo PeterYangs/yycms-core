@@ -5,6 +5,7 @@ namespace Ycore\Console;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use Illuminate\Database\Schema\Blueprint;
+use QL\QueryList;
 use Ycore\Core\Core;
 use Ycore\Events\WebsitePush;
 use Ycore\Http\Controllers\Admin\CategoryController;
@@ -38,9 +39,41 @@ class Test extends Command
      * @return int
      * @throws \JsonException
      */
-    public function handle(Upload $upload)
+    public function handle()
     {
 
+
+        $html = <<<oef
+<html><head>
+<title>王者荣耀手机游戏介绍</title>
+</head>
+<body>
+
+<h3>游戏玩法</h3>
+<p>《王者荣耀》是一款多人在线对战游戏，玩家需要通过组建自己的五人团队与其他玩家进行实时对战。游戏采用即时战略游戏（MOBA）模式，玩家需要合理利用各个英雄角色的技能，配合团队成员，在地图上争夺资源、攻击敌方防御塔和击败敌方英雄以获得胜利。</p>
+
+<h3>游戏亮点</h3>
+<p>王者荣耀拥有丰富多样的英雄选择，每个英雄都有独特的技能和特点，玩家可以根据自己的游戏风格选择适合的英雄进行对战。游戏地图设计精美，包含丰富的地形和战略要点，玩家需要通过团队合作和个人操作来掌控战局。游戏画面精致细腻，流畅度高，给玩家带来极致的视觉享受。</p>
+
+<h3>游戏优势</h3>
+<p>首先，《王者荣耀》是一款跨平台游戏，可以在手机上进行畅快的游戏对战，不受时间和地点限制。其次，游戏提供了丰富的游戏模式，包括排位赛、挑战赛、好友对战等，满足玩家的不同需求。此外，游戏进行了多次优化和更新，确保游戏的平衡性和稳定性。</p>
+
+<h3>小编评语</h3>
+<p>《王者荣耀》作为一款经典的手机游戏，无论是游戏玩法还是画面表现都取得了很大的成就。游戏的团队合作和个人操作的要求使得玩家在游戏中体验到了紧张刺激的战斗，同时也培养了玩家的策略思维和团队合作能力。如果你是一位MOBA游戏爱好者，那《王者荣耀》绝对不容错过。</p>
+
+
+</body></html>
+oef;
+
+
+        $doc = QueryList::html($html);
+
+
+        dd($doc->find('body')->eq(0)->html());
+
+
+
+        return;
 
         $list = getArticleByCategoryName(20, 10, 0, [], [], 'push_time', 'desc', [['obj', '=', '23855']]);
 

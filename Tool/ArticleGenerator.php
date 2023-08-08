@@ -3,6 +3,7 @@
 namespace Ycore\Tool;
 
 //文章操作类
+use QL\QueryList;
 use Throwable;
 use Ycore\Events\ArticleUpdate;
 use Ycore\Events\WebsitePush;
@@ -431,21 +432,21 @@ class ArticleGenerator
             //chatgpt替换内容
             if ($is_gpt) {
 
-                for ($i = 0; $i < 2; $i++) {
 
-                    $article->content = $this->ai->article($article);
-
-                    if (!str_contains($article->content, "<html")) {
-
-                        break;
-                    }
-
-
-                }
+                $article->content = $this->ai->article($article);
 
                 if (str_contains($article->content, "<html")) {
 
-                    throw new \Exception("生成失败！");
+
+                    $doc = QueryList::html($article->content);
+
+                    $article->content = trim($doc->find('body')->eq(0)->html());
+
+                    if ($article->content === "") {
+
+                        throw new \Exception('AI生成内容为空！');
+                    }
+
                 }
 
 
