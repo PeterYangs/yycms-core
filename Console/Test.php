@@ -43,6 +43,16 @@ class Test extends Command
     {
 
 
+        $env = file_get_contents(base_path('.env'));
+
+//        preg_match("/APP_NAME=([\w.]+)/", $env, $res);
+
+//        ;
+
+        dd(preg_replace("/APP_NAME=[^\n]+/","APP_NAME=123",$env,1));
+
+        return;
+
         $html = <<<oef
 <html><head>
 <title>王者荣耀手机游戏介绍</title>
@@ -70,7 +80,6 @@ oef;
 
 
         dd($doc->find('body')->eq(0)->html());
-
 
 
         return;

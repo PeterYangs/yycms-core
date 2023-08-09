@@ -13,6 +13,7 @@ use Ycore\Http\Controllers\Admin\CollectController;
 use Ycore\Http\Controllers\Admin\CommonController;
 use Ycore\Http\Controllers\Admin\ExpandChangeController;
 use Ycore\Http\Controllers\Admin\HomeController;
+use Ycore\Http\Controllers\Admin\InstallController;
 use Ycore\Http\Controllers\Admin\LoginController;
 use Ycore\Http\Controllers\Admin\MenuController;
 use Ycore\Http\Controllers\Admin\ModeController;
@@ -376,18 +377,18 @@ Route::middleware([])->group(function () {
 
 
         });
-//
-//
+
+
     });
-//
-//
+
     Route::get('icp', function () {
 
-
-//        return j();
 
         return \Ycore\Tool\Json::code(1, "success", getOption('icp'));
 
     });
+
+
+    Route::post('configSave',[InstallController::class,'configSave']);
 
 });

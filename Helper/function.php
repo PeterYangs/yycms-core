@@ -2401,6 +2401,23 @@ function getTagLink(Tag $tag): string
 
 }
 
+function setEnv($key, $value)
+{
+
+
+    if (File::isWritable(base_path('.env'))) {
+
+        throw new Exception('.env文件无写入权限');
+    }
+
+    $env = file_get_contents(base_path('.env'));
+
+    $env = preg_replace("/$key=[^\n]+/", "APP_NAME=$value", $env, 1);
+
+    file_put_contents(base_path('.env'), $env);
+
+}
+
 
 
 
