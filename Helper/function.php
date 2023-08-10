@@ -210,7 +210,7 @@ function dealExpandToTable($data): array
  * Create by Peter Yang
  * 2023-02-22 11:37:34
  * @param string|array|int $categoryName
- * @return \Illuminate\Support\Collection
+ * @return array<int,Category>
  */
 function getCategoryIds(string|array|int $categoryName, $exceptSelf = false): \Illuminate\Support\Collection
 {
@@ -393,7 +393,7 @@ function getCategoryIds(string|array|int $categoryName, $exceptSelf = false): \I
 /**
  * Create by Peter Yang
  * 2022-06-27 13:56:19
- * @param string|array $categoryName 分类名称
+ * @param string|array|int $categoryName 分类名称
  * @param int $limit 长度
  * @param int $offset offset
  * @param array $querys 查询条件 [ ['status', '=', '1'], ['subscribed', '<>', '1'] ]
@@ -403,8 +403,8 @@ function getCategoryIds(string|array|int $categoryName, $exceptSelf = false): \I
  * @param array $expandQuerys 拓展表查询条件 [ ['obj','=','358'] ]
  *
  * 调用例子：getArticleByCategoryName('角色扮演',11,0,[],[],'push_time','desc','1',[ ['author','=','是真的帅'] ])
- *
- * @throws Exception
+ * @param bool $isRandom
+ * @return array<int,Article>
  */
 function getArticleByCategoryName(
     string|array|int $categoryName,
@@ -529,6 +529,7 @@ function getArticleByCategoryName(
  * 上方的随机版
  * Create by Peter Yang
  * 2022-06-29 17:30:56
+ * @return array<int,Article>
  */
 function getArticleByCategoryNameWithRandom(
     string|array $categoryName,

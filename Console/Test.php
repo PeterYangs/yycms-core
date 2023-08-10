@@ -43,13 +43,29 @@ class Test extends Command
     {
 
 
+//        ;
+
+
+
+
+
+        foreach (getCategoryIds(config()) as $value) {
+
+
+            dd($value->name);
+
+        }
+
+
+        return;
+
         $env = file_get_contents(base_path('.env'));
 
 //        preg_match("/APP_NAME=([\w.]+)/", $env, $res);
 
 //        ;
 
-        dd(preg_replace("/APP_NAME=[^\n]+/","APP_NAME=123",$env,1));
+        dd(preg_replace("/APP_NAME=[^\n]+/", "APP_NAME=123", $env, 1));
 
         return;
 
