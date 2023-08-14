@@ -65,6 +65,7 @@ class SiteSettingController extends AuthCheckController
             'seo_title',
             'site_name',
             'sm_token',
+            'bing_token'
         ];
 
 //        $data = SiteSetting::first();
