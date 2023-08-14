@@ -7,6 +7,7 @@ use Ycore\Events\ArticleUpdate;
 use Ycore\Events\WebsitePush;
 use Ycore\Listeners\ArticleStatic;
 use Ycore\Listeners\BaiduPush;
+use Ycore\Listeners\BingPush;
 use Ycore\Listeners\DeleteStaticPage;
 use Ycore\Listeners\ResetTagList;
 use Ycore\Listeners\SelectArticleTag;
@@ -30,7 +31,9 @@ class YyCmsEventProvider extends ServiceProvider
         ],
         //站长推送
         WebsitePush::class => [
-            BaiduPush::class
+            BaiduPush::class,
+            BingPush::class
+
         ],
         //文章修改事件
         ArticleUpdate::class => [

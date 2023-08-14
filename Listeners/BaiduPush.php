@@ -81,7 +81,7 @@ class BaiduPush
                 if ($isOver === date("Y-m-d", $this->now)) {
 
 
-                    \Log::channel('push')->error("超出当天配额了(文章链接-" . $pcUrl . ")");
+                    \Log::channel('push')->error("百度推送超出当天配额了(文章链接-" . $pcUrl . ")");
 
                     return;
 
@@ -107,7 +107,7 @@ class BaiduPush
                 }
 
 
-                \Ycore\Models\WebsitePush::create(['article_id' => $articleId, 'link' => $pcUrl, 'spider' => 'baidu', 'platform' => 'pc']);
+                \Ycore\Models\WebsitePush::create(['article_id' => $articleId, 'link' => $pcUrl, 'spider' => 'baidu', 'platform' => 'pc', 'msg' => $result]);
 
             } catch (\Exception $exception) {
 
@@ -131,7 +131,7 @@ class BaiduPush
                 if ($isOver === date("Y-m-d", $this->now)) {
 
 
-                    \Log::channel('push')->error("超出当天配额了(文章链接-" . $mobileUrl . ")");
+                    \Log::channel('push')->error("百度推送超出当天配额了(文章链接-" . $mobileUrl . ")");
 
                     return;
 
@@ -156,7 +156,7 @@ class BaiduPush
 
                 }
 
-                \Ycore\Models\WebsitePush::create(['article_id' => $articleId, 'link' => $mobileUrl, 'spider' => 'baidu', 'platform' => 'mobile']);
+                \Ycore\Models\WebsitePush::create(['article_id' => $articleId, 'link' => $mobileUrl, 'spider' => 'baidu', 'platform' => 'mobile', 'msg' => $result]);
 
             } catch (\Exception $exception) {
 

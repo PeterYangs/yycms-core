@@ -27,13 +27,6 @@ class SiteSettingController extends AuthCheckController
     public function settingUpdate(Request $request)
     {
         $post = $request->input();
-////        dd($post);
-//        $id = $post['id'] ?? null;
-//
-//        $bool = SiteSetting::updateOrCreate(['id' => $id], $post);
-//        if ($bool) {
-//            return Json::code(1, 'success');
-//        }
 
 
         foreach ($post as $key => $value) {

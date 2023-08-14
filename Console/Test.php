@@ -5,6 +5,7 @@ namespace Ycore\Console;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Http;
 use QL\QueryList;
 use Ycore\Core\Core;
 use Ycore\Events\WebsitePush;
@@ -45,8 +46,112 @@ class Test extends Command
 
 //        ;
 
+        //df79b569a14b40ba9991830db9f33673
 
 
+//        $list = [
+//            'https://www.522sy.com/game/',
+//            'https://www.522sy.com/game01/',
+//            'https://www.522sy.com/app/',
+//            'https://www.522sy.com/app01/',
+//            'https://www.522sy.com/game02/',
+//            'https://www.522sy.com/game03/',
+//            'https://www.522sy.com/game04/',
+//            'https://www.522sy.com/game05/',
+//            'https://www.522sy.com/game06/',
+//            'https://www.522sy.com/game07/',
+//            'https://www.522sy.com/game08/',
+//            'https://www.522sy.com/game09/',
+//            'https://www.522sy.com/app02/',
+//            'https://www.522sy.com/app03/',
+//            'https://www.522sy.com/app04/',
+//            'https://www.522sy.com/app05/',
+//            'https://www.522sy.com/app06/',
+//            'https://www.522sy.com/app07/',
+//            'https://www.522sy.com/zixun/',
+//            'https://www.522sy.com/gl/',
+//            'https://www.522sy.com/zx/',
+//            'https://www.522sy.com/phb/',
+//            'https://www.522sy.com/gc/',
+//            'https://www.522sy.com/game10/',
+//            'https://www.522sy.com/app08/',
+//            'https://www.522sy.com/app09/',
+//            'https://www.522sy.com/game11/',
+//            'https://www.522sy.com/app10/',
+//            'https://www.522sy.com/pc/',
+//            'https://www.522sy.com/jc/',
+//            'https://www.522sy.com/game02/11.html',
+//            'https://www.522sy.com/game05/12.html',
+//            'https://www.522sy.com/game01/13.html',
+//            'https://www.522sy.com/game06/14.html',
+//            'https://www.522sy.com/game03/16.html',
+//            'https://www.522sy.com/game02/17.html',
+//            'https://www.522sy.com/game05/19.html',
+//            'https://www.522sy.com/game01/20.html',
+//            'https://www.522sy.com/game05/21.html',
+//            'https://www.522sy.com/game10/22.html',
+//            'https://www.522sy.com/game05/23.html',
+//            'https://www.522sy.com/game06/24.html',
+//            'https://www.522sy.com/game01/25.html',
+//            'https://www.522sy.com/phb/33.html',
+//            'https://www.522sy.com/app07/34.html',
+//            'https://www.522sy.com/app07/35.html',
+//            'https://www.522sy.com/app01/36.html',
+//            'https://www.522sy.com/app07/37.html',
+//            'https://www.522sy.com/app07/38.html',
+//            'https://www.522sy.com/game01/39.html',
+//            'https://www.522sy.com/game01/40.html',
+//            'https://www.522sy.com/game05/41.html',
+//
+//        ];
+
+        $data = file_get_contents(base_path('33.txt'));
+
+
+        $list = array_filter(explode("\n", $data)) ;
+
+//        dd($list);
+
+
+        $client = new Client();
+
+
+        foreach ($list as $value) {
+
+//            $rsp = $client->request('post', 'https://ssl.bing.com/webmaster/api.svc/json/SubmitUrlbatch?apikey=df79b569a14b40ba9991830db9f33673', [
+//                'json' => [
+//                    'siteUrl' => 'https://www.522sy.com',
+//                    'urlList' => [
+//                        $value
+//                    ]
+//                ]
+//            ]);
+
+            $rsp=Http::post("https://ssl.bing.com/webmaster/api.svc/json/SubmitUrlbatch?apikey=df79b569a14b40ba9991830db9f33673",[
+                'siteUrl' => 'https://www.522sy.com',
+                'urlList' => [
+                    $value
+                ]
+            ]);
+
+
+//            $rsp->s
+
+            $this->info($rsp->status() . "---" . $rsp->body());
+
+        }
+
+
+//        dd($rsp->getStatusCode(), $rsp->getBody()->getContents());
+
+
+//        $client->post();
+
+
+        //$bing_token
+
+
+        return;
 
 
         foreach (getCategoryIds(config()) as $value) {
