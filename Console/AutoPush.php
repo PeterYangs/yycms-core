@@ -148,7 +148,7 @@ class AutoPush extends Command
                 $cIds = Category::where('pid', $category_id)->get()->pluck('id')->push($category_id)->all();
 
 
-                $query = StoreArticle::whereIn('category_id', $cIds)->where('status', 1)->limit($value->number);
+                $query = StoreArticle::whereIn('category_id', $cIds)->where('status', 1)->where('debug',0)->limit($value->number);
 
 
                 switch ($value->rule) {
@@ -198,17 +198,15 @@ class AutoPush extends Command
             }
 
 
+            //草稿箱自动发布
             if ($value->type === "article") {
 
-//                dd(123);
 
                 $category_id = $value->category_id;
 
                 //获取该分类的子分类
                 $cIds = Category::where('pid', $category_id)->get()->pluck('id')->push($category_id)->all();
 
-
-//                dd($cIds);
 
                 $query = Article::where('push_status', 3)
                     ->whereNull('deleted_at')
