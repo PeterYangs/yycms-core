@@ -8,92 +8,95 @@ use Illuminate\Database\Eloquent\Builder;
 class Search
 {
 
-    static function searchList(Builder $builder,$search){
+    static function searchList(Builder $builder, $search)
+    {
 
 
-        $search=json_decode($search,true);
+        $search = json_decode($search, true);
 
 
-        $custom=[];
+        $custom = [];
 
-        foreach ($search as $key=>$value){
+        foreach ($search as $key => $value) {
 
 
-            if(!isset($value['value'])||$value['value']==='') continue;
+            $val = trim($value['value']);
 
-            if(isset($value['custom'])){
+            if (!isset($val) || $val === '') continue;
 
-                $custom[]=$value;
+            if (isset($value['custom'])) {
+
+                $custom[] = $value;
 
                 continue;
             }
 
-            if(!isset($value['field'])) continue;
+            if (!isset($value['field'])) continue;
 
 
-            switch ($value['condition']){
+            switch ($value['condition']) {
 
                 case 'like':
 
-                    if(count(explode('.',$value['field']))>1){
+                    if (count(explode('.', $value['field'])) > 1) {
 
-                        $builder->whereHas(explode('.',$value['field'])[0],function ($query)use ($value){
+                        $builder->whereHas(explode('.', $value['field'])[0], function ($query) use ($value, $val) {
 
-                            $query->where(explode('.',$value['field'])[1],'like','%'.$value['value']."%");
+                            $query->where(explode('.', $value['field'])[1], 'like', '%' . $val . "%");
 
                         });
 
                         break;
                     }
 
-                    $builder->where($value['field'],'like','%'.$value['value']."%");
+                    $builder->where($value['field'], 'like', '%' . $val . "%");
 
                     break;
 
 
                 case '>':
 
-                    if(count(explode('.',$value['field']))>1){
+                    if (count(explode('.', $value['field'])) > 1) {
 
-                        $builder->whereHas(explode('.',$value['field'])[0],function ($query)use ($value){
+                        $builder->whereHas(explode('.', $value['field'])[0], function ($query) use ($value, $val) {
 
-                            $query->where(explode('.',$value['field'])[1],'>',$value['value']);
+                            $query->where(explode('.', $value['field'])[1], '>', $val);
 
                         });
 
                         break;
                     }
 
-                    $builder->where($value['field'],'>',$value['value']);
+                    $builder->where($value['field'], '>', $val);
 
                     break;
 
 
                 case '<':
 
-                    if(count(explode('.',$value['field']))>1){
+                    if (count(explode('.', $value['field'])) > 1) {
 
-                        $builder->whereHas(explode('.',$value['field'])[0],function ($query)use ($value){
+                        $builder->whereHas(explode('.', $value['field'])[0], function ($query) use ($value, $val) {
 
-                            $query->where(explode('.',$value['field'])[1],'<',$value['value']);
+                            $query->where(explode('.', $value['field'])[1], '<', $val);
 
                         });
 
                         break;
                     }
 
-                    $builder->where($value['field'],'<',$value['value']);
+                    $builder->where($value['field'], '<', $val);
 
                     break;
 
 
                 case '>=':
 
-                    if(count(explode('.',$value['field']))>1){
+                    if (count(explode('.', $value['field'])) > 1) {
 
-                        $builder->whereHas(explode('.',$value['field'])[0],function ($query)use ($value){
+                        $builder->whereHas(explode('.', $value['field'])[0], function ($query) use ($value, $val) {
 
-                            $query->where(explode('.',$value['field'])[1],'>=',$value['value']);
+                            $query->where(explode('.', $value['field'])[1], '>=', $val);
 
                         });
 
@@ -101,105 +104,103 @@ class Search
                     }
 
 
-                    $builder->where($value['field'],'>=',$value['value']);
+                    $builder->where($value['field'], '>=', $val);
 
                     break;
 
 
                 case '<=':
 
-                    if(count(explode('.',$value['field']))>1){
+                    if (count(explode('.', $value['field'])) > 1) {
 
-                        $builder->whereHas(explode('.',$value['field'])[0],function ($query)use ($value){
+                        $builder->whereHas(explode('.', $value['field'])[0], function ($query) use ($value, $val) {
 
-                            $query->where(explode('.',$value['field'])[1],'<=',$value['value']);
+                            $query->where(explode('.', $value['field'])[1], '<=', $val);
 
                         });
 
                         break;
                     }
 
-                    $builder->where($value['field'],'<=',$value['value']);
+                    $builder->where($value['field'], '<=', $val);
 
                     break;
 
 
                 case '!=':
 
-                    if(count(explode('.',$value['field']))>1){
+                    if (count(explode('.', $value['field'])) > 1) {
 
-                        $builder->whereHas(explode('.',$value['field'])[0],function ($query)use ($value){
+                        $builder->whereHas(explode('.', $value['field'])[0], function ($query) use ($value, $val) {
 
-                            $query->where(explode('.',$value['field'])[1],'!=',$value['value']);
+                            $query->where(explode('.', $value['field'])[1], '!=', $val);
 
                         });
 
                         break;
                     }
 
-                    $builder->where($value['field'],'!=',$value['value']);
+                    $builder->where($value['field'], '!=', $val);
 
                     break;
 
 
                 case '<>':
 
-                    if(count(explode('.',$value['field']))>1){
+                    if (count(explode('.', $value['field'])) > 1) {
 
-                        $builder->whereHas(explode('.',$value['field'])[0],function ($query)use ($value){
+                        $builder->whereHas(explode('.', $value['field'])[0], function ($query) use ($value, $val) {
 
-                            $query->where(explode('.',$value['field'])[1],'<>',$value['value']);
+                            $query->where(explode('.', $value['field'])[1], '<>', $val);
 
                         });
 
                         break;
                     }
 
-                    $builder->where($value['field'],'<>',$value['value']);
+                    $builder->where($value['field'], '<>', $val);
 
                     break;
 
 
                 case "=":
 
-                    if(count(explode('.',$value['field']))>1){
+                    if (count(explode('.', $value['field'])) > 1) {
 
-                        $builder->whereHas(explode('.',$value['field'])[0],function ($query)use ($value){
+                        $builder->whereHas(explode('.', $value['field'])[0], function ($query) use ($value, $val) {
 
-                            $query->where(explode('.',$value['field'])[1],'=',$value['value']);
+                            $query->where(explode('.', $value['field'])[1], '=', $val);
 
                         });
 
                         break;
                     }
 
-                    $builder->where($value['field'],'=',$value['value']);
+                    $builder->where($value['field'], '=', $val);
 
                     break;
-
 
 
                 default :
 
 
-                    if(count(explode('.',$value['field']))>1){
+                    if (count(explode('.', $value['field'])) > 1) {
 
-                        $builder->whereHas(explode('.',$value['field'])[0],function ($query)use ($value){
+                        $builder->whereHas(explode('.', $value['field'])[0], function ($query) use ($value, $val) {
 
-                            $query->where(explode('.',$value['field'])[1],$value['value']);
+                            $query->where(explode('.', $value['field'])[1], $val);
 
                         });
 
                         break;
                     }
 
-                    $builder->where($value['field'],$value['value']);
+                    $builder->where($value['field'], $val);
 
                     break;
 
 
             }
-
 
 
         }
