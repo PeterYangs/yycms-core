@@ -1501,9 +1501,11 @@ function getExGame(Article $article)
  * 2022-09-09 14:01:23
  * @param Article $article
  * @param int $limit
+ * @param string $orderField
+ * @param string $orderDirection
  * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
  */
-function getExGameList(Article $article, int $limit = 0, $name = ''): \Illuminate\Database\Eloquent\Collection|array
+function getExGameList(Article $article, int $limit = 0, $name = '', string $orderField = 'push_time', string $orderDirection = 'desc'): \Illuminate\Database\Eloquent\Collection|array
 {
 
 
@@ -1518,7 +1520,7 @@ function getExGameList(Article $article, int $limit = 0, $name = ''): \Illuminat
 
         $query->select('slave')->from('article_association_object')->where('main', $mainId)->where('name', $name);
 
-    })->orderBy('push_time', 'desc');
+    })->orderBy($orderField, $orderDirection);
 
     if ($limit !== 0) {
 
@@ -1540,7 +1542,7 @@ function getExGameList(Article $article, int $limit = 0, $name = ''): \Illuminat
  * @param int $size
  * @return Closure|mixed|object
  */
-function getExGameListWithPage(Article $article, string $pageUrl = "", int $page = 1, int $size = 10, $name = '')
+function getExGameListWithPage(Article $article, string $pageUrl = "", int $page = 1, int $size = 10, $name = '', string $orderField = 'push_time', string $orderDirection = 'desc')
 {
 
 
@@ -1555,7 +1557,7 @@ function getExGameListWithPage(Article $article, string $pageUrl = "", int $page
 
         $query->select('slave')->from('article_association_object')->where('main', $mainId)->where('name', $name);
 
-    });
+    })->orderBy($orderField, $orderDirection);
 
 
     $offset = ($page - 1) * $size;
