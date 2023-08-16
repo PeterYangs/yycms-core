@@ -24,6 +24,7 @@ use Ycore\Http\Controllers\Admin\RulesController;
 use Ycore\Http\Controllers\Admin\SearchArticleController;
 use Ycore\Http\Controllers\Admin\SearchController;
 use Ycore\Http\Controllers\Admin\SeoTitleChangeController;
+use Ycore\Http\Controllers\Admin\SitemapController;
 use Ycore\Http\Controllers\Admin\SiteSettingController;
 use Ycore\Http\Controllers\Admin\SpecialController;
 use Ycore\Http\Controllers\Admin\SpiderController;
@@ -246,6 +247,12 @@ Route::middleware([])->group(function () {
         });
 
 
+        Route::group(['prefix' => 'sitemap'], function () {
+            Route::post('create', [SitemapController::class, 'create']);
+            Route::post('list', [SitemapController::class, 'list']);
+        });
+
+
         //主页数据
         Route::group(['prefix' => 'home'], function () {
             Route::any('spiderTable', [HomeController::class, 'spiderTable']);
@@ -257,7 +264,7 @@ Route::middleware([])->group(function () {
         });
 
 
-        //主页数据
+
         Route::group(['prefix' => 'store_article'], function () {
             Route::any('list', [StoreArticleController::class, 'list']);
             Route::any('detail', [StoreArticleController::class, 'detail']);

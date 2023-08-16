@@ -17,6 +17,7 @@ use Ycore\Tool\ArticleGenerator;
 use Illuminate\Console\Command;
 use Ycore\Tool\ChatGpt;
 use Ycore\Service\Ai\Ai;
+use Ycore\Tool\Sitemap;
 
 class Test extends Command
 {
@@ -42,6 +43,14 @@ class Test extends Command
      */
     public function handle()
     {
+
+//        ;
+
+
+        dd(Sitemap::getSitemapList());
+
+
+        return;
 
 
 //        ;
