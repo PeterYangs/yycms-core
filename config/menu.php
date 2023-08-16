@@ -50,7 +50,7 @@ return [
         'name' => '设置',
         'children' => [
             ['name' => '系统设置', 'path' => '/main/setting', 'title' => ['消息队列', '正在运行的任务'], 'apiPath' => '/admin/queue/getTask'],
-            ['name' => '系统设置', 'path' => '/main/sitemap', 'title' => ['消息队列', '正在运行的任务'], 'apiPath' => '/admin/queue/getTask'],
+            ['name' => '网站地图', 'path' => '/main/sitemap', 'title' => ['消息队列', '正在运行的任务'], 'apiPath' => '/admin/queue/getTask'],
             ['name' => '网站设置', 'path' => '/main/site_setting', 'title' => ['消息队列', '正在运行的任务'], 'apiPath' => '/admin/queue/getTask'],
             ['name' => '单页面', 'path' => '/main/page_list', 'title' => ['消息队列', '正在运行的任务'], 'apiPath' => '/admin/queue/getTask'],
             ['name' => '拓展属性替换', 'path' => '/main/expand_change_list', 'title' => ['消息队列', '正在运行的任务'], 'apiPath' => '/admin/queue/getTask'],
