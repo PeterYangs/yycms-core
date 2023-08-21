@@ -556,7 +556,7 @@ class ArticleController extends AuthCheckController
 
             $query->whereIn('pid', $pid->pluck('id')->all());
 
-        })->whereRaw("( ? like CONCAT('%',title,'%')  $tag_condition   )", [$item->title])->limit(8)->get();
+        })->whereRaw("( ? like CONCAT('%',title,'%')  $tag_condition   )", [$item->title])->orderByRaw("LENGTH(title) asc ")->limit(8)->get();
 
 
         return Json::code(1, 'success', ['article' => $item, 'list' => $list]);
