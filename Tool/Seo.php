@@ -88,7 +88,7 @@ class Seo
 
 
                 $arr = [
-                    '[title]' . getSeoVersionDesc($article) . '下载(暂未上线)',
+                    '[title]' . getSeoVersionDesc($article) . self::filterDownloadStr($article->title, '下载(暂未上线)'),
 
                 ];
 
@@ -104,13 +104,14 @@ class Seo
                     "ex." . config('static.ios_download_link')) !== "") {
 
 
+                //带版的就不出现版
                 if (str_contains($article->title, "版")) {
 
 
                     $arr = [
-                        '[title]' . getSeoVersionDesc($article) . '下载_[title]官方下载' . getVersion($article),
-                        '[title]' . getSeoVersionDesc($article) . '下载_[title]免费下载' . getVersion($article),
-                        '[title]' . getSeoVersionDesc($article) . '下载_[title]手机下载' . getVersion($article),
+                        '[title]' . getSeoVersionDesc($article) . self::filterDownloadStr($article->title, '下载_[title]官方下载') . getVersion($article),
+                        '[title]' . getSeoVersionDesc($article) . self::filterDownloadStr($article->title, '下载_[title]免费下载') . getVersion($article),
+                        '[title]' . getSeoVersionDesc($article) . self::filterDownloadStr($article->title, '下载_[title]手机下载') . getVersion($article),
                     ];
 
 
@@ -135,9 +136,9 @@ class Seo
 
 
                     $arr = [
-                        '[title]' . $oneDesc . '下载_[title]' . $twoDesc . '下载' . getVersion($article),
-                        '[title]' . $oneDesc . '下载_[title]' . $twoDesc . '下载' . getVersion($article),
-                        '[title]' . $oneDesc . '下载_[title]' . $twoDesc . '下载' . getVersion($article),
+                        '[title]' . $oneDesc . '下载_[title]' . $twoDesc . self::filterDownloadStr($article->title, '下载') . getVersion($article),
+                        '[title]' . $oneDesc . '下载_[title]' . $twoDesc . self::filterDownloadStr($article->title, '下载') . getVersion($article),
+                        '[title]' . $oneDesc . '下载_[title]' . $twoDesc . self::filterDownloadStr($article->title, '下载') . getVersion($article),
                     ];
 
                 }
@@ -148,6 +149,8 @@ class Seo
 
 
         } elseif (getObjPlus($article, 'category.id') === config('category.collect')) {
+
+            //游戏合集seo标题规则
 
             $arr = [
                 '好玩的[title]手游合集推荐-最新的[title]手游大全下载',
@@ -175,6 +178,8 @@ class Seo
             $title = str_replace('[title]', getObjPlus($article, 'title'), $arr[array_rand($arr)]);
 
         } elseif (getObjPlus($article, 'category.id') === config('category.app_collect')) {
+
+            //应用合集
 
             $arr = [
                 '[title]软件推荐-好用的[title]app-[title]软件合集',
@@ -211,6 +216,23 @@ class Seo
 
     }
 
+
+    /**
+     * 防止下载出现多次
+     * @return void
+     */
+    private static function filterDownloadStr($title, $str): string
+    {
+
+
+        if (str_contains($title, "下载")) {
+
+
+            return str_replace("下载", "", $str);
+        }
+
+        return $str;
+    }
 
     /**
      * 查找文章内容中的标签并替换
