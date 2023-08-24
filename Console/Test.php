@@ -47,7 +47,18 @@ class Test extends Command
 //        ;
 
 
-        dd(Sitemap::getSitemapList());
+//        dd(Sitemap::getSitemapList());
+
+
+        $a = new ArticleGenerator();
+
+        $a->fill([
+            'category_id' => 2,
+            'content' => "角色扮演内容啊",
+            'title' => '随便一个标题'.time(),
+            'img'=>'123'
+
+        ], [])->create();
 
 
         return;
@@ -117,7 +128,7 @@ class Test extends Command
         $data = file_get_contents(base_path('33.txt'));
 
 
-        $list = array_filter(explode("\n", $data)) ;
+        $list = array_filter(explode("\n", $data));
 
 //        dd($list);
 
@@ -136,7 +147,7 @@ class Test extends Command
 //                ]
 //            ]);
 
-            $rsp=Http::post("https://ssl.bing.com/webmaster/api.svc/json/SubmitUrlbatch?apikey=df79b569a14b40ba9991830db9f33673",[
+            $rsp = Http::post("https://ssl.bing.com/webmaster/api.svc/json/SubmitUrlbatch?apikey=df79b569a14b40ba9991830db9f33673", [
                 'siteUrl' => 'https://www.522sy.com',
                 'urlList' => [
                     $value

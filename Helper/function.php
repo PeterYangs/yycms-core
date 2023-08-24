@@ -14,6 +14,7 @@ use Ycore\Models\Collect;
 use Ycore\Models\CollectTag;
 use Ycore\Models\Options;
 use Ycore\Models\Tag;
+use Ycore\Tool\ArticleGenerator;
 use Ycore\Tool\Hook;
 use Ycore\Tool\Json;
 use Ycore\Tool\Seo;
@@ -2117,6 +2118,7 @@ function autoAssociationObject(Article $article): bool
         $whereArr[] = $category->parent->id;
     }
 
+    //获取当前文章的父级关联类型
     $collect = Collect::whereIn('son_id', $whereArr)->first();
 
 
@@ -2160,6 +2162,13 @@ function autoAssociationObject(Article $article): bool
                         'slave' => $article->id,
                         'name' => config('static.association_object', 'association_object')
                     ]);
+
+
+                    //更新父级文章更新时间
+                    $a = new ArticleGenerator();
+
+                    $a->fill(['updated_at' => now()], [])->update(['id' => $main->id]);
+
 
                 } catch (\Exception $exception) {
 
