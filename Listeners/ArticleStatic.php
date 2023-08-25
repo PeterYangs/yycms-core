@@ -58,6 +58,8 @@ class ArticleStatic
         } catch (\Exception $exception) {
 
 
+            \Log::error("文章静态化失败，文章id为" . $article->id . "(" . $exception->getMessage() . ")");
+
         }
 
 
