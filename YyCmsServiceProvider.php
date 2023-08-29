@@ -2,8 +2,7 @@
 
 namespace Ycore;
 
-use Barryvdh\Debugbar\DebugbarViewEngine;
-use Barryvdh\Debugbar\LaravelDebugbar;
+
 use Illuminate\Foundation\Application;
 use Illuminate\Pagination\Paginator;
 use Illuminate\View\Engines\EngineResolver;
@@ -51,7 +50,6 @@ use Ycore\Console\MakeXml;
 use Ycore\Console\MatchApk;
 use Ycore\Console\MysqlBackup;
 use Ycore\Console\PushCustom;
-use Ycore\Console\PushRandomStoreToArticle;
 use Ycore\Console\SearchAccess;
 use Ycore\Console\SetSeoTitle;
 use Ycore\Console\Spider;
@@ -156,7 +154,7 @@ class YyCmsServiceProvider extends ServiceProvider
         }
 
 
-        //邮件发送流量流量限制，1分钟只能发5个
+        //邮件发送流量流量限制，1分钟只能发5个(消息队列限流)
         RateLimiter::for('email', function ($job) {
 
 

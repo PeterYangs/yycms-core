@@ -2,10 +2,13 @@
 
 namespace Ycore\Console;
 
+use DebugBar\Bridge\SwiftMailer\SwiftMailCollector;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Mail\Mailer;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use QL\QueryList;
 use Ycore\Core\Core;
 use Ycore\Events\WebsitePush;
@@ -44,8 +47,37 @@ class Test extends Command
     public function handle()
     {
 
+//        Mail::set
+
+//        $mailer=new Mailer();
+
+
+
+//        $mailer= new Mailer();
+
+
+
+//        $mail= new PHPMail
+//
+//
+//        $mail
+
+
+        $transport = \Swift_SmtpTransport::newInstance('smtp.exmail.qq.com', 465, 'ssl');
+
+
+//        PHPMai
+
+
+//        Swift
+
 //        ;
 
+
+//        Mail::
+
+
+        return;
 
 //        dd(Sitemap::getSitemapList());
 
