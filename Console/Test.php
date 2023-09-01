@@ -9,7 +9,10 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Mail\Mailer;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 use QL\QueryList;
+use Symfony\Component\Mailer\Transport;
 use Ycore\Core\Core;
 use Ycore\Events\WebsitePush;
 use Ycore\Http\Controllers\Admin\CategoryController;
@@ -47,14 +50,49 @@ class Test extends Command
     public function handle()
     {
 
+
+//        Transport::fromDsn();
+
+
+        $mail = new PHPMailer(true);
+
+        //Server settings
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+        $mail->isSMTP();
+        $mail->Host = "smtp.qq.com";
+        $mail->SMTPAuth = true;
+        $mail->Username = "904801074@qq.com";
+        $mail->Password = 'fangdlbaosembfif';
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+        $mail->Port = '465';
+
+        //Recipients
+        $mail->setFrom('904801074@qq.com', '发送者');
+        $mail->addAddress('1259343832@qq.com', '接受者');     //Add a recipient
+//        $mail->addAddress('ellen@example.com');               //Name is optional
+//        $mail->addReplyTo('info@example.com', 'Information');
+//        $mail->addCC('cc@example.com');
+//        $mail->addBCC('bcc@example.com');
+
+
+        $mail->addStringAttachment(file_get_contents(base_path('123.xml')), "123.xml");
+
+        $mail->isHTML(true);
+
+
+        $mail->Subject = 'title';
+
+        $mail->Body = '<h1>content</h1>';
+
+        $mail->send();
+
+
 //        Mail::set
 
 //        $mailer=new Mailer();
 
 
-
 //        $mailer= new Mailer();
-
 
 
 //        $mail= new PHPMail
@@ -63,7 +101,7 @@ class Test extends Command
 //        $mail
 
 
-        $transport = \Swift_SmtpTransport::newInstance('smtp.exmail.qq.com', 465, 'ssl');
+//        $transport = \Swift_SmtpTransport::newInstance('smtp.exmail.qq.com', 465, 'ssl');
 
 
 //        PHPMai
@@ -87,8 +125,8 @@ class Test extends Command
         $a->fill([
             'category_id' => 2,
             'content' => "角色扮演内容啊",
-            'title' => '随便一个标题'.time(),
-            'img'=>'123'
+            'title' => '随便一个标题' . time(),
+            'img' => '123'
 
         ], [])->create();
 

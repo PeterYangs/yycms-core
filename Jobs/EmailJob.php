@@ -8,6 +8,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\RateLimited;
 use Illuminate\Queue\SerializesModels;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 
 class EmailJob implements ShouldQueue
 {
@@ -35,12 +37,13 @@ class EmailJob implements ShouldQueue
      * @param string $attachData
      */
     public function __construct(
-        array $emails,
+        array  $emails,
         string $title,
         string $content,
         string $attachFilename = '',
         string $attachData = ''
-    ) {
+    )
+    {
         $this->emails = $emails;
         $this->title = $title;
         $this->content = $content;
@@ -72,25 +75,54 @@ class EmailJob implements ShouldQueue
     {
         //
 
+//
+//        \Mail::html($this->content, function (\Illuminate\Mail\Message $message) {
+//
+//
+//            foreach ($this->emails as $v) {
+//
+//                $message->to($v);
+//
+//            }
+//
+//            $message->subject($this->title);
+//
+//            //发送附件内容
+//            if ($this->attachFilename) {
+//
+//                $message->attachData($this->attachData, $this->attachFilename);
+//            }
+//
+//        });
 
-        \Mail::html($this->content, function (\Illuminate\Mail\Message $message) {
+
+        $mail = new PHPMailer(true);
+
+        //Server settings
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+        $mail->isSMTP();
+        $mail->Host = "smtp.qq.com";
+        $mail->SMTPAuth = true;
+        $mail->Username = "904801074@qq.com";
+        $mail->Password = 'fangdlbaosembfif';
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+        $mail->Port = '465';
+
+        //Recipients
+        $mail->setFrom('904801074@qq.com', '发送者');
+        $mail->addAddress('1259343832@qq.com', '接受者');     //Add a recipient
 
 
-            foreach ($this->emails as $v) {
+        $mail->addStringAttachment(file_get_contents(base_path('123.xml')), "123.xml");
 
-                $message->to($v);
+        $mail->isHTML(true);
 
-            }
 
-            $message->subject($this->title);
+        $mail->Subject = 'title';
 
-            //发送附件内容
-            if ($this->attachFilename) {
+        $mail->Body = '<h1>content</h1>';
 
-                $message->attachData($this->attachData, $this->attachFilename);
-            }
-
-        });
+        $mail->send();
 
 
     }
