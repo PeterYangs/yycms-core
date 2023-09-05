@@ -12,6 +12,7 @@ namespace Ycore\Http\Controllers\Admin;
 use Illuminate\Support\Facades\Artisan;
 use Ycore\Tool\Json;
 use Illuminate\Http\Request;
+use Ycore\Tool\Mail;
 
 class SiteSettingController extends AuthCheckController
 {
@@ -39,7 +40,6 @@ class SiteSettingController extends AuthCheckController
 
         return Json::code(1, 'success', $post);
 
-//        return Json::code(2, '失败');
     }
 
     /**
@@ -65,7 +65,12 @@ class SiteSettingController extends AuthCheckController
             'seo_title',
             'site_name',
             'sm_token',
-            'bing_token'
+            'bing_token',
+            'mail_host',
+            'mail_username',
+            'mail_password',
+            'mail_port',
+            'notice_mail'
         ];
 
 //        $data = SiteSetting::first();
@@ -162,6 +167,26 @@ class SiteSettingController extends AuthCheckController
 
 
         return Json::code(1, "success", "PushAsset " . getOption("theme", "demo"));
+
+    }
+
+
+    function sendTestMail()
+    {
+
+        try {
+
+            Mail::send([getOption('notice_mail')], '测试邮件', '<h1>测试内容</h1>');
+
+        } catch (\Exception $exception) {
+
+
+            return Json::code(2, 'success', $exception->getMessage());
+        }
+
+
+        return Json::code(1, 'success');
+
 
     }
 

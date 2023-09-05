@@ -53,6 +53,12 @@ class Test extends Command
 
 //        Transport::fromDsn();
 
+//        Mai
+
+        \Ycore\Tool\Mail::send(['904801074@qq.com'],'测试标题',"测试内容",'随便爽爽爽',"123.txt");
+
+
+        return;
 
         $mail = new PHPMailer(true);
 

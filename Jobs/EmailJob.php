@@ -10,6 +10,7 @@ use Illuminate\Queue\Middleware\RateLimited;
 use Illuminate\Queue\SerializesModels;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
+use Ycore\Tool\Mail;
 
 class EmailJob implements ShouldQueue
 {
@@ -73,56 +74,9 @@ class EmailJob implements ShouldQueue
      */
     public function handle()
     {
-        //
-
-//
-//        \Mail::html($this->content, function (\Illuminate\Mail\Message $message) {
-//
-//
-//            foreach ($this->emails as $v) {
-//
-//                $message->to($v);
-//
-//            }
-//
-//            $message->subject($this->title);
-//
-//            //发送附件内容
-//            if ($this->attachFilename) {
-//
-//                $message->attachData($this->attachData, $this->attachFilename);
-//            }
-//
-//        });
 
 
-        $mail = new PHPMailer(true);
-
-        //Server settings
-        $mail->SMTPDebug = SMTP::DEBUG_SERVER;
-        $mail->isSMTP();
-        $mail->Host = "smtp.qq.com";
-        $mail->SMTPAuth = true;
-        $mail->Username = "904801074@qq.com";
-        $mail->Password = 'fangdlbaosembfif';
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-        $mail->Port = '465';
-
-        //Recipients
-        $mail->setFrom('904801074@qq.com', '发送者');
-        $mail->addAddress('1259343832@qq.com', '接受者');     //Add a recipient
-
-
-        $mail->addStringAttachment(file_get_contents(base_path('123.xml')), "123.xml");
-
-        $mail->isHTML(true);
-
-
-        $mail->Subject = 'title';
-
-        $mail->Body = '<h1>content</h1>';
-
-        $mail->send();
+        Mail::send($this->emails, $this->title, $this->content, $this->attachData, $this->attachFilename);
 
 
     }

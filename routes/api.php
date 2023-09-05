@@ -244,6 +244,7 @@ Route::middleware([])->group(function () {
             Route::post('switchTheme', [SiteSettingController::class, 'switchTheme']);
             Route::post('theme', [SiteSettingController::class, 'theme']);
             Route::post('PushAsset', [SiteSettingController::class, 'pushAsset']);
+            Route::post('sendTestMail', [SiteSettingController::class, 'sendTestMail']);
         });
 
 

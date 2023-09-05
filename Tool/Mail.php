@@ -9,15 +9,22 @@ class Mail
 {
 
 
-    public static function send(array $emails, string $title, string $content, string $attachData = '', string $attachFilePath = '')
+    public static function send(array $emails, string $title, string $content, string $attachData = '', string $attachFilename = '', string $attachFilePath = '')
     {
 
-//        if ()
+
+        if (!(getOption("mail_host") && getOption('mail_username') && getOption('mail_password') && getOption('mail_port'))) {
+
+
+            throw new \Exception("邮箱配置缺失!");
+
+        }
+
 
         $mail = new PHPMailer(true);
 
         //Server settings
-        $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+        $mail->SMTPDebug = SMTP::DEBUG_OFF;
         $mail->isSMTP();
         $mail->Host = getOption("mail_host");
         $mail->SMTPAuth = true;
@@ -27,27 +34,40 @@ class Mail
         $mail->Port = getOption('mail_port');
 
         //Recipients
-        $mail->setFrom('904801074@qq.com', '发送者');
-        $mail->addAddress('1259343832@qq.com', '接受者');     //Add a recipient
+        $mail->setFrom(getOption('mail_username'), getOption('mail_username'));
+
+        foreach ($emails as $email) {
+
+            $mail->addAddress($email, $email);     //Add a recipient
+        }
+
+        $mail->isHTML();
+
+        $mail->Subject = $title;
+
+        $mail->Body = $content;
+
+
+        if ($attachData && $attachFilename) {
+
+
+            $mail->addStringAttachment($attachData, $attachFilename);
+
+        } else {
+
+
+            if ($attachFilePath) {
+
+
+                $mail->addAttachment($attachFilePath);
+            }
+
+        }
+
+        $mail->send();
 
 
     }
-
-//
-//    protected array $emails;
-//
-//    protected string $title;
-//
-//    protected string $content;
-//
-//    //附件（数据）
-//    protected string $attachData;
-//
-//    //附件名
-//    protected string $attachFilepath;
-//
-//
-//    protected PHPMailer $mailer;
 
 
 }
