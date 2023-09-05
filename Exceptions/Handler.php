@@ -7,6 +7,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Throwable;
 use Ycore\Jobs\EmailJob;
+use Ycore\Models\ErrorAccess;
 
 class Handler extends ExceptionHandler
 {
@@ -54,15 +55,7 @@ class Handler extends ExceptionHandler
             if ($er->getStatusCode() === 404 || $e instanceof MethodNotAllowedHttpException || ((env('APP_DEBUG') === false && !app()->runningInConsole()) && ($e instanceof ModelNotFoundException || $e->getPrevious() instanceof ModelNotFoundException))) {
 
 
-                $a = getHostPrefix();
-
-                if ($a === "m") {
-
-                    return response()->view('mobile.404', [], 404);
-
-                }
-
-                return response()->view('pc.404', [], 404);
+                return response()->view('404', [], 404);
 
 
             }
@@ -72,6 +65,16 @@ class Handler extends ExceptionHandler
 
             return response('404', 404);
 
+        } finally {
+
+            ErrorAccess::create([
+                'ip' => $request->ip(),
+                'url' => $request->fullUrl(),
+                'referer' => $request->header('referer'),
+                'query' => $request->getQueryString(),
+                'agent' => $request->header('user-agent', "")
+            ]);
+
         }
 
 
@@ -80,33 +83,7 @@ class Handler extends ExceptionHandler
             if (!env('APP_DEBUG')) {
 
 
-                //获取错误页面
-                $view = $this->renderExceptionWithCustomRenderer($e);
-
-
-                \Log::error($e->getTraceAsString());
-
-
-                $notice_email = getOption('notice_mail');
-
-                if ($notice_email) {
-
-
-                    dispatch(new EmailJob([$notice_email], env('APP_NAME') . "-报错日志-" . date("Y-m-d-H-i-s"),
-                        $e->getMessage(), 'error.html', $view));
-
-                }
-
-
-                $a = getHostPrefix();
-
-                if ($a === "m") {
-
-                    return response()->view('mobile.500', [], 500);
-
-                }
-
-                return response()->view('pc.500', [], 500);
+                return response()->view('500', [], $er->getStatusCode());
 
 
             }
@@ -118,14 +95,13 @@ class Handler extends ExceptionHandler
         } catch (\Exception $exception) {
 
 
-            $view = $this->renderExceptionWithCustomRenderer($exception);
-
-            if (env("APP_DEBUG") === true) {
+            return response($er->getStatusCode(), $er->getStatusCode());
 
 
-                return response($view, 500);
+        } finally {
 
-            }
+            //获取错误页面
+            $view = $this->renderExceptionWithCustomRenderer($e);
 
 
             $notice_email = getOption('notice_mail');
@@ -133,13 +109,11 @@ class Handler extends ExceptionHandler
             if ($notice_email) {
 
 
-                dispatch(new EmailJob([$notice_email], env('APP_NAME') . "-报错日志-" . date("Y-m-d-H-i-s"),
-                    $exception->getMessage(), 'error.html', $view));
+                dispatch(new EmailJob([$notice_email], env('APP_NAME') . "-报错日志(状态码" . $er->getStatusCode() . ")-" . date("Y-m-d-H-i-s"),
+                    $e->getMessage(), 'error.html', $view));
 
             }
 
-
-            return response('500', 500);
         }
 
 
