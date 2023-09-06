@@ -35,6 +35,7 @@ class Kernel
 
         //日志清理
         $schedule->command('CleanUserAccess')->dailyAt("01:05");
+        $schedule->command('CleanErrorAccess')->dailyAt("01:15");
 
 
         //自动采集
