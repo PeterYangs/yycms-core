@@ -23,6 +23,7 @@ use Ycore\Http\Controllers\Admin\RouteController;
 use Ycore\Http\Controllers\Admin\RulesController;
 use Ycore\Http\Controllers\Admin\SearchArticleController;
 use Ycore\Http\Controllers\Admin\SearchController;
+use Ycore\Http\Controllers\Admin\SeoController;
 use Ycore\Http\Controllers\Admin\SeoTitleChangeController;
 use Ycore\Http\Controllers\Admin\SitemapController;
 use Ycore\Http\Controllers\Admin\SiteSettingController;
@@ -265,7 +266,6 @@ Route::middleware([])->group(function () {
         });
 
 
-
         Route::group(['prefix' => 'store_article'], function () {
             Route::any('list', [StoreArticleController::class, 'list']);
             Route::any('detail', [StoreArticleController::class, 'detail']);
@@ -386,6 +386,13 @@ Route::middleware([])->group(function () {
 
         });
 
+        Route::group(['prefix' => 'seo'], function () {
+
+
+            Route::post('errorAccessList', [SeoController::class, 'errorAccessList']);
+
+        });
+
 
     });
 
@@ -397,6 +404,6 @@ Route::middleware([])->group(function () {
     });
 
 
-    Route::post('configSave',[InstallController::class,'configSave']);
+    Route::post('configSave', [InstallController::class, 'configSave']);
 
 });

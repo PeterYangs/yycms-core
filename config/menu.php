@@ -29,6 +29,7 @@ return [
             ['name' => '标签列表', 'path' => '/main/tag_list', 'title' => ['cms管理', '自定义模块列表'], 'apiPath' => '/admin/mode/list'],
             ['name' => 'seo变动配置', 'path' => '/main/seo_title_change_edit', 'title' => ['cms管理', '自定义模块列表'], 'apiPath' => '/admin/mode/list'],
             ['name' => '推送记录', 'path' => '/main/website_push_list', 'title' => ['cms管理', '自定义模块列表'], 'apiPath' => '/admin/mode/list'],
+            ['name' => '自动发布设置', 'path' => '/main/auto_push_list', 'title' => ['cms管理', '自定义模块列表'], 'apiPath' => '/admin/mode/list'],
         ]
     ],
     [
@@ -38,19 +39,17 @@ return [
             ['name' => '采集配置', 'path' => '/main/spider_list', 'title' => ['cms管理', '自定义模块列表'], 'apiPath' => '/admin/mode/list'],
             ['name' => '分类映射', 'path' => '/main/category_map_list', 'title' => ['cms管理', '自定义模块列表'], 'apiPath' => '/admin/mode/list'],
             ['name' => '搜索引擎采集', 'path' => '/main/search_engine_list', 'title' => ['cms管理', '自定义模块列表'], 'apiPath' => '/admin/mode/list'],
-            ['name' => '采集自动发布设置', 'path' => '/main/auto_push_list', 'title' => ['cms管理', '自定义模块列表'], 'apiPath' => '/admin/mode/list'],
+
 
 
         ]
 
     ],
 
-
     [
         'name' => '设置',
         'children' => [
             ['name' => '系统设置', 'path' => '/main/setting', 'title' => ['消息队列', '正在运行的任务'], 'apiPath' => '/admin/queue/getTask'],
-            ['name' => '网站地图', 'path' => '/main/sitemap', 'title' => ['消息队列', '正在运行的任务'], 'apiPath' => '/admin/queue/getTask'],
             ['name' => '网站设置', 'path' => '/main/site_setting', 'title' => ['消息队列', '正在运行的任务'], 'apiPath' => '/admin/queue/getTask'],
             ['name' => '单页面', 'path' => '/main/page_list', 'title' => ['消息队列', '正在运行的任务'], 'apiPath' => '/admin/queue/getTask'],
             ['name' => '拓展属性替换', 'path' => '/main/expand_change_list', 'title' => ['消息队列', '正在运行的任务'], 'apiPath' => '/admin/queue/getTask'],
@@ -59,5 +58,13 @@ return [
 
         ]
     ],
+    [
+        'name' => 'seo优化',
+        'children' => [
+            ['name' => '404访问列表', 'path' => '/main/error_access', 'title' => ['消息队列', '正在运行的任务'], 'apiPath' => '/admin/queue/getTask'],
+            ['name' => '网站地图', 'path' => '/main/sitemap', 'title' => ['消息队列', '正在运行的任务'], 'apiPath' => '/admin/queue/getTask'],
+
+        ]
+    ]
 
 ];
