@@ -2,6 +2,8 @@
 
 
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 use Ycore\Core\Core;
 use Ycore\Events\ArticleUpdate;
 use Ycore\Http\Controllers\Admin\CategoryController;
@@ -2437,6 +2439,42 @@ function setEnv($key, $value)
 
 }
 
+/**
+ * 添加水印
+ * @param string $sourcePath
+ * @param string $ext
+ * @return void
+ * @throws JsonException
+ */
+function addWaterMark(string $sourcePath, string $ext)
+{
 
+    $watermark = getOption('watermark', null);
 
+    if (getOption('open_watermark') === 1 && $watermark && Storage::disk('upload')->exists($watermark)) {
 
+        $image = Image::make($sourcePath);
+
+        $waterWidth = $image->getWidth() / 3;
+
+        //图片太小就不添加水印了
+        if ($waterWidth >= 10) {
+
+            $water = Image::make(Storage::disk('upload')->get(getOption('watermark')));
+
+            //设置水印图片大小
+            $water->resize($waterWidth, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+
+            //设置在右下角
+            $image->insert($water, 'bottom-right', 10, 10);
+
+            $image->save(null, null, $ext);
+
+        }
+
+    }
+
+}

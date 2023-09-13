@@ -71,59 +71,22 @@ class AliUpload implements Upload
                     true) . '.' . $ext;
 
 
-            try {
+            //添加水印
+            if ($is_watermark) {
 
-                //储存到临时文件
-                Storage::put($fileName, file_get_contents($realPath));
-
-
-                $watermark = getOption('watermark', null);
-
-
-                //添加水印
-                if ($is_watermark && getOption('open_watermark') === 1 && $watermark) {
-
-
-                    $image = Image::make(Storage::path($fileName));
-
-                    $waterWidth = $image->getWidth() / 3;
-
-                    //图片太小就不添加水印了
-                    if ($waterWidth >= 10) {
-
-                        $water = Image::make(Storage::disk('upload')->get(getOption('watermark')));
-
-                        //设置水印图片大小
-                        $water->resize($waterWidth, null, function ($constraint) {
-                            $constraint->aspectRatio();
-                            $constraint->upsize();
-                        });
-
-                        //设置在右下角
-                        $image->insert($water, 'bottom-right', 10, 10);
-
-
-                        $image->save();
-
-                    }
-
-                }
-
-
-                $this->ossClient->putObject(env("ALI_BUCKET_NAME", ""), rtrim(config('yycms.upload_prefix'), '/') . "/" . $fileName,
-                    Storage::get($fileName));
-
-                $this->ossClient->putSymlink(env("ALI_BUCKET_NAME", ""), "api/" . rtrim(config('yycms.upload_prefix'), '/') . "/" . $fileName,
-                    rtrim(config('yycms.upload_prefix'), '/') . "/" . $fileName);
-
-                $file_array[] = $fileName;
-
-            } finally {
-
-                //删除临时文件
-                Storage::delete($fileName);
+                addWaterMark($realPath, $ext);
 
             }
+
+
+            $this->ossClient->putObject(env("ALI_BUCKET_NAME", ""), rtrim(config('yycms.upload_prefix'), '/') . "/" . $fileName,
+                file_get_contents($realPath));
+
+            $this->ossClient->putSymlink(env("ALI_BUCKET_NAME", ""), "api/" . rtrim(config('yycms.upload_prefix'), '/') . "/" . $fileName,
+                rtrim(config('yycms.upload_prefix'), '/') . "/" . $fileName);
+
+            $file_array[] = $fileName;
+
 
         }
 
@@ -156,39 +119,9 @@ class AliUpload implements Upload
 
             }
 
+            //添加水印
+            addWaterMark($file->getRealPath(), $ext);
 
-//            $watermark = getOption('watermark', null);
-//
-//
-////            $open_watermark = getOption('open_watermark', 0);
-//
-//
-//            //添加水印
-//            if (getOption('open_watermark') === 1 && $watermark && Storage::disk('upload')->exists($watermark)) {
-//
-//                $image = Image::make(public_path(rtrim(config('yycms.upload_prefix'), '/') . "/" . $fileName));
-//
-//                $waterWidth = $image->getWidth() / 3;
-//
-//                //图片太小就不添加水印了
-//                if ($waterWidth >= 10) {
-//
-//                    $water = Image::make(Storage::disk('upload')->path(getOption('watermark')));
-//
-//                    //设置水印图片大小
-//                    $water->resize($waterWidth, null, function ($constraint) {
-//                        $constraint->aspectRatio();
-//                        $constraint->upsize();
-//                    });
-//
-//                    //设置在右下角
-//                    $image->insert($water, 'bottom-right', 10, 10);
-//
-//                    $image->save();
-//
-//                }
-//
-//            }
 
         }
 
