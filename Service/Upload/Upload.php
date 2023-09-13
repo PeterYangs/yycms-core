@@ -11,9 +11,10 @@ interface Upload
      * 2022-09-29 14:20:46
      * @param array $files
      * @param string $upload_path
+     * @param bool $is_watermark 是否添加水印
      * @return mixed
      */
-    function upload(array $files, string $upload_path = "");
+    function upload(array $files, string $upload_path = "", bool $is_watermark = false);
 
 
     /**

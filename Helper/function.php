@@ -2069,6 +2069,13 @@ function getOption(string $key, mixed $default = null): mixed
     }
 
 
+    if ($item->type === 'int') {
+
+
+        $value = (int)$value;
+    }
+
+
     return $value;
 }
 

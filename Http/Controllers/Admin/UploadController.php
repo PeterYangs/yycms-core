@@ -23,9 +23,12 @@ class UploadController extends LoginCheckController
 
         $all_file = request()->allFiles();
 
+        //是否添加水印
+        $watermark = request()->input('watermark') === "1";
+
         $upload_path = request()->input('upload_path', "");
 
-        $file_array = $upload->upload($all_file, $upload_path);
+        $file_array = $upload->upload($all_file, $upload_path, $watermark);
 
 
         return Json::code(1, 'success', $file_array);

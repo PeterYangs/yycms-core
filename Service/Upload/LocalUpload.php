@@ -14,7 +14,7 @@ use Intervention\Image\Facades\Image;
 class LocalUpload implements Upload
 {
 
-    public function upload(array $files, string $upload_path = "")
+    public function upload(array $files, string $upload_path = "", bool $is_watermark = false)
     {
         // TODO: Implement Upload() method.
 
@@ -52,6 +52,36 @@ class LocalUpload implements Upload
 
             # 选择磁盘
             Storage::disk('upload')->put($fileName, file_get_contents($realPath));
+
+
+            $watermark = getOption('watermark', null);
+
+            //添加水印
+            if ($is_watermark && getOption('open_watermark') === 1 && $watermark && Storage::disk('upload')->exists($watermark)) {
+
+                $image = Image::make(public_path(rtrim(config('yycms.upload_prefix'), '/') . "/" . $fileName));
+
+                $waterWidth = $image->getWidth() / 3;
+
+                //图片太小就不添加水印了
+                if ($waterWidth >= 10) {
+
+                    $water = Image::make(Storage::disk('upload')->get(getOption('watermark')));
+
+                    //设置水印图片大小
+                    $water->resize($waterWidth, null, function ($constraint) {
+                        $constraint->aspectRatio();
+                        $constraint->upsize();
+                    });
+
+                    //设置在右下角
+                    $image->insert($water, 'bottom-right', 10, 10);
+
+                    $image->save();
+
+                }
+
+            }
 
 
             //图片压缩
@@ -96,6 +126,12 @@ class LocalUpload implements Upload
                 throw new \Exception('不允许上传该类型文件,' . $ext);
 
             }
+
+
+
+
+
+
 
         }
 

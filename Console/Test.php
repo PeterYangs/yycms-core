@@ -9,6 +9,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Mail\Mailer;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
+use Intervention\Image\Facades\Image;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use QL\QueryList;
@@ -51,11 +52,65 @@ class Test extends Command
     {
 
 
+        $image = Image::make((public_path('uploads/20230605/647d8b90bc53c2.44800558.temp')));
+
+        $waterWidth = $image->getWidth() / 3;
+
+        //图片太小就不添加水印了
+        if ($waterWidth >= 10) {
+
+//                    $water = Image::make(Storage::disk('upload')->path(getOption('watermark')));
+            $water = Image::make(file_get_contents(rtrim(env('IMAGE_DOMAIN'), '/') . '/' . trim(env('UPLOAD_PREFIX'), '/') . '/' . ltrim(getOption('watermark'), '/')));
+
+            //设置水印图片大小
+            $water->resize($waterWidth, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+
+            //设置在右下角
+            $image->insert($water, 'bottom-right', 10, 10);
+
+            $image->save(null,null,'png');
+
+
+//            dd($data);
+
+
+        }
+
+        return;
+
+
 //        Transport::fromDsn();
 
 //        Mai
 
-        \Ycore\Tool\Mail::send(['904801074@qq.com'],'测试标题',"测试内容",'随便爽爽爽',"123.txt");
+
+//        $image = Image::make(base_path("64d0584fce47d6.85531711.jpg"));
+        $image = Image::make(file_get_contents(base_path("64d0584fce47d6.85531711.jpg")));
+
+
+        $waterWidth = $image->getWidth() / 5;
+
+
+//        dd($waterWidth);
+
+        $water = Image::make(base_path('logo.png'));
+
+        $water->resize($waterWidth, null, function ($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize();
+        });
+
+        $image->insert($water, 'bottom-right', 10, 10);
+
+        $image->save(base_path('ll.png'));
+
+
+        return;
+
+        \Ycore\Tool\Mail::send(['904801074@qq.com'], '测试标题', "测试内容", '随便爽爽爽', "123.txt");
 
 
         return;

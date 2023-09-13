@@ -70,10 +70,12 @@ class SiteSettingController extends AuthCheckController
             'mail_username',
             'mail_password',
             'mail_port',
-            'notice_mail'
+            'notice_mail',
+            'open_watermark',
+            'watermark',
+
         ];
 
-//        $data = SiteSetting::first();
 
         $data = [];
 

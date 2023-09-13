@@ -107,6 +107,11 @@ class YyCmsServiceProvider extends ServiceProvider
                     $value = json_decode($item->value, true, 512, JSON_THROW_ON_ERROR);
                 }
 
+                if ($item->type === 'int') {
+
+                    $value = (int)$value;
+                }
+
 
                 app()->instance("option_" . $item->key, $value);
 
@@ -130,6 +135,7 @@ class YyCmsServiceProvider extends ServiceProvider
                 //移动端
                 if (request()->host() === parse_url(getOption('m_domain'))['host']) {
 
+                    //加载移动端视图路径
                     \View::addLocation(base_path('theme/' . getOption('theme', 'demo') . '/mobile/view'));
 
                 } else {
@@ -138,6 +144,7 @@ class YyCmsServiceProvider extends ServiceProvider
 
                 }
 
+                //加载自定义分页样式
                 if (\View::exists('paginator')) {
 
                     Paginator::defaultView('paginator');
