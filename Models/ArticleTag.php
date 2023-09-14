@@ -10,7 +10,7 @@ namespace Ycore\Models;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $article_id 文章id
  * @property int $tag_id 标签id
- * @property-read \App\Models\Tag|null $tag
+ * @property-read \Ycore\Models\Tag|null $tag
  * @method static \Illuminate\Database\Eloquent\Builder|ArticleTag newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ArticleTag newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ArticleTag query()
@@ -26,7 +26,7 @@ class ArticleTag extends Base
 
     protected $table = 'article_tag';
 
-    protected $fillable = ['article_id', 'tag_id'];
+    protected $fillable = ['article_id', 'tag_id','type'];
 
 
     function tag()

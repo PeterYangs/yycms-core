@@ -223,6 +223,13 @@ class Article extends Base
     }
 
 
+    function article_tag_only()
+    {
+
+        return $this->hasMany(ArticleTag::class, 'article_id', 'id');
+    }
+
+
     function special()
     {
 

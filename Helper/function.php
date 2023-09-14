@@ -2111,14 +2111,21 @@ function getCategory(int|string|array $categoryName, int $limit = 15, $exceptSel
 
 /**
  * 自动设置一对多关系
+ * (场景介绍：)
  * @param Article $article
  * @return bool
  */
 function autoAssociationObject(Article $article): bool
 {
 
+//    return true;
+
     $category = Category::where('id', $article->category_id)->first();
 
+    if (!$category) {
+
+        return false;
+    }
 
     $whereArr = [$category->id];
 
@@ -2139,57 +2146,46 @@ function autoAssociationObject(Article $article): bool
         return false;
     }
 
+
     if ($collect) {
 
-
-        $content = $article->content;
-
-
-        $t = CollectTag::whereRaw("? like CONCAT('%',title,'%')", [$content])->limit(10)->get();
+        $tagIds = $article->article_tag->pluck('tag_id');
 
 
-        if ($t->count() > 0) {
+        $mainList = Article::where('category_id', $collect->category_id)->with('article_tag_only')->whereHas('article_tag_only', function ($q) use ($tagIds) {
 
 
-            $mainList = Article::where('category_id', $collect->category_id)->where(function ($query) use ($t) {
+            $q->whereIn('tag_id', $tagIds);
 
 
-                foreach ($t as $v) {
-
-                    $query->orWhere('title', 'like', '%' . $v->title . '%');
-                }
-
-            })->limit(4)->get();
+        })->limit(4)->get();
 
 
-            foreach ($mainList as $main) {
+        foreach ($mainList as $main) {
 
-                try {
+            try {
 
-                    ArticleAssociationObject::create([
-                        'main' => $main->id,
-                        'slave' => $article->id,
-                        'name' => config('static.association_object', 'association_object')
-                    ]);
-
-
-                    //更新父级文章更新时间
-                    $a = new ArticleGenerator();
-
-                    $a->fill(['updated_at' => now()], [])->update(['id' => $main->id]);
+                ArticleAssociationObject::create([
+                    'main' => $main->id,
+                    'slave' => $article->id,
+                    'name' => config('static.association_object', 'association_object')
+                ]);
 
 
-                } catch (\Exception $exception) {
-
-                }
-
+            } catch (\Exception $exception) {
 
             }
 
+            //更新父级文章更新时间
+            $a = new ArticleGenerator();
 
-            return true;
+            $a->fill(['updated_at' => now()], [])->update(['id' => $main->id]);
+
 
         }
+
+
+        return true;
 
 
     }
@@ -2478,3 +2474,56 @@ function addWaterMark(string $sourcePath, string $ext)
     }
 
 }
+
+/**
+ * 查找文章标签
+ * @param Article $article
+ * @return void
+ */
+function selectArticleTag(Article $article)
+{
+
+    //查询当前文章标题中的标签
+    $tags = Tag::whereRaw(" ? like CONCAT('%',title,'%')", [$article->title])->get();
+
+
+    foreach ($tags as $tag) {
+
+        try {
+
+            ArticleTag::create([
+                'article_id' => $article->id,
+                'tag_id' => $tag->id,
+                'type' => 'title'
+            ]);
+
+
+        } catch (\Exception $exception) {
+        }
+
+
+    }
+
+    //查询当前文章内容中的标签
+    $tags = Tag::whereRaw("? like CONCAT('%',title,'%')", [$article->content])->limit(5)->get();
+
+
+    foreach ($tags as $tag) {
+
+        try {
+
+            ArticleTag::create([
+                'article_id' => $article->id,
+                'tag_id' => $tag->id,
+                'type' => 'content'
+            ]);
+
+
+        } catch (\Exception $exception) {
+        }
+
+
+    }
+
+}
+

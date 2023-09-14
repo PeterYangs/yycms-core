@@ -37,48 +37,24 @@ class FindTag extends Command
     {
 
 
-        Tag::chunk(100, function ($items) {
+        Article::with('category')->orderBy('id','desc')->chunk(1000, function ($items) {
 
 
             foreach ($items as $item) {
 
 
-                $articles = Article::where('title', "like", "%" . $item->title . "%")->get();
+                selectArticleTag($item);
 
+                $this->count++;
 
-                if ($articles->count() > 0) {
-
-
-                    foreach ($articles as $article) {
-
-
-                        try {
-
-                            ArticleTag::create([
-                                'article_id' => $article->id,
-                                'tag_id' => $item->id,
-                            ]);
-
-                            $this->count++;
-
-                            echo $article->title . PHP_EOL;
-
-                        } catch (\Exception $exception) {
-
-
-//                            echo $article->title . "----" . $exception->getMessage();
-                        }
-
-
-                    }
-
-
-                }
+                $this->info($item->title);
 
             }
 
 
         });
+
+        \Cache::forget('tag_list');
 
 
         echo "总计" . $this->count . PHP_EOL;

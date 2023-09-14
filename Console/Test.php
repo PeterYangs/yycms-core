@@ -52,6 +52,24 @@ class Test extends Command
     {
 
 
+//        $a = new ArticleGenerator();
+//
+//        $a->fill([
+//            'category_id' => 2,
+//            'content' => "这是一个经营手游和角色扮演和我的世界",
+//            'title' => '随便一个标题' . time(),
+//            'img' => '123'
+//
+//        ], [])->create();
+
+
+        $article = getArticleById(23941);
+
+        autoAssociationObject($article);
+
+
+        return;
+
         $image = Image::make((public_path('uploads/20230605/647d8b90bc53c2.44800558.temp')));
 
         $waterWidth = $image->getWidth() / 3;
@@ -71,7 +89,7 @@ class Test extends Command
             //设置在右下角
             $image->insert($water, 'bottom-right', 10, 10);
 
-            $image->save(null,null,'png');
+            $image->save(null, null, 'png');
 
 
 //            dd($data);

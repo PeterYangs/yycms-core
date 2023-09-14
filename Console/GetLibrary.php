@@ -2,19 +2,11 @@
 
 namespace Ycore\Console;
 
-use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\Process\Process;
 use Ycore\Core\Core;
-use Ycore\Events\ArticleUpdate;
-use Ycore\Models\Article;
-use Ycore\Models\ArticleAssociationObject;
-use Ycore\Models\Category;
-use Ycore\Models\Collect;
-use Ycore\Models\CollectTag;
 
 class GetLibrary extends Command
 {

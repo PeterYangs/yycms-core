@@ -2,7 +2,7 @@
 
 namespace Ycore\Tool;
 
-//文章操作类
+
 use QL\QueryList;
 use Throwable;
 use Ycore\Events\ArticleUpdate;
@@ -11,13 +11,13 @@ use Ycore\Http\Controllers\Admin\CategoryController;
 use Ycore\Models\Article;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
-use Ycore\Models\ArticleAssociationObject;
 use Ycore\Models\Category;
-use Ycore\Models\Collect;
-use Ycore\Models\CollectTag;
 use Ycore\Models\ExpandData;
 use Ycore\Service\Ai\Ai;
 
+/**
+ * 文章操作类
+ */
 class ArticleGenerator
 {
 
@@ -255,7 +255,7 @@ class ArticleGenerator
         if ($validator->fails()) {
 
 
-            throw new \Exception(join("\n", $validator->errors()->all()));
+            throw new \Exception(implode("\n", $validator->errors()->all()));
 
         }
 
@@ -419,16 +419,6 @@ class ArticleGenerator
             //设置seo标题
             Seo::setSeoTitle($article->id, true);
 
-
-            //自动设置关联关系
-            if ($autoAssociationObject) {
-
-
-                autoAssociationObject($article);
-
-            }
-
-
             //chatgpt替换内容
             if ($is_gpt) {
 
@@ -453,15 +443,6 @@ class ArticleGenerator
                 $article->save();
 
 
-                //自动设置关联关系
-                if ($autoAssociationObject) {
-
-
-                    autoAssociationObject($article);
-
-                }
-
-
             }
 
 
@@ -470,6 +451,13 @@ class ArticleGenerator
 
             //文章更新触发的事件
             event(new ArticleUpdate($article->id));
+
+            //自动设置关联关系
+            if ($autoAssociationObject) {
+
+                autoAssociationObject($article);
+
+            }
 
 
             if ($article->push_status === 1 && $article->status === 1 && $isPush) {

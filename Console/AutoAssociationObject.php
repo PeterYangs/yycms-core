@@ -3,13 +3,9 @@
 namespace Ycore\Console;
 
 use Illuminate\Console\Command;
-use Symfony\Component\Process\Process;
 use Ycore\Events\ArticleUpdate;
 use Ycore\Models\Article;
-use Ycore\Models\ArticleAssociationObject;
-use Ycore\Models\Category;
 use Ycore\Models\Collect;
-use Ycore\Models\CollectTag;
 
 class AutoAssociationObject extends Command
 {

@@ -4,13 +4,6 @@ namespace Ycore\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Symfony\Component\Process\Process;
-use Ycore\Events\ArticleUpdate;
-use Ycore\Models\Article;
-use Ycore\Models\ArticleAssociationObject;
-use Ycore\Models\Category;
-use Ycore\Models\Collect;
-use Ycore\Models\CollectTag;
 use Ycore\Tool\Cmd;
 
 class PushAsset extends Command

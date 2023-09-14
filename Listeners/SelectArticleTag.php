@@ -7,6 +7,7 @@ use Ycore\Models\Article;
 use Ycore\Models\ArticleTag;
 use Ycore\Models\Tag;
 
+//自动设置文章标签（根据文章标题和文章内容）
 class SelectArticleTag
 {
     /**
@@ -27,7 +28,7 @@ class SelectArticleTag
      */
     public function handle(ArticleUpdate $event)
     {
-        //
+
         $article = Article::where('id', $event->articleId)->with('category')->first();
 
 
@@ -36,26 +37,9 @@ class SelectArticleTag
             return;
         }
 
-        $tags = Tag::whereRaw(" ? like CONCAT('%',title,'%')", [$article->title])->get();
 
+        selectArticleTag($article);
 
-        foreach ($tags as $tag) {
-
-
-            try {
-
-
-                ArticleTag::create([
-                    'article_id' => $article->id,
-                    'tag_id' => $tag->id,
-                ]);
-
-
-            } catch (\Exception $exception) {
-            }
-
-
-        }
 
     }
 }
