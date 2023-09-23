@@ -6,6 +6,7 @@ use Ycore\Events\ArticleDestroy;
 use Ycore\Events\ArticleUpdate;
 use Ycore\Events\WebsitePush;
 use Ycore\Listeners\ArticleStatic;
+use Ycore\Listeners\AutoAssociationObject;
 use Ycore\Listeners\BaiduPush;
 use Ycore\Listeners\BingPush;
 use Ycore\Listeners\DeleteStaticPage;
@@ -41,6 +42,9 @@ class YyCmsEventProvider extends ServiceProvider
 
             //查找文章标签
             SelectArticleTag::class,
+
+            //文章一对多自动关联
+            AutoAssociationObject::class,
 
             //文件静态
             ArticleStatic::class,

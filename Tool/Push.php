@@ -55,7 +55,7 @@ class Push
                 'special_id' => $storeArticle->special_id,
                 'push_status' => $push_status,
                 'status' => $status
-            ], $ex)->create(true, true, $is_gpt);
+            ], $ex)->create(true, $is_gpt);
 
 
         } catch (\Exception $exception) {

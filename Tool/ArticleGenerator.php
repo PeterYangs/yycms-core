@@ -235,10 +235,9 @@ class ArticleGenerator
      * Create by Peter Yang
      * 2023-03-23 15:03:56
      * @param bool $isPush 是否推送到站长
-     * @param bool $autoAssociationObject 是否自动处理一对多关系
      * @throws Throwable
      */
-    function create(bool $isPush = true, bool $autoAssociationObject = true, bool $is_gpt = false): Article
+    function create(bool $isPush = true, bool $is_gpt = false): Article
     {
 
 
@@ -451,13 +450,6 @@ class ArticleGenerator
 
             //文章更新触发的事件
             event(new ArticleUpdate($article->id));
-
-            //自动设置关联关系
-            if ($autoAssociationObject) {
-
-                autoAssociationObject($article);
-
-            }
 
 
             if ($article->push_status === 1 && $article->status === 1 && $isPush) {
