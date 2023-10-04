@@ -1058,6 +1058,11 @@ function getContentShort(Article $article, int $length): string
 {
 
 
+    if (strip_tags($article->content) === $article->content) {
+
+        return mb_substr(trim($article->content), 0, $length);
+    }
+
     $html = QueryList::html($article->content);
 
     $text = $html->find("*")->text();
