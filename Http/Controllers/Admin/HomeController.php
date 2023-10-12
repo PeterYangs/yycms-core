@@ -38,6 +38,7 @@ class HomeController extends AuthCheckController
 
 
     /**
+     * @Auth(type='skip_auth')
      * 检查更新
      * @return string
      * @throws \Exception

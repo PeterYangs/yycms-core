@@ -59,6 +59,7 @@ class CommonController extends AuthCheckController
     }
 
     /**
+     * @Auth(type='skip_auth')
      * 分类下拉组件使用
      */
     function forCategory()
