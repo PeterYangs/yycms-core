@@ -101,14 +101,12 @@ class Auth
         $currentRoute = '/' . $route->uri;
 
 
-//        dd($currentRoute);
-
-        $rules = array_map(function ($v) {
-
-
-            return "/api" . $v;
-
-        }, $rules);
+//        $rules = array_map(function ($v) {
+//
+//
+//            return  $v;
+//
+//        }, $rules);
 
 
         if (!in_array($currentRoute, $rules, true)) {
