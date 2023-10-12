@@ -24,13 +24,14 @@ class RouteController extends AuthCheckController
 
 
 
+
         foreach (Route::getRoutes() as $v){
 
 
             $uri=$v->uri;
 
 
-            if(explode('/',$uri)[0] !== 'admin') {
+            if(explode('/',$uri)[0] !== 'api') {
                 continue;
             }
 
@@ -41,6 +42,8 @@ class RouteController extends AuthCheckController
             $uriList[]=['value'=>'/'.$uri];
 
         }
+
+
 
         return Json::code(1,Route::getRoutes(),$uriList);
     }

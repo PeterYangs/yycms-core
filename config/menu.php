@@ -21,8 +21,8 @@ return [
     [
         'name' => 'cms管理',
         'children' => [
-            ['name' => '文章应用列表', 'path' => '/main/article_list', 'title' => ['cms管理', '文章列表'], 'apiPath' => '/admin/article/list'],
-            ['name' => '自定义模块', 'path' => '/main/mode_list', 'title' => ['cms管理', '自定义模块列表'], 'apiPath' => '/admin/mode/list'],
+            ['name' => '文章应用列表', 'path' => '/main/article_list', 'title' => ['cms管理', '文章列表'], 'apiPath' => '/api/admin/article/list'],
+            ['name' => '自定义模块', 'path' => '/main/mode_list', 'title' => ['cms管理', '自定义模块列表'], 'apiPath' => '/api/admin/mode/list'],
             ['name' => '特殊属性', 'path' => '/main/special', 'title' => ['cms管理', '自定义模块列表'], 'apiPath' => '/admin/mode/list'],
             ['name' => '文章静态', 'path' => '/main/static', 'title' => ['cms管理', '自定义模块列表'], 'apiPath' => '/admin/mode/list'],
             ['name' => '新闻关联游戏', 'path' => '/main/find_game', 'title' => ['cms管理', '自定义模块列表'], 'apiPath' => '/admin/mode/list'],
