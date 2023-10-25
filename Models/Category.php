@@ -67,7 +67,8 @@ class Category extends Base
         'seo_description',
         'status',
         'sort',
-        'ai_command'
+        'ai_command',
+        'tag_relate_rule'
     ];
 
     protected static function booted()

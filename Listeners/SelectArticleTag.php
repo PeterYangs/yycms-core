@@ -29,7 +29,11 @@ class SelectArticleTag
     public function handle(ArticleUpdate $event)
     {
 
-        $article = Article::where('id', $event->articleId)->with('category')->first();
+        $article = Article::where('id', $event->articleId)
+            ->whereNull('deleted_at')
+            ->withoutGlobalScopes()
+            ->with('category')
+            ->first();
 
 
         if (!$article) {

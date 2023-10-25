@@ -52,6 +52,26 @@ class Test extends Command
     {
 
 
+        for ($i = 0; $i < 10; $i++) {
+
+
+            print_r(get_headers("https://dcd.7230x.com/apk/d47ab2150bbd3884b5d2d16347525345/2104/04/1882427.apk", 1));
+
+        }
+
+//        dd();
+
+
+        return;
+
+        $client = new Client();
+
+
+        $client->request('get', 'https://store-drcn.hispace.dbankcloud.cn/dl/appdl/application/apk/04/042cd58f1e4b48d3bc04d00b9db618fa/com.nyhy.khyuny.2306170939.apk?sign=e90k1001e710010720009000@39242AEB32C94CE8B8351B071FFF55F6&source=autoList_search&subsource=%E7%96%AF%E7%8B%82%E7%BE%8E%E9%A3%9F%E5%A4%A7%E5%B8%88&listId=15&position=1&extendStr=serviceType%3A0%3Bs%3A1694767686707&tabStatKey=1&hcrId=f073b797d4d942d38d3a4a413e307a36&maple=0&distOpEntity=HWSW&traceId=65041a462e539b5a', ['sink' => base_path('123.apk')]);
+
+
+        return;
+
 //        $a = new ArticleGenerator();
 //
 //        $a->fill([

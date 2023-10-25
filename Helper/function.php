@@ -2488,45 +2488,63 @@ function addWaterMark(string $sourcePath, string $ext)
 function selectArticleTag(Article $article)
 {
 
-    //查询当前文章标题中的标签
-    $tags = Tag::whereRaw(" ? like CONCAT('%',title,'%')", [$article->title])->get();
+    $tagRelateRule = $article->category->tag_relate_rule;
 
+    if ($tagRelateRule === 0) {
 
-    foreach ($tags as $tag) {
-
-        try {
-
-            ArticleTag::create([
-                'article_id' => $article->id,
-                'tag_id' => $tag->id,
-                'type' => 'title'
-            ]);
-
-
-        } catch (\Exception $exception) {
-        }
-
+        $tagRelateRule = $article->category->parent->tag_relate_rule;
 
     }
 
-    //查询当前文章内容中的标签
-    $tags = Tag::whereRaw("? like CONCAT('%',title,'%')", [$article->content])->limit(5)->get();
+    if ($tagRelateRule === 1 || $tagRelateRule === 3) {
+
+        //查询当前文章标题中的标签
+        $tags = Tag::whereRaw(" ? like CONCAT('%',title,'%')", [$article->title])->get();
 
 
-    foreach ($tags as $tag) {
+        foreach ($tags as $tag) {
 
-        try {
+            try {
 
-            ArticleTag::create([
-                'article_id' => $article->id,
-                'tag_id' => $tag->id,
-                'type' => 'content'
-            ]);
+                ArticleTag::create([
+                    'article_id' => $article->id,
+                    'tag_id' => $tag->id,
+                    'type' => 'title'
+                ]);
 
 
-        } catch (\Exception $exception) {
+            } catch (\Exception $exception) {
+
+            }
+
+
         }
 
+    }
+
+
+    if ($tagRelateRule === 2 || $tagRelateRule === 3) {
+
+        //查询当前文章内容中的标签
+        $tags = Tag::whereRaw("? like CONCAT('%',title,'%')", [$article->content])->limit(5)->get();
+
+
+        foreach ($tags as $tag) {
+
+            try {
+
+                ArticleTag::create([
+                    'article_id' => $article->id,
+                    'tag_id' => $tag->id,
+                    'type' => 'content'
+                ]);
+
+
+            } catch (\Exception $exception) {
+            }
+
+
+        }
 
     }
 
