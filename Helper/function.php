@@ -1587,7 +1587,7 @@ function getExGameListWithPage(Article $article, string $pageUrl = "", int $page
  * @param int $limit
  * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
  */
-function getRelated(Article $article, array|int|string $categoryName, int $limit = 5)
+function getRelated(Article $article, array|int|string $categoryName, int $limit = 5, int $type = 0)
 {
 
 
@@ -1598,7 +1598,14 @@ function getRelated(Article $article, array|int|string $categoryName, int $limit
 
 
     //获取当前文章所有标签
-    $tagList = $article->article_tag->pluck('tag_id')->all();
+    $tagList = $article->article_tag;
+
+    if ($type !== 0) {
+
+        $tagList = $tagList->where('type', $type);
+    }
+
+    $tagList = $tagList->pluck('tag_id')->all();
 
 
     //获取当前文章中关联的单一文章id
@@ -1645,12 +1652,20 @@ function getRelated(Article $article, array|int|string $categoryName, int $limit
  * @param Article $article
  * @param int $categoryId
  * @param int $limit
+ * @param int $type 标签类型，0是所有，1是软件标签，2是形容词标签
  * @return \Illuminate\Support\Collection|\Tightenco\Collect\Support\Collection
  */
-function getRelatedByTag(Article $article, int|string|array $categoryName, int $limit = 5)
+function getRelatedByTag(Article $article, int|string|array $categoryName, int $limit = 5, int $type = 0)
 {
 
-    $tagList = $article->article_tag->pluck('tag_id')->all();
+    $tagList = $article->article_tag;
+
+    if ($type !== 0) {
+
+        $tagList = $tagList->where('type', $type);
+    }
+
+    $tagList = $tagList->pluck('tag_id')->all();
 
     if (count($tagList) <= 0) {
 
