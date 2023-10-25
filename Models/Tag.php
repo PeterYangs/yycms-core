@@ -9,8 +9,8 @@ namespace Ycore\Models;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string $title 标签名称
- * @property-read \App\Models\ArticleTag|null $article_tag
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ArticleTag[] $article_tags
+ * @property-read \Ycore\Models\ArticleTag|null $article_tag
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Ycore\Models\ArticleTag[] $article_tags
  * @property-read int|null $article_tags_count
  * @method static \Illuminate\Database\Eloquent\Builder|Tag newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Tag newQuery()
@@ -26,7 +26,7 @@ class Tag extends Base
 
     protected $table = 'tag';
 
-    protected $fillable = ['title'];
+    protected $fillable = ['title','type'];
 
     function article_tag()
     {
