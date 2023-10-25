@@ -2490,9 +2490,9 @@ function selectArticleTag(Article $article)
 
     $tagRelateRule = $article->category->tag_relate_rule;
 
-    if ($tagRelateRule === 0) {
+    if ($tagRelateRule === 0 && optional($article->category->parent)->tag_relate_rule) {
 
-        $tagRelateRule = $article->category->parent->tag_relate_rule;
+        $tagRelateRule = optional($article->category->parent)->tag_relate_rule;
 
     }
 
