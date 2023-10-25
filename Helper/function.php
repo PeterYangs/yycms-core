@@ -1600,12 +1600,26 @@ function getRelated(Article $article, array|int|string $categoryName, int $limit
     //获取当前文章所有标签
     $tagList = $article->article_tag;
 
+    $tList = [];
+
+
     if ($type !== 0) {
 
-        $tagList = $tagList->where('type', $type);
+        foreach ($tagList as $key => $item) {
+
+            if ($item->tag->type === $type) {
+
+                $tList[] = $item->tag->id;
+            }
+        }
+
+    } else {
+
+        $tList = $tagList->pluck('tag_id')->all();
     }
 
-    $tagList = $tagList->pluck('tag_id')->all();
+
+    $tagList = $tList;
 
 
     //获取当前文章中关联的单一文章id
@@ -1660,12 +1674,26 @@ function getRelatedByTag(Article $article, int|string|array $categoryName, int $
 
     $tagList = $article->article_tag;
 
+    $tList = [];
+
+
     if ($type !== 0) {
 
-        $tagList = $tagList->where('type', $type);
+        foreach ($tagList as $key => $item) {
+
+            if ($item->tag->type === $type) {
+
+                $tList[] = $item->tag->id;
+            }
+        }
+
+    } else {
+
+        $tList = $tagList->pluck('tag_id')->all();
     }
 
-    $tagList = $tagList->pluck('tag_id')->all();
+
+    $tagList = $tList;
 
     if (count($tagList) <= 0) {
 
@@ -1673,9 +1701,8 @@ function getRelatedByTag(Article $article, int|string|array $categoryName, int $
         return collect([]);
     }
 
-
     $query = ArticleListModel()->where('id', "!=", $article->id)
-        ->whereRaw("id in (select article_tag.article_id from article_tag where article_tag.tag_id in (" . join(",", $tagList) . ") and article_tag.article_id != " . $article->id . ")")
+        ->whereRaw("id in (select article_tag.article_id from article_tag where article_tag.tag_id in (" . implode(",", $tagList) . ") and article_tag.article_id != " . $article->id . ")")
         ->limit($limit);
 
 
