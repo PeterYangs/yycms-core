@@ -148,7 +148,7 @@ class AutoPush extends Command
                 $cIds = Category::where('pid', $category_id)->get()->pluck('id')->push($category_id)->all();
 
 
-                $query = StoreArticle::whereIn('category_id', $cIds)->where('status', 1)->where('debug',0)->limit($value->number);
+                $query = StoreArticle::whereIn('category_id', $cIds)->where('status', 1)->where('debug', 0)->limit($value->number);
 
 
                 switch ($value->rule) {
@@ -253,7 +253,7 @@ class AutoPush extends Command
                         $ar = new ArticleGenerator();
 
 
-                        $ar->fill(['push_status' => 1], [])->update(['id' => $a->id], true);
+                        $ar->fill(['push_status' => 1, 'push_time' => now()], [])->update(['id' => $a->id], true);
 
 
                     } catch (\Exception $exception) {

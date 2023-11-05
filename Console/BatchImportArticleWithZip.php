@@ -21,7 +21,7 @@ class BatchImportArticleWithZip extends Command
      *
      * @var string
      */
-    protected $signature = 'BatchImportArticleWithZip {zipPath} {cid}';
+    protected $signature = 'BatchImportArticleWithZip {zipPath} {cid} {push_status} {status}';
 
     /**
      * The console command description.
@@ -44,6 +44,10 @@ class BatchImportArticleWithZip extends Command
         $zipPath = $this->argument('zipPath');
 
         $zipPath = public_path($zipPath);
+
+        $push_status = $this->argument('push_status');
+
+        $status = $this->argument('status');
 
 
         $tempDir = \Ramsey\Uuid\Uuid::uuid4()->toString() . "-temp-article";
@@ -88,15 +92,23 @@ class BatchImportArticleWithZip extends Command
 
                     $html = QueryList::html($fileInfo->getContents());
 
-                    $html->find('img')->map(function (Elements $elements) use ($upload) {
+                    try {
+
+                        $html->find('img')->map(function (Elements $elements) use ($upload) {
 
 
-                        $url = $upload->uploadRemoteFile($elements->attr('src'));
+                            $url = $upload->uploadRemoteFile($elements->attr('src'));
 
 
-                        $elements->attr('src', $url);
+                            $elements->attr('src', $url);
 
-                    });
+                        });
+
+                    } catch (\Exception $exception) {
+
+                        $this->error($exception->getMessage() . "--" . $exception->getFile() . ":" . $exception->getLine());
+                        continue;
+                    }
 
 
                     try {
@@ -106,6 +118,8 @@ class BatchImportArticleWithZip extends Command
                             'content' => $html->getHtml(),
                             'img' => "test_img/" . random_int(1, 13) . ".png",
                             'title' => $fileInfo->getBasename('.txt'),
+                            'push_status' => $push_status ?: 1,
+                            'status' => $status ?: 1
 
                         ], []);
 
@@ -130,13 +144,15 @@ class BatchImportArticleWithZip extends Command
 
         } catch (\Exception $exception) {
 
+            $this->error($exception->getMessage() . "--" . $exception->getFile() . ":" . $exception->getLine());
+
         } finally {
 
 
-            \File::deleteDirectories(storage_path('app/public/' . $tempDir));
-
-
-            rmdir(storage_path('app/public/' . $tempDir));
+//            \File::deleteDirectories(storage_path('app/public/' . $tempDir));
+//
+//
+//            rmdir(storage_path('app/public/' . $tempDir));
 
         }
 
