@@ -54,7 +54,7 @@ return [
             ['name' => '单页面', 'path' => '/main/page_list', 'title' => ['消息队列', '正在运行的任务'], 'apiPath' => '/admin/queue/getTask'],
             ['name' => '拓展属性替换', 'path' => '/main/expand_change_list', 'title' => ['消息队列', '正在运行的任务'], 'apiPath' => '/admin/queue/getTask'],
             ['name' => '主题设置', 'path' => '/main/theme', 'title' => ['消息队列', '正在运行的任务'], 'apiPath' => '/admin/queue/getTask'],
-
+            ['name' => '下载服务器设置', 'path' => '/main/download_site_list', 'title' => ['消息队列', '正在运行的任务'], 'apiPath' => '/admin/queue/getTask'],
 
         ]
     ],
@@ -65,6 +65,13 @@ return [
             ['name' => '网站地图', 'path' => '/main/sitemap', 'title' => ['消息队列', '正在运行的任务'], 'apiPath' => '/admin/queue/getTask'],
 
         ]
-    ]
+    ],
+    [
+        'name' => '第三方',
+        'children' => [
+            ['name' => 'AccessKey', 'path' => '/main/access_key', 'title' => ['消息队列', '正在运行的任务'], 'apiPath' => '/admin/queue/getTask'],
+
+        ]
+    ],
 
 ];

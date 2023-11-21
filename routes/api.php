@@ -1,6 +1,7 @@
 <?php
 
 
+use Ycore\Http\Controllers\Admin\AccessKeyController;
 use Ycore\Http\Controllers\Admin\AdminController;
 use Ycore\Http\Controllers\Admin\ArticleController;
 use Ycore\Http\Controllers\Admin\ArticleExpandController;
@@ -11,6 +12,7 @@ use Ycore\Http\Controllers\Admin\CategoryMapController;
 use Ycore\Http\Controllers\Admin\CategoryRouteController;
 use Ycore\Http\Controllers\Admin\CollectController;
 use Ycore\Http\Controllers\Admin\CommonController;
+use Ycore\Http\Controllers\Admin\DownloadSiteController;
 use Ycore\Http\Controllers\Admin\ExpandChangeController;
 use Ycore\Http\Controllers\Admin\HomeController;
 use Ycore\Http\Controllers\Admin\InstallController;
@@ -390,6 +392,34 @@ Route::middleware([])->group(function () {
 
 
             Route::post('errorAccessList', [SeoController::class, 'errorAccessList']);
+
+        });
+
+
+        Route::group(['prefix' => 'access_key'], function () {
+
+
+            Route::post('create', [AccessKeyController::class, 'create']);
+            Route::post('list', [AccessKeyController::class, 'list']);
+            Route::post('change', [AccessKeyController::class, 'change']);
+
+        });
+
+        Route::group(['prefix' => 'access_key'], function () {
+
+
+            Route::post('create', [AccessKeyController::class, 'create']);
+            Route::post('list', [AccessKeyController::class, 'list']);
+            Route::post('change', [AccessKeyController::class, 'change']);
+
+        });
+
+        Route::group(['prefix' => 'download_site'], function () {
+
+
+            Route::post('update', [DownloadSiteController::class, 'update']);
+            Route::post('list', [DownloadSiteController::class, 'list']);
+            Route::post('detail', [DownloadSiteController::class, 'detail']);
 
         });
 
