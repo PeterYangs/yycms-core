@@ -420,6 +420,8 @@ Route::middleware([])->group(function () {
             Route::post('update', [DownloadSiteController::class, 'update']);
             Route::post('list', [DownloadSiteController::class, 'list']);
             Route::post('detail', [DownloadSiteController::class, 'detail']);
+            Route::post('apiList', [DownloadSiteController::class, 'apiList']);
+            Route::post('downloadCodeCheck', [DownloadSiteController::class, 'downloadCodeCheck']);
 
         });
 
@@ -433,7 +435,19 @@ Route::middleware([])->group(function () {
 
     });
 
+    Route::group(['namespace' => "Third", 'prefix' => 'third'], function () {
 
-    Route::post('configSave', [InstallController::class, 'configSave']);
+
+        Route::group(['prefix' => "category"], function () {
+
+
+            Route::get('category', [\Ycore\Http\Controllers\Third\CategoryController::class, 'category']);
+
+        });
+
+    });
+
+
+//    Route::post('configSave', [InstallController::class, 'configSave']);
 
 });

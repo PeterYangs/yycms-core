@@ -8,6 +8,7 @@ use Ycore\Jobs\AiToArticle;
 use Ycore\Jobs\EmailJob;
 use Ycore\Models\Article;
 use Ycore\Models\ArticleAssociationObject;
+use Ycore\Models\ArticleDownload;
 use Ycore\Models\ArticleExpand;
 use Ycore\Models\Category;
 use Ycore\Models\Special;
@@ -37,25 +38,35 @@ class ArticleController extends AuthCheckController
 
             $ag = new ArticleGenerator();
 
+            $article = null;
+
             if ($id) {
 
 
-                $ag->fill($post, dealExpandToTable($post['expand']))->update(['id' => $id]);
+                $article = $ag->fill($post, dealExpandToTable($post['expand']))->update(['id' => $id]);
 
             } else {
 
 
-                $ag->fill($post, dealExpandToTable($post['expand']))->create();
+                $article = $ag->fill($post, dealExpandToTable($post['expand']))->create();
 
             }
 
+            if ($post['article_download']['download_site_id']) {
+                //下载模块写入
+                ArticleDownload::updateOrCreate(['article_id' => $article->id], [
+                    'article_id' => $article->id,
+                    'download_site_id' => $post['article_download']['download_site_id'],
+                    'file_path' => $post['article_download']['file_path'],
+                    'save_type' => $post['article_download']['save_type'],
+                    'pan_password' => $post['article_download']['pan_password']
+                ]);
+            }
 
             return Json::code(1, 'success');
 
 
         } catch (\Exception $exception) {
-
-            \DB::rollBack();
 
 
             $view = app(ExceptionRenderer::class)->render($exception);
@@ -90,11 +101,13 @@ class ArticleController extends AuthCheckController
             ->whereNull('deleted_at')
             ->withoutGlobalScopes()
             ->with('article_tag')
+            ->with('article_download.download_site')
             ->findOrFail($id);
 
 
         $item->append('has_collect');
 
+//        $item->append('download_url');
 
         $expand = $item->expand;
 

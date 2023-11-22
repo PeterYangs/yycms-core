@@ -52,6 +52,73 @@ class Test extends Command
     {
 
 
+//        Http::get();
+
+//        dd();
+//
+//        ;
+
+        $arr = array_filter(get_headers("http://www.925g.com", true),function ($item) {
+
+
+            if (is_numeric($item)) {
+
+                return true;
+            }
+
+            return false;
+
+        },ARRAY_FILTER_USE_KEY);
+
+//        dd($arr);
+
+        dd(end($arr));
+
+//        $ch=curl_init("http://www.925g.com");
+
+//        dd(curl_getinfo($ch));
+
+
+        $content = file_get_contents(public_path('250312.html'));
+
+//        dd($content);
+
+        $encode = mb_detect_encoding($content, ['utf8', 'gb2312']);
+        $content = mb_convert_encoding($content, "utf8", $encode);
+
+//        file_put_contents(public_path('123.html'),$content);
+
+        dd($content);
+
+        return;
+
+        $client = new Client();
+
+        $rsp = $client->request('get', "https://d.apkpure.com/b/APK/com.supercell.brawlstars?versionCode=52177&nc=arm64-v8a%2Carmeabi-v7a&sv=24", [
+            'proxy' => "http://127.0.0.1:33210",
+            'headers' => [
+                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
+                "Accept-Encoding" => 'gzip, deflate',
+                "Accept" => '*/*',
+                "Connection" => "keep-alive",
+            ],
+            'allow_redirects' => false,
+//            'allow_redirects' => [
+//                'max' => 5,
+//                'strict' => false,
+//                'referer' => false,
+//                'protocols' => ['http', 'https'],
+//                'track_redirects' => false
+//            ]
+        ]);
+
+
+        echo $rsp->getStatusCode() . PHP_EOL;
+
+
+        return;
+
+
         for ($i = 0; $i < 10; $i++) {
 
 

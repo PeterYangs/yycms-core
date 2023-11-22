@@ -138,6 +138,48 @@ class Article extends Base
 
     }
 
+
+    function article_download()
+    {
+
+        return $this->hasOne(ArticleDownload::class, 'article_id', 'id');
+    }
+
+
+    /**
+     * 获取下载地址
+     * @return Attribute
+     */
+    function downloadUrl(): Attribute
+    {
+
+
+        return new Attribute(
+            get: function ($value, $data) {
+
+                $articleDownload = $this->article_download;
+
+                if (!$articleDownload) {
+
+                    return "";
+                }
+
+                $file_path = $articleDownload->file_path;
+
+                $download_site = $articleDownload->download_site;
+
+                if (!$download_site) {
+
+                    return "";
+                }
+
+                return str_replace("{path}", $file_path, $download_site->rule);
+
+            }
+        );
+    }
+
+
     /**
      * Create by Peter Yang
      * 2022-06-23 14:02:04

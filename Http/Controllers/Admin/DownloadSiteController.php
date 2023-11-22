@@ -54,4 +54,35 @@ class DownloadSiteController extends AuthCheckController
 
     }
 
+    function apiList()
+    {
+
+
+        return Json::code(1, 'success', DownloadSite::get());
+    }
+
+
+    function downloadCodeCheck()
+    {
+
+        $url = request()->input('url');
+
+        $arr = array_filter(get_headers($url, true), function ($item) {
+
+            if (is_numeric($item)) {
+
+                return true;
+            }
+
+            return false;
+
+        }, ARRAY_FILTER_USE_KEY);
+
+        $code = end($arr);
+
+        return Json::code(1, 'success', $code);
+
+    }
+
+
 }

@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('access_key', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->engine="InnoDB";
             $table->string('app_id')->unique()->comment('app_id');
             $table->string('app_secret')->comment('app_secret');
             $table->integer('status')->default(1)->comment('状态，1是正常，2是禁用');
