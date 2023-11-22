@@ -36,6 +36,7 @@ use Ycore\Http\Controllers\Admin\StoreArticleController;
 use Ycore\Http\Controllers\Admin\TagController;
 use Ycore\Http\Controllers\Admin\UploadController;
 use Ycore\Http\Controllers\Admin\WebsitePushController;
+use Ycore\Http\Middleware\third\CheckSignature;
 
 Route::middleware([])->group(function () {
 
@@ -435,17 +436,39 @@ Route::middleware([])->group(function () {
 
     });
 
-    Route::group(['namespace' => "Third", 'prefix' => 'third'], function () {
+    Route::middleware([CheckSignature::class])->group(function () {
+
+        Route::group(['namespace' => "Third", 'prefix' => 'third'], function () {
 
 
-        Route::group(['prefix' => "category"], function () {
+            Route::group(['prefix' => "category"], function () {
 
 
-            Route::get('category', [\Ycore\Http\Controllers\Third\CategoryController::class, 'category']);
+                Route::get('category', [\Ycore\Http\Controllers\Third\CategoryController::class, 'category']);
+
+            });
 
         });
 
     });
+
+
+    if (env("APP_DEBUG") === true) {
+
+        Route::get('getSignature', function () {
+
+            $accessKey = \Ycore\Models\AccessKey::first();
+
+            if (!$accessKey) {
+
+                return "无任何accessKey";
+            }
+
+            return \Ycore\Tool\Signature::encrypt($accessKey->app_id, $accessKey->app_secret);
+
+        });
+
+    }
 
 
 //    Route::post('configSave', [InstallController::class, 'configSave']);

@@ -2,8 +2,6 @@
 
 namespace Ycore\Http\Middleware\third;
 
-use App\Http\Models\AuthorizationRules;
-use App\Tool\Code;
 use Closure;
 use Illuminate\Http\Request;
 use Ycore\Models\AccessKey;
@@ -41,7 +39,7 @@ class CheckSignature
             return response(Signature::fail(Signature::PARAMS_ERROR, '无此appid'));
         }
 
-        if (!Signature::decrypt($request->get('time'), $request->get('echostr'), $request->get('appid'), $rule->secret, $request->get('signature'))) {
+        if (!Signature::decrypt($request->get('time'), $request->get('echostr'), $request->get('appid'), $rule->app_secret, $request->get('signature'))) {
 
             return response(Signature::fail(Signature::SIGNATURE_ERROR, "签名错误"));
         }

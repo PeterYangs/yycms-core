@@ -14,7 +14,8 @@ class Signature
     //请求参数出错
     public const PARAMS_ERROR = 10002;
 
-
+    //内容添加错误
+    public const CONTENT_ERROR = 10003;
 
 
     public static function decrypt($time, $echostr, $app_id, $secret, $signature)
