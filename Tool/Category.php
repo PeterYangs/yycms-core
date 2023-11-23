@@ -8,7 +8,7 @@ class Category
 
     /**
      * @return array
-     * Notes:无限极分类
+     * Notes:树形结构
      * User: Zy
      * Date: 2022/6/20 16:39
      */
@@ -34,6 +34,54 @@ class Category
             }
         }
         return array_values($all);
+    }
+
+
+    /**
+     * 无限极查询
+     * @param $pid
+     * @return array
+     */
+    public static function getCategoryByPid($pid)
+    {
+
+
+        return (new self())->c($pid, []);
+    }
+
+
+    private function c($pid, array $disableID)
+    {
+
+        static $all = [];
+
+        $list = \Ycore\Models\Category::where('pid', $pid)->get();
+
+        if ($list) {
+
+            foreach ($list as $key => $value) {
+
+                $id = $value->id;
+
+                $detail = \Cache::get('category:detail:pc_' . $id);
+
+                if (in_array($id, $disableID, true)) {
+                    continue;
+                }
+
+                $value->detail = $detail;
+
+                $all[] = $value;
+
+                $this->c($id, $disableID);
+
+
+            }
+
+        }
+
+        return array_values($all);
+
     }
 
 }

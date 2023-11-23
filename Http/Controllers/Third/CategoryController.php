@@ -4,6 +4,7 @@ namespace Ycore\Http\Controllers\Third;
 
 use Ycore\Tool\Category;
 use Ycore\Tool\Json;
+use Ycore\Tool\Signature;
 
 class CategoryController extends BaseController
 {
@@ -13,7 +14,7 @@ class CategoryController extends BaseController
     {
 
 
-        return Json::code(1, 'success', Category::infiniteClassification(['id', 'pid', 'lv', 'name']));
+        return Signature::success(Category::getCategoryByPid(0));
 
     }
 

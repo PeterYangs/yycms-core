@@ -29,9 +29,11 @@ class CheckSignature
             return response(Signature::fail(Signature::PARAMS_ERROR, $va->errors()->first()));
         }
 
-        $diff = time() - strtotime($request->get('time'));
-        if ($diff > (50 * 60) || $diff < -(50 * 60)) {
-            return response(Signature::fail(Signature::TIME_CHECK_ERROR, "时间验证错误"));
+        if (env("APP_DEBUG") === false) {
+            $diff = time() - strtotime($request->get('time'));
+            if ($diff > (50 * 60) || $diff < -(50 * 60)) {
+                return response(Signature::fail(Signature::TIME_CHECK_ERROR, "时间验证错误"));
+            }
         }
 
         $rule = AccessKey::where('app_id', $request->get('appid'))->first();
