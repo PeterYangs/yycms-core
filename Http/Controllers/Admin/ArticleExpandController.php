@@ -177,7 +177,7 @@ class ArticleExpandController extends AuthCheckController
                 $table->timestamp($value['name'])->nullable()->comment($value['desc']);
 
                 break;
-
+            case 2:
             case 7:
             case 6:
 
@@ -194,7 +194,7 @@ class ArticleExpandController extends AuthCheckController
 
             default:
 
-                $table->string($value['name'], 500)->nullable()->comment($value['desc']);
+                $table->string($value['name'], 1000)->nullable()->comment($value['desc']);
 
         }
 

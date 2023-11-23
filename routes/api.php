@@ -36,6 +36,7 @@ use Ycore\Http\Controllers\Admin\StoreArticleController;
 use Ycore\Http\Controllers\Admin\TagController;
 use Ycore\Http\Controllers\Admin\UploadController;
 use Ycore\Http\Controllers\Admin\WebsitePushController;
+use Ycore\Http\Controllers\Third\ContentController;
 use Ycore\Http\Middleware\third\CheckSignature;
 
 Route::middleware([])->group(function () {
@@ -445,6 +446,13 @@ Route::middleware([])->group(function () {
 
 
                 Route::get('category', [\Ycore\Http\Controllers\Third\CategoryController::class, 'category']);
+
+            });
+
+            Route::group(['prefix' => "content"], function () {
+
+
+                Route::post('content', [ContentController::class, 'content']);
 
             });
 
