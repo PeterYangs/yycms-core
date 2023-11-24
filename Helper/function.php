@@ -2224,9 +2224,9 @@ function autoAssociationObject(Article $article): bool
             }
 
             //更新父级文章更新时间
-            $a = new ArticleGenerator();
-
-            $a->fill(['updated_at' => now()], [])->update(['id' => $main->id]);
+//            $a = new ArticleGenerator();
+//
+//            $a->fill(['updated_at' => now()], [])->update(['id' => $main->id]);
 
 
         }
