@@ -6,6 +6,7 @@ namespace Ycore;
 use Illuminate\Foundation\Application;
 use Illuminate\Pagination\Paginator;
 use Illuminate\View\Engines\EngineResolver;
+use Ycore\Console\AndroidUrlToDownload;
 use Ycore\Console\AutoAssociationObject;
 use Ycore\Console\BatchImportArticleWithZip;
 use Ycore\Console\CleanStaticPage;
@@ -293,6 +294,7 @@ class YyCmsServiceProvider extends ServiceProvider
             SetExpandDataBatch::class,
             BatchImportArticleWithZip::class,
             ResetDatabase::class,
+            AndroidUrlToDownload::class,
 
         ]);
 
