@@ -21,6 +21,10 @@ class Detail extends Base
             ->where('category_id', $cid)
             ->firstOrFail();
 
+        $item->append('download_url');
+
+
+
         $category = Category::where('id', $cid)->with('category_route')->firstOrFail();
 
         $listRoute = $category->category_route->where('type', 1)->where('tag', 'list')->where('is_main', 1)->value('route');

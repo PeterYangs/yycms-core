@@ -2592,3 +2592,20 @@ function selectArticleTag(Article $article)
 
 }
 
+/**
+ * 获取跳转下载地址
+ * @param Article $article
+ * @return string
+ */
+function getRedirectDownloadUrl(Article $article): string
+{
+    $articleDownload = $article->article_download;
+
+    if (!$articleDownload) {
+
+        return "";
+    }
+
+    return "/__download/" . $articleDownload->id;
+}
+

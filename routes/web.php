@@ -4,6 +4,7 @@
 //后台图片访问
 use App\Http\Controllers\Pc\HitsController;
 use Ycore\Http\Controllers\YyCms;
+use Ycore\Models\ArticleDownload;
 use Ycore\Tool\YRoute;
 
 
@@ -245,5 +246,20 @@ Route::get('_beian.js', function () {
 Route::get('_js_hide.js', function () {
 
     return response()->file(dirname(__DIR__) . "/asset/_js_hide.js", ['Content-Type' => 'application/javascript']);
+});
+
+
+Route::get('__download/{article_download_id}', function ($article_download_id) {
+
+    $articleDownload = ArticleDownload::with('download_site')->findOrFail($article_download_id);
+
+    if (!$articleDownload->download_site) {
+
+        abort(404);
+    }
+
+    $url = str_replace("{path}", $articleDownload->file_path, $articleDownload->download_site->rule);
+
+    return redirect()->away($url, 302);
 });
 
