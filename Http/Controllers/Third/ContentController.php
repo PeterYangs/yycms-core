@@ -3,6 +3,8 @@
 namespace Ycore\Http\Controllers\Third;
 
 
+use Ycore\Models\ArticleDownload;
+use Ycore\Models\DownloadSite;
 use Ycore\Tool\ArticleGenerator;
 use Ycore\Tool\Signature;
 
@@ -35,25 +37,69 @@ class ContentController extends BaseController
             return Signature::fail(Signature::PARAMS_ERROR, $validator->errors()->first());
         }
 
+        $article = null;
 
-        $ag = new ArticleGenerator();
+        try {
 
-        $article = $ag->fill([
-            'title' => $post['main']['title'],
-            'category_id' => $post['main']['category_id'],
-            'push_time' => now(),
-            'content' => $post['main']['content'],
-            'img' => $post['main']['img'],
-            'seo_title' => $post['main']['seo_title'] ?? "",
-            'seo_desc' => $post['main']['seo_desc'] ?? "",
-            'seo_keyword' => $post['main']['seo_keyword'] ?? "",
+            $ag = new ArticleGenerator();
 
-        ], $post['expand'])->create();
+            $article = $ag->fill([
+                'title' => $post['main']['title'],
+                'category_id' => $post['main']['category_id'],
+                'push_time' => now(),
+                'content' => $post['main']['content'],
+                'img' => $post['main']['img'],
+                'seo_title' => $post['main']['seo_title'] ?? "",
+                'seo_desc' => $post['main']['seo_desc'] ?? "",
+                'seo_keyword' => $post['main']['seo_keyword'] ?? "",
+
+            ], $post['expand'])->create(true, false, false);
+
+        } catch (\Exception $exception) {
+
+            report($exception);
+
+            return Signature::fail(Signature::CONTENT_ERROR, $exception->getMessage());
+
+        }
+
+        $rule = $post['download']['rule'];
+
+        $note = $post['download']['note'] ?? "";
+
+        $downloadSite = DownloadSite::where('rule', $rule)->first();
+
+        $downloadSiteId = 0;
+
+        //设置下载服务器
+        if (!$downloadSite) {
+
+            $d = DownloadSite::create([
+                'rule' => $rule,
+                'note' => $note,
+            ]);
+            $downloadSiteId = $d->id;
+
+        } else {
+
+            $downloadSiteId = $downloadSite->id;
+        }
+
+
+        ArticleDownload::create([
+            'article_id' => $article->id,
+            'library_id' => $post['main']['library_article_id'],
+            'apk_id' => $post['main']['library_apk_id'],
+            'download_site_id' => $downloadSiteId,
+            'file_path' => $post['download']['file_path'],
+            'save_type' => $post['download']['save_type'],
+            'pan_password' => $post['download']['pan_password']
+        ]);
 
 
         return Signature::success([
             'id' => $article->id,
-            'path' => getDetailUrl($article)
+            'path' => parse_url(getDetailUrl($article))['path']
         ]);
 
     }

@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Ycore\Models\Category;
 use Ycore\Models\ExpandData;
 use Ycore\Service\Ai\Ai;
+use Ycore\Service\Upload\Upload;
 
 /**
  * 文章操作类
@@ -27,6 +28,9 @@ class ArticleGenerator
     protected array $expandData;
 
 
+    protected Upload $upload;
+
+
     /**
      * @var Ai
      */
@@ -37,6 +41,8 @@ class ArticleGenerator
 
 
         $this->ai = resolve(Ai::class);
+
+        $this->upload = resolve(Upload::class);
 
     }
 
@@ -237,7 +243,7 @@ class ArticleGenerator
      * @param bool $isPush 是否推送到站长
      * @throws Throwable
      */
-    function create(bool $isPush = true, bool $is_gpt = false): Article
+    function create(bool $isPush = true, bool $is_gpt = false, $titleUniqueCheck = true): Article
     {
 
 
@@ -258,6 +264,19 @@ class ArticleGenerator
 
         }
 
+        $img = $this->articleData['img'];
+
+
+        //外链图片
+        if (preg_match("/^(http|https):\/\//", $img) !== false) {
+
+
+            $img_url = ltrim($this->upload->uploadRemoteFile($img), '/uploads/');
+
+            $this->articleData['img'] = $img_url;
+
+        }
+
 
         try {
 
@@ -266,13 +285,18 @@ class ArticleGenerator
 
             $articleData = $this->articleData;
 
-            $isFind = Article::where('title', $articleData['title'])->where('category_id', $articleData['category_id'])->first();
+
+            if ($titleUniqueCheck) {
+
+                $isFind = Article::where('title', $articleData['title'])->where('category_id', $articleData['category_id'])->first();
 
 
-            if ($isFind) {
+                if ($isFind) {
 
 
-                throw new \Exception("《" . $articleData['title'] . "》" . "已存在！");
+                    throw new \Exception("《" . $articleData['title'] . "》" . "已存在！");
+                }
+
             }
 
 
@@ -332,11 +356,28 @@ class ArticleGenerator
 
                             case 4:
                             case 6:
+                                //图片
                             case 7:
 
                                 if (!is_array($v)) {
 
-                                    $v = json_decode($v, true);
+                                    $v = json_decode($v, true, 512, JSON_THROW_ON_ERROR);
+                                }
+
+                                foreach ($v as $imgKey => $imgItem) {
+
+                                    $img_url = $imgItem['img'] ?? "";
+
+                                    //外链图片
+                                    if (preg_match("/^(http|https):\/\//", $img_url) !== false) {
+
+                                        if (!$img_url) {
+
+                                            continue;
+                                        }
+                                        $v[$imgKey]['img'] = ltrim($this->upload->uploadRemoteFile($img_url), '/uploads/');
+
+                                    }
                                 }
 
                                 break;

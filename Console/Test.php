@@ -52,13 +52,39 @@ class Test extends Command
     {
 
 
+        $a = new ArticleGenerator();
+
+        $a->fill([
+            'category_id' => 2,
+            'content' => "角色扮演内容啊",
+            'title' => '随便一个标题' . time(),
+            'img' => 'https://soft-library.oss-cn-hangzhou.aliyuncs.com/icon/2023/11/20/3162ec9cf15363c9d2380bb3ef348caf.png'
+
+        ], [
+            'screenshots' => [
+                [
+                    'img' => 'https://soft-library.oss-cn-hangzhou.aliyuncs.com/screenshot/2023/11/20/85fd7f4d-83e2-4e66-b7d8-82079a25aa820.png',
+                    'name' => '截图1'
+                ],
+                [
+                    'img' => 'https://soft-library.oss-cn-hangzhou.aliyuncs.com/screenshot/2023/11/20/8ad79eec-5401-465c-8a1f-df064d6f9c8e1.png',
+                    'name' => '截图2'
+                ],
+
+            ]
+        ])->create();
+
+
+        dd("");
+
+
 //        Http::get();
 
 //        dd();
 //
 //        ;
 
-        $arr = array_filter(get_headers("http://www.925g.com", true),function ($item) {
+        $arr = array_filter(get_headers("http://www.925g.com", true), function ($item) {
 
 
             if (is_numeric($item)) {
@@ -68,7 +94,7 @@ class Test extends Command
 
             return false;
 
-        },ARRAY_FILTER_USE_KEY);
+        }, ARRAY_FILTER_USE_KEY);
 
 //        dd($arr);
 
