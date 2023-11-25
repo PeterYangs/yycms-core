@@ -108,17 +108,24 @@ class ArticleGenerator
 
             }
 
-
-//            $expand = $article->expand;
-
-//            dd($expand);
-
-//            getExpandByCategoryId()
-
             //获取空的拓展数据
             $expandData = optional(getExpandByCategoryId($article->category_id))->toArray() ?: [];
 
-//            dd($this->expandData);
+            //原值覆盖
+            foreach ($article->expand as $item) {
+
+
+                foreach ($expandData as $expandKey => $expand) {
+
+                    if ($item['name'] === $expand['name']) {
+
+                        $expandData[$expandKey]['value'] = $item['value'];
+                    }
+
+                }
+
+            }
+
 
             foreach ($expandData as $key => $value) {
 
@@ -141,13 +148,11 @@ class ArticleGenerator
                                     $v = json_decode($v, true, 512, JSON_THROW_ON_ERROR);
                                 }
 
-//                                dd($v);
 
                                 foreach ($v as $imgKey => $imgItem) {
 
                                     $img_url = $imgItem['img'] ?? "";
 
-//                                    dd(preg_match("/^(http|https):\/\//", $img_url));
 
                                     //外链图片
                                     if (preg_match("/^(http|https):\/\//", $img_url)) {
@@ -176,10 +181,12 @@ class ArticleGenerator
 
             }
 
+//            dd($expandData);
+
+
             //获取关联表
             $table_name = CategoryController::getExpandTableName($article->category_id);
 
-//            dd($expandData);
 
             $expandDataKeyValue = dealExpandToTable($expandData);
 
@@ -490,7 +497,7 @@ class ArticleGenerator
 
 
             //如果设置了seo_title数据就不自动设置seo_title
-            if (!$articleData['seo_title']){
+            if (!$articleData['seo_title']) {
 
                 //设置seo标题
                 Seo::setSeoTitle($article->id, true);
