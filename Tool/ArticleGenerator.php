@@ -116,7 +116,7 @@ class ArticleGenerator
 //            getExpandByCategoryId()
 
             //获取空的拓展数据
-            $expandData = optional(getExpandByCategoryId($articleData['category_id']))->toArray() ?: [];
+            $expandData = optional(getExpandByCategoryId($article->category_id))->toArray() ?: [];
 
 //            dd($this->expandData);
 
