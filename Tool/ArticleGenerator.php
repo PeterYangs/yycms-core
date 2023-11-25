@@ -489,8 +489,12 @@ class ArticleGenerator
             }
 
 
-            //设置seo标题
-            Seo::setSeoTitle($article->id, true);
+            //如果设置了seo_title数据就不自动设置seo_title
+            if ($articleData['seo_title']){
+
+                //设置seo标题
+                Seo::setSeoTitle($article->id, true);
+            }
 
             //chatgpt替换内容
             if ($is_gpt) {

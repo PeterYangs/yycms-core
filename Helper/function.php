@@ -1992,7 +1992,7 @@ function getVersion(Article $article): string
 {
 
 
-    $version = getObjPlus($article, 'ex.version');
+    $version = getObjPlus($article, 'ex.version_name');
 
 
     if (!$version) {
