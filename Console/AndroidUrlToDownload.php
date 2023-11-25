@@ -49,7 +49,7 @@ class AndroidUrlToDownload extends Command
 
         $ids = getCategoryIds([1, 3]);
 
-        Article::whereIn('category_id', $ids)->where('id',3464)->chunkById(1000, function ($items) use ($downloadSite) {
+        Article::whereIn('category_id', $ids)->chunkById(1000, function ($items) use ($downloadSite) {
 
 
             foreach ($items as $item) {
