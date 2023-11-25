@@ -8,6 +8,7 @@ use Ycore\Models\Article;
 use Ycore\Models\ArticleDownload;
 use Ycore\Models\Collect;
 use Ycore\Models\DownloadSite;
+use Ycore\Tool\ArticleGenerator;
 
 class AndroidUrlToDownload extends Command
 {
@@ -48,13 +49,15 @@ class AndroidUrlToDownload extends Command
 
         $ids = getCategoryIds([1, 3]);
 
-        Article::whereIn('category_id', $ids)->chunkById(1000, function ($items) use ($downloadSite) {
+        Article::whereIn('category_id', $ids)->where('id',3464)->chunkById(1000, function ($items) use ($downloadSite) {
 
 
             foreach ($items as $item) {
 
 
                 if (isset($item->ex['android'])) {
+
+                    $version = $item->ex['version'];
 
 
                     try {
@@ -66,8 +69,19 @@ class AndroidUrlToDownload extends Command
                             'save_type' => 1
                         ]);
 
+                        if ($version) {
+
+                            $ag = new ArticleGenerator();
+
+                            $ag->fill([], ['version' => "", 'version_name' => $version])->update(['id' => $item->id]);
+                        }
+
+
                     } catch (\Exception $exception) {
 
+                        $this->error($exception->getMessage());
+
+                        continue;
                     }
 
                 }
