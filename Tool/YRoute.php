@@ -4,6 +4,7 @@ namespace Ycore\Tool;
 
 use Illuminate\Pagination\Paginator;
 use Ycore\Http\Middleware\home\ArticleSpecial;
+use Ycore\Http\Middleware\home\HomeTag;
 use Ycore\Http\Middleware\home\StaticRender;
 use Ycore\Http\Middleware\home\UserAccess;
 
@@ -25,7 +26,7 @@ class YRoute
         }
 
 
-        \Route::domain($domain)->middleware([UserAccess::class, ArticleSpecial::class])->group(function () use ($callback) {
+        \Route::domain($domain)->middleware([HomeTag::class, UserAccess::class, ArticleSpecial::class])->group(function () use ($callback) {
 
 
             \Route::get("/", make(\Ycore\Http\Controllers\Pc\Index::class, 'index'))->middleware(StaticRender::class)->name('pc.index');
@@ -69,7 +70,7 @@ class YRoute
         }
 
 
-        \Route::domain($domain)->middleware([UserAccess::class, ArticleSpecial::class])->group(function () use ($callback) {
+        \Route::domain($domain)->middleware([HomeTag::class, UserAccess::class, ArticleSpecial::class])->group(function () use ($callback) {
 
 
             \Route::get("/", make(\Ycore\Http\Controllers\Mobile\Index::class, 'index'))->middleware(StaticRender::class)->name('mobile.index');

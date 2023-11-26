@@ -21,7 +21,7 @@ class Detail extends Base
             ->where('category_id', $cid)
             ->firstOrFail();
 
-
+        //获取下载地址
         $item->append('download_url');
 
         $category = Category::where('id', $cid)->with('category_route')->firstOrFail();

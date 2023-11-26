@@ -33,3 +33,8 @@ tag_link  文章内容标签链接
 参数1 $platform  平台(pc/mobile)
 参数2 $tag_id  标签id
 返回值  新的标签链接
+
+the_expand 拓展数据过滤器
+参数1 $article  文章主表数据
+参数2 $expand 文章拓展数据
+返回值  新的拓展数据
