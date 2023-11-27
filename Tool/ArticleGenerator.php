@@ -540,6 +540,10 @@ class ArticleGenerator
             if ($article->push_status === 1 && $article->status === 1 && $isPush) {
 
                 event(new WebsitePush($article->id));
+
+            } else {
+
+                \Log::channel('push')->error("【" . $article->title . "】" . $article->id . ",不推送，当前【push_status:" . $article->push_status . "】【status:" . $article->status . "】【isPush:" . $isPush . "】");
             }
 
 
