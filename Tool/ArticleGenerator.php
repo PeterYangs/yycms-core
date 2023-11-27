@@ -108,13 +108,30 @@ class ArticleGenerator
 
             }
 
+            //获取空的拓展数据
+            $expandData = optional(getExpandByCategoryId($article->category_id))->toArray() ?: [];
 
-            $expand = $article->expand;
+            //原值覆盖
+            foreach ($article->expand as $item) {
 
-            foreach ($expand as $key => $value) {
+
+                foreach ($expandData as $expandKey => $expand) {
+
+                    if ($item['name'] === $expand['name']) {
+
+                        $expandData[$expandKey]['value'] = $item['value'];
+                    }
+
+                }
+
+            }
+
+
+            foreach ($expandData as $key => $value) {
 
 
                 foreach ($this->expandData as $k => $v) {
+
 
                     if ($k === $value['name']) {
 
@@ -123,11 +140,30 @@ class ArticleGenerator
 
                             case 4:
                             case 6:
+                                //图片
                             case 7:
 
                                 if (!is_array($v)) {
 
-                                    $v = json_decode($v, true);
+                                    $v = json_decode($v, true, 512, JSON_THROW_ON_ERROR);
+                                }
+
+
+                                foreach ($v as $imgKey => $imgItem) {
+
+                                    $img_url = $imgItem['img'] ?? "";
+
+
+                                    //外链图片
+                                    if (preg_match("/^(http|https):\/\//", $img_url)) {
+
+                                        if (!$img_url) {
+
+                                            continue;
+                                        }
+                                        $v[$imgKey]['img'] = ltrim($this->upload->uploadRemoteFile($img_url), '/uploads/');
+
+                                    }
                                 }
 
                                 break;
@@ -135,9 +171,9 @@ class ArticleGenerator
 
                         }
 
+                        $expandData[$key]['value'] = $v;
 
-                        $expand[$key]['value'] = $v;
-
+                        break;
                     }
 
                 }
@@ -145,10 +181,14 @@ class ArticleGenerator
 
             }
 
+//            dd($expandData);
+
+
             //获取关联表
             $table_name = CategoryController::getExpandTableName($article->category_id);
 
-            $expandDataKeyValue = dealExpandToTable($expand);
+
+            $expandDataKeyValue = dealExpandToTable($expandData);
 
             foreach ($this->articleData as $key => $value) {
 
@@ -165,14 +205,14 @@ class ArticleGenerator
             //判断是否更新seo标题
             $isChangeSeoTitle = Seo::isChangeArticleSeoTitle($article->id, $article->toArray(), $table_name, $expandDataKeyValue);
 
-            $article->expand = $expand;
+            $article->expand = $expandData;
 
 
             $article->save();
 
 
             //设置拓展表数据
-            foreach ($article->expand as $item) {
+            foreach ($expandData as $item) {
 
 
                 ExpandData::updateOrCreate(['article_id' => $article->id, 'article_expand_detail_id' => $item['id']], [
@@ -197,7 +237,7 @@ class ArticleGenerator
 
 
             //处理一对多关联
-            dealArticleAssociationObject($article->id, $expand);
+            dealArticleAssociationObject($article->id, $expandData);
 
 
             if ($table_name) {
@@ -268,7 +308,7 @@ class ArticleGenerator
 
 
         //外链图片
-        if (preg_match("/^(http|https):\/\//", $img) !== false) {
+        if (preg_match("/^(http|https):\/\//", $img)) {
 
 
             $img_url = ltrim($this->upload->uploadRemoteFile($img), '/uploads/');
@@ -456,8 +496,12 @@ class ArticleGenerator
             }
 
 
-            //设置seo标题
-            Seo::setSeoTitle($article->id, true);
+            //如果设置了seo_title数据就不自动设置seo_title
+            if (!$articleData['seo_title']) {
+
+                //设置seo标题
+                Seo::setSeoTitle($article->id, true);
+            }
 
             //chatgpt替换内容
             if ($is_gpt) {
@@ -511,6 +555,49 @@ class ArticleGenerator
         }
 
 
+    }
+
+
+    function articleStatic(int $articleId): bool
+    {
+
+        $article = Article::where('id', $articleId)->with('category')->first();
+
+
+        if (!$article) {
+
+
+            return false;
+        }
+
+        try {
+
+            $b = \Http::get(getDetailUrlForCli($article) . '?admin_key=' . env('ADMIN_KEY'))->body();
+
+
+            \Storage::disk('static')->put('pc/' . str_replace("{id}", $article->id,
+                    \Cache::get('category:detail:pc_' . $article->category->id)),
+                $b);
+
+
+            $b = \Http::withHeaders(['User-Agent' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1'])->get(getDetailUrlForCli($article,
+                    'mobile') . '?admin_key=' . env('ADMIN_KEY'))->body();
+
+
+            \Storage::disk('static')->put('mobile/' . str_replace("{id}", $article->id,
+                    \Cache::get('category:detail:mobile_' . $article->category->id)), $b);
+
+
+        } catch (\Exception $exception) {
+
+
+            \Log::error("文章静态化失败，文章id为" . $article->id . "(" . $exception->getMessage() . ")");
+
+            return false;
+
+        }
+
+        return true;
     }
 
 

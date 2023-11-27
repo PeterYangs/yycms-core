@@ -288,7 +288,7 @@ class AliUpload implements Upload
         $fileName = date('Ymd') . '/' . uniqid('',
                 true) . '.' . $ext;
 
-        $rsp = \Http::withOptions(['verify' => false])->timeout(15)->connectTimeout(10)->get($url);
+        $rsp = \Http::withOptions(['verify' => false])->retry(2,200)->timeout(15)->connectTimeout(10)->get($url);
 
         $this->ossClient->putObject(env("ALI_BUCKET_NAME", ""), rtrim(config('yycms.upload_prefix'), '/') . "/" . $fileName,
             $rsp);

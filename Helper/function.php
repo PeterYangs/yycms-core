@@ -1992,7 +1992,7 @@ function getVersion(Article $article): string
 {
 
 
-    $version = getObjPlus($article, 'ex.version');
+    $version = getObjPlus($article, 'ex.version_name');
 
 
     if (!$version) {
@@ -2224,9 +2224,9 @@ function autoAssociationObject(Article $article): bool
             }
 
             //更新父级文章更新时间
-            $a = new ArticleGenerator();
-
-            $a->fill(['updated_at' => now()], [])->update(['id' => $main->id]);
+//            $a = new ArticleGenerator();
+//
+//            $a->fill(['updated_at' => now()], [])->update(['id' => $main->id]);
 
 
         }

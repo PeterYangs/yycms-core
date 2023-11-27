@@ -8,6 +8,7 @@ use Ycore\Models\Article;
 use Ycore\Models\ArticleDownload;
 use Ycore\Models\Collect;
 use Ycore\Models\DownloadSite;
+use Ycore\Tool\ArticleGenerator;
 
 class AndroidUrlToDownload extends Command
 {
@@ -56,6 +57,8 @@ class AndroidUrlToDownload extends Command
 
                 if (isset($item->ex['android'])) {
 
+                    $version = $item->ex['version'];
+
 
                     try {
 
@@ -66,8 +69,19 @@ class AndroidUrlToDownload extends Command
                             'save_type' => 1
                         ]);
 
+                        if ($version) {
+
+                            $ag = new ArticleGenerator();
+
+                            $ag->fill([], ['version' => "", 'version_name' => $version])->update(['id' => $item->id]);
+                        }
+
+
                     } catch (\Exception $exception) {
 
+                        $this->error($exception->getMessage());
+
+                        continue;
                     }
 
                 }

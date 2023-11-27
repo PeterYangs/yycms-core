@@ -99,6 +99,10 @@ class ContentController extends BaseController
         ]);
 
 
+        //重新静态化，防止下载地址不出现
+        $ag->articleStatic($article->id);
+
+
         return Signature::success([
             'id' => $article->id,
             'path' => parse_url(getDetailUrl($article))['path']
