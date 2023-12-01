@@ -98,7 +98,7 @@ class BaiduPush
 
                 $result = $this->push($pcUrl, $domain, $baidu_token);
 
-                if (str_contains($result, "over quota")) {
+                if (str_contains($result, "over quota") || str_contains($result, "site error")) {
 
 
                     //设置超出当天配额标记
@@ -148,7 +148,7 @@ class BaiduPush
 
                 $result = $this->push($mobileUrl, $m_domain, $baidu_token);
 
-                if (str_contains($result, "over quota")) {
+                if (str_contains($result, "over quota") || str_contains($result, "site error")) {
 
 
                     //设置超出当天配额标记
