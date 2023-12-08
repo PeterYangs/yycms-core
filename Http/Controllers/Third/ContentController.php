@@ -87,7 +87,14 @@ class ContentController extends BaseController
             $downloadSiteId = $downloadSite->id;
         }
 
-
+        $get_article_download_article_id = ArticleDownload::where('library_id', $post['main']['library_article_id'])->first();
+        //重复分发，直接返回结果
+        if ($get_article_download_article_id) {
+            return Signature::success([
+                'id' => $article->id,
+                'path' => parse_url(getDetailUrl($article))['path']
+            ]);
+        }
         ArticleDownload::create([
             'article_id' => $article->id,
             'library_id' => $post['main']['library_article_id'],
