@@ -37,6 +37,8 @@ class ResetDatabase extends Command
     {
 
 
+        $this->error("危险操作！请确认三次！！！");
+
         for ($i = 0; $i < 3; $i++) {
 
             $ask = $this->ask('确定清理所有数据吗(' . (3 - $i) . ')？(yes/no)', 'no');
@@ -62,7 +64,6 @@ class ResetDatabase extends Command
         WebsitePush::truncate();
 
         ArticleDownload::truncate();
-
 
 
         $this->info("清理完毕");
