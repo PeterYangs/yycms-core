@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 
 use Ycore\Models\Article;
 use Ycore\Models\ArticleAssociationObject;
+use Ycore\Models\ArticleDownload;
 use Ycore\Models\ArticleTag;
 use Ycore\Models\ExpandData;
 use Ycore\Models\UserAccess;
@@ -59,6 +60,10 @@ class ResetDatabase extends Command
         UserAccess::truncate();
 
         WebsitePush::truncate();
+
+        ArticleDownload::truncate();
+
+
 
         $this->info("清理完毕");
 
