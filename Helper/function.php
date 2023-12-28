@@ -1585,6 +1585,9 @@ function getExGameListWithPage(Article $article, string $pageUrl = "", int $page
  * @param Article $article
  * @param array|int|string $categoryName 限制特定分类id(如果是多个分类，取第一个，故拓展表必须是同一个)
  * @param int $limit
+ * @param int $type 标签查找类型（1是软件标签，2是形容词标签），如《王者荣耀怎么玩》有【王者荣耀(软件标签)、MOBA(形容词标签)、社交(形容词标签)】三个标签，
+ *                  《和平精英怎么玩》有【和平精英(软件标签)、社交（形容词标签）】，type设置0《王者荣耀怎么玩》会关联到《和平精英怎么玩》，选择1则不会关联到，
+ *                   因为是根据相同的标签并且相同的类型才会匹配到
  * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
  */
 function getRelated(Article $article, array|int|string $categoryName, int $limit = 5, int $type = 0)
@@ -1660,13 +1663,13 @@ function getRelated(Article $article, array|int|string $categoryName, int $limit
 
 
 /**
- * 获取标签相关的文章（可以用于查询相关版本）
+ * 获取标签相关的文章（可以用于查询相关版本，相关版本type需要填1）
  * Create by Peter Yang
  * 2022-10-22 17:11:37
  * @param Article $article
  * @param int $categoryId
  * @param int $limit
- * @param int $type 标签类型，0是所有，1是软件标签，2是形容词标签
+ * @param int $type 标签类型，0是所有，1是软件标签，2是形容词标签（具体看上一个的函数的注释）
  * @return \Illuminate\Support\Collection|\Tightenco\Collect\Support\Collection
  */
 function getRelatedByTag(Article $article, int|string|array $categoryName, int $limit = 5, int $type = 0)
@@ -2158,7 +2161,7 @@ function getCategory(int|string|array $categoryName, int $limit = 15, $exceptSel
 
 /**
  * 自动设置一对多关系
- * (场景介绍：)
+ * (场景介绍：《王者荣耀》这个游戏会根据标题和内容自动设置【王者荣耀、MOBA、社交】等几个标签，自动设置关联到其他文章)
  * @param Article $article
  * @return bool
  */
