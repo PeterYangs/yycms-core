@@ -45,6 +45,8 @@ class Special extends Base
         'list_mobile_hide',
         'list_pc_without_search_hide',
         'list_mobile_without_search_hide',
+        'pc_js',
+        'mobile_js',
     ];
 
 }

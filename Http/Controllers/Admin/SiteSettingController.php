@@ -73,6 +73,8 @@ class SiteSettingController extends AuthCheckController
             'notice_mail',
             'open_watermark',
             'watermark',
+            'statistics_pc',
+            'statistics_mobile'
 
         ];
 

@@ -63,6 +63,16 @@ class Common implements Engine
 
             }
 
+
+            //详情页脚本加载
+            if (request()->route('_type') === "detail" && isset($data['data']) && $data['data'] instanceof Article) {
+
+
+                $htmlDoc->find("body")->append("<script  src='/_detail-{$data['data']->id}.js' type='text/javascript' charset='utf-8'></script>");
+
+            }
+
+
             //备案页面
             if (request()->path() === "/" && getOption('is_beian')) {
 
@@ -128,6 +138,10 @@ class Common implements Engine
                 $htmlDoc->find("body")->append(view('_time_json_index', [])->render());
 
             }
+
+
+            $htmlDoc->find("body")->append("<script  src='/_common.js' type='text/javascript' charset='utf-8'></script>");
+
 
             //加锁
             $isSet = true;

@@ -45,6 +45,38 @@ YRoute::pcRoute(function () {
     });
 
 
+    Route::get("_common.js",function (){
+
+
+        $statistics_pc = getOption("statistics_pc", "");
+
+        return response($statistics_pc, 200, ['content-type' => 'text/javascript']);
+
+    });
+
+
+    Route::get("_detail-{id}.js", function ($id) {
+
+        $all_js="";
+
+        $article = ArticleDetailModel()->where('id', $id)->first();
+
+        if (!$article){
+
+            abort(404);
+        }
+
+        if ($article->special->pc_js){
+
+            $all_js .= $article->special->pc_js;
+
+        }
+
+        return response($all_js, 200, ['content-type' => 'text/javascript']);
+
+    });
+
+
 });
 
 YRoute::mobileRoute(function () {
@@ -79,6 +111,38 @@ YRoute::mobileRoute(function () {
 
 
         return response()->file(storage_path('link/mobile.txt'), ['content-type' => 'text/plain']);
+    });
+
+
+    Route::get("_common.js",function (){
+
+
+        $statistics_mobile = getOption("statistics_mobile", "");
+
+        return response($statistics_mobile, 200, ['content-type' => 'text/javascript']);
+
+    });
+
+
+    Route::get("_detail-{id}.js", function ($id) {
+
+        $all_js="";
+
+        $article = ArticleDetailModel()->where('id', $id)->first();
+
+        if (!$article){
+
+            abort(404);
+        }
+
+        if ($article->special->mobile_js){
+
+            $all_js .= $article->special->mobile_js;
+
+        }
+
+        return response($all_js, 200, ['content-type' => 'text/javascript']);
+
     });
 
 
