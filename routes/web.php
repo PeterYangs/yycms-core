@@ -66,7 +66,7 @@ YRoute::pcRoute(function () {
             abort(404);
         }
 
-        if ($article->special->pc_js){
+        if (optional($article->special)->pc_js) {
 
             $all_js .= $article->special->pc_js;
 
@@ -135,7 +135,7 @@ YRoute::mobileRoute(function () {
             abort(404);
         }
 
-        if ($article->special->mobile_js){
+        if (optional($article->special)->mobile_js) {
 
             $all_js .= $article->special->mobile_js;
 
