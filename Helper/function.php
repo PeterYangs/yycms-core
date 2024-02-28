@@ -1735,7 +1735,7 @@ if (!function_exists('autoAssociationObject')) {
             $whereArr[] = $category->parent->id;
         }
 
-        //获取当前文章的父级关联类型
+        //获取当前文章的父级关联类型(如：角色扮演分类在后台设置的父级类型是游戏合集)
         $collect = Collect::whereIn('son_id', $whereArr)->first();
 
         //是否已经设置了关联
@@ -1761,8 +1761,8 @@ if (!function_exists('autoAssociationObject')) {
                 } catch (\Exception $exception) {
                 }
                 //更新父级文章更新时间
-//            $a = new ArticleGenerator();
-//            $a->fill(['updated_at' => now()], [])->update(['id' => $main->id]);
+                DB::table('article')->where('id', $main->id)->update(['updated_at' => now()]);
+                staticByArticle($article);
             }
             return true;
         }
@@ -2074,6 +2074,44 @@ if (!function_exists('getRedirectDownloadUrl')) {
             return "";
         }
         return "/__download/" . $articleDownload->id;
+    }
+}
+
+
+if (!function_exists('staticByArticle')) {
+
+
+    /**
+     * 静态化单一文章
+     * @param Article $article
+     * @return void
+     */
+    function staticByArticle(Article $article): void
+    {
+        try {
+
+            $b = \Http::get(getDetailUrlForCli($article) . '?admin_key=' . env('ADMIN_KEY'))->body();
+
+
+            \Storage::disk('static')->put('pc/' . str_replace("{id}", $article->id,
+                    \Cache::get('category:detail:pc_' . $article->category->id)),
+                $b);
+
+
+            $b = \Http::withHeaders(['User-Agent' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1'])->get(getDetailUrlForCli($article,
+                    'mobile') . '?admin_key=' . env('ADMIN_KEY'))->body();
+
+
+            \Storage::disk('static')->put('mobile/' . str_replace("{id}", $article->id,
+                    \Cache::get('category:detail:mobile_' . $article->category->id)), $b);
+
+
+        } catch (\Exception $exception) {
+
+
+            \Log::error("文章静态化失败，文章id为" . $article->id . "(" . $exception->getMessage() . ")");
+
+        }
     }
 }
 
