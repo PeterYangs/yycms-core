@@ -6,6 +6,7 @@ use Ycore\Events\ArticleUpdate;
 use Ycore\Events\WebsitePush;
 use Ycore\Jobs\AiToArticle;
 use Ycore\Jobs\EmailJob;
+use Ycore\Jobs\TxtToArticle;
 use Ycore\Models\Article;
 use Ycore\Models\ArticleAssociationObject;
 use Ycore\Models\ArticleDownload;
@@ -705,6 +706,77 @@ class ArticleController extends AuthCheckController
 
         return Json::code(1, $txt_list, $post);
 
+    }
+
+
+    /**
+     * @return string
+     */
+    function batchImportByZip()
+    {
+
+        $post = request()->post();
+
+        $category_id = $post['category_id'];
+
+        $tempDir = \Ramsey\Uuid\Uuid::uuid4()->toString() . "-temp-article";
+
+        $path = $post['file_path'];
+
+        $category = Category::where('id', $category_id)->first();
+
+        $push_status = $post['push_status'];
+
+        $img = $post['img'];
+
+        if (!$category) {
+
+            return Json::code(2, "cid" . " " . $category_id . ",不存在！");
+        }
+
+        $ok = $this->unzip_file(public_path('uploads/' . $path), storage_path('app/public/' . $tempDir));
+
+
+        if (!$ok) {
+
+            Json::code(2, "压缩文件解压失败");
+        }
+
+        $fileList = \File::allFiles(storage_path('app/public/' . $tempDir));
+
+
+        foreach ($fileList as $fileInfo) {
+
+
+            dispatch(new TxtToArticle($fileInfo->getExtension(), $fileInfo->getContents(), $category_id, $fileInfo->getBasename('.txt'), $push_status, 1, $img));
+
+        }
+
+
+        return Json::code(1, 'success');
+
+
+    }
+
+
+    function unzip_file(string $zipName, string $dest)
+    {
+        //检测要解压压缩包是否存在
+        if (!is_file($zipName)) {
+            return false;
+        }
+        //检测目标路径是否存在
+        if (!is_dir($dest)) {
+            mkdir($dest, 0777, true);
+        }
+        $zip = new \ZipArchive();
+        if ($zip->open($zipName)) {
+            $zip->extractTo($dest);
+            $zip->close();
+            return true;
+        } else {
+            return false;
+        }
     }
 
 

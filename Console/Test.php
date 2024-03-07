@@ -52,6 +52,9 @@ class Test extends Command
     {
 
 
+//        dd(\File::fi(storage_path('app/public/062fbbc1-e067-4d4a-9d08-fc888f4ecef8-temp-article/文章1.txt')));
+
+
         $a = new ArticleGenerator();
 
         $a->fill([], ['version_name' => "1.1.0.11111"])->update(['id' => 24221]);

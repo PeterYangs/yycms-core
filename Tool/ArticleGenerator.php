@@ -328,7 +328,7 @@ class ArticleGenerator
 
             if ($titleUniqueCheck) {
 
-                $isFind = Article::where('title', $articleData['title'])->where('category_id', $articleData['category_id'])->first();
+                $isFind = Article::withoutGlobalScopes()->where('title', $articleData['title'])->where('category_id', $articleData['category_id'])->first();
 
 
                 if ($isFind) {

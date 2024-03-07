@@ -204,6 +204,7 @@ Route::middleware([])->group(function () {
             Route::any('up', [ArticleController::class, 'up']);
             Route::post('CleanStaticPage', [ArticleController::class, 'CleanStaticPage']);
             Route::post('batchImportByTxt', [ArticleController::class, 'batchImportByTxt']);
+            Route::post('batchImportByZip', [ArticleController::class, 'batchImportByZip']);
         });
 
 
