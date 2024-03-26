@@ -310,10 +310,14 @@ if (!function_exists('getArticleByCategoryName')) {
                 return Article::min('id');
             });
 
-            $query->join(
-                DB::raw("(SELECT ROUND(RAND() * ( {$maxId} - {$minId} )+ $minId ) AS xid) as t2"),
-                'article.id', '>=', 't2.xid'
-            );
+            if ($maxId && $minId) {
+
+                $query->join(
+                    DB::raw("(SELECT ROUND(RAND() * ( {$maxId} - {$minId} )+ $minId ) AS xid) as t2"),
+                    'article.id', '>=', 't2.xid'
+                );
+
+            }
 
 //        $query->inRandomOrder();
         } else {

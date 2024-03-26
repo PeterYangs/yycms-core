@@ -240,7 +240,7 @@ Route::get('/download/{type}/{id}',
 
 
 //文章点击
-Route::get('/hits/{id}', [YyCms::class, 'add']);
+Route::get('/hits/{id}', [YyCms::class, 'add'])->where(['id'=>"[0-9]+"]);
 
 
 Route::get('/now', function () {
