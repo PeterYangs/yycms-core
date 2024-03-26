@@ -38,3 +38,14 @@ the_expand 拓展数据过滤器
 参数1 $article  文章主表数据
 参数2 $expand 文章拓展数据
 返回值  新的拓展数据
+
+
+----------------------------------------------------------------------------------------------------------------------------
+
+Action
+
+article_action   文章修改事件
+参数1 $eventName  事件名称    create_before|create_after|update_before|update_after|delete_before|delete_after
+参数2 $article    文章主表数据
+参数3 $expand     文章拓展数据
+

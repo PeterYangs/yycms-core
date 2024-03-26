@@ -181,8 +181,6 @@ class ArticleGenerator
 
             }
 
-//            dd($expandData);
-
 
             //获取关联表
             $table_name = CategoryController::getExpandTableName($article->category_id);
@@ -440,6 +438,11 @@ class ArticleGenerator
 
 
             $expandDataKeyValue = dealExpandToTable($expandData);
+
+            if (Hook::actionExist('create_before')) {
+
+                Hook::applyAction('create_before', $articleData, $expandDataKeyValue);
+            }
 
             //添加默认数据
             $articleData['seo_title'] = ($articleData['seo_title'] ?? "");

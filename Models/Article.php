@@ -297,7 +297,7 @@ class Article extends Base
                 if (app()->has('run_env') && app()->get('run_env') === "home") {
 
 
-                    if (Hook::exist('the_expand')) {
+                    if (Hook::filterExist('the_expand')) {
 
                         $newEx = Hook::applyFilter('the_expand', $attrs, $ex);
 
