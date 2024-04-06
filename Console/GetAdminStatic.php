@@ -76,7 +76,7 @@ class GetAdminStatic extends Command
             $downloadUrl = "https://gitee.com/mryy1996/yycms-admin-static/releases/download/" . Core::GetAdminVersion() . "/dist.zip";
 
 
-            $rsp = Http::withOptions(['verify' => false])->timeout(60)->connectTimeout(10)->get($downloadUrl);
+            $rsp = Http::withOptions(['verify' => false])->timeout(90)->connectTimeout(10)->get($downloadUrl);
 
 
             if ($rsp->status() !== 200) {
