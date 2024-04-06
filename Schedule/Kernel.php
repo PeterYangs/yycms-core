@@ -54,8 +54,10 @@ class Kernel
         //定时文章发布
         $schedule->command('TimingArticlePush')->everyMinute();
 
-        //详情页静态化
-        $schedule->command('StaticTool')->dailyAt("01:25");
+        if (getOption('static_everyday', 0) === 1) {
+            //详情页静态化
+            $schedule->command('StaticTool')->dailyAt("01:25");
+        }
 
 
     }
