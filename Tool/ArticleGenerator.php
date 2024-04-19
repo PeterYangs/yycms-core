@@ -205,6 +205,12 @@ class ArticleGenerator
 
             $article->expand = $expandData;
 
+            //更新前触发的钩子
+            if (Hook::actionExist('update_before')) {
+
+                Hook::applyAction('update_before', $articleData, $expandDataKeyValue);
+            }
+
 
             $article->save();
 
@@ -258,6 +264,14 @@ class ArticleGenerator
             if ($article->push_status === 1 && $article->status === 1 && $isPush) {
 
                 event(new WebsitePush($article->id));
+            }
+
+            //新增后触发的钩子
+            if (Hook::actionExist('update_after')) {
+
+                $data=$article->toArray();
+
+                Hook::applyAction('update_after', $data, $data['ex']);
             }
 
             return $article;
@@ -439,6 +453,7 @@ class ArticleGenerator
 
             $expandDataKeyValue = dealExpandToTable($expandData);
 
+            //新增前触发的钩子
             if (Hook::actionExist('create_before')) {
 
                 Hook::applyAction('create_before', $articleData, $expandDataKeyValue);
@@ -547,6 +562,12 @@ class ArticleGenerator
             } else {
 
                 \Log::channel('push')->error("【" . $article->title . "】" . $article->id . ",不推送，当前【push_status:" . $article->push_status . "】【status:" . $article->status . "】【isPush:" . $isPush . "】");
+            }
+
+            //新增后触发的钩子
+            if (Hook::actionExist('create_after')) {
+
+                Hook::applyAction('create_after', $articleData, $expandDataKeyValue);
             }
 
 

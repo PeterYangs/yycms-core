@@ -117,6 +117,8 @@ class BingPush
             } catch (\Exception $exception) {
 
 
+                Log::error("bing推送报错---" . $exception->getMessage());
+
             }
 
 
@@ -170,6 +172,7 @@ class BingPush
 
             } catch (\Exception $exception) {
 
+                Log::error("bing推送报错---" . $exception->getMessage());
 
             }
 

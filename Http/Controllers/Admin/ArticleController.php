@@ -152,6 +152,11 @@ class ArticleController extends AuthCheckController
 
         $article = Article::withoutGlobalScopes()->where('id', $id)->first();
 
+        if (!$article) {
+
+            return Json::code(2, $id . "不存在!");
+        }
+
         $article->delete();
 
         return Json::code(1, 'success');

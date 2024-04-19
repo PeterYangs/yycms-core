@@ -101,9 +101,30 @@ class Article extends Base
         static::addGlobalScope(new ArticleScope);
 
 
+        static::deleting(function (Article $article){
+
+
+            //删除前触发的钩子
+            if (Hook::actionExist('delete_before')) {
+
+                $data=$article->toArray();
+
+                Hook::applyAction('delete_before', $data, $data['ex']);
+            }
+
+        });
+
         static::deleted(function ($article) {
 
             event(new ArticleDestroy($article->id));
+
+            //删除前触发的钩子
+            if (Hook::actionExist('delete_after')) {
+
+                $data=$article->toArray();
+
+                Hook::applyAction('delete_after', $data, $data['ex']);
+            }
 
         });
 

@@ -112,6 +112,8 @@ class BaiduPush
             } catch (\Exception $exception) {
 
 
+                Log::error("baidu推送报错---" . $exception->getMessage());
+
             }
 
 
@@ -160,6 +162,7 @@ class BaiduPush
 
             } catch (\Exception $exception) {
 
+                Log::error("baidu推送报错---" . $exception->getMessage());
 
             }
 

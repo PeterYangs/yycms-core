@@ -541,7 +541,7 @@ if (!function_exists('getDetailUrl')) {
     function getDetailUrl($item): string
     {
         if (!$item) {
-            return '';
+            throw new Exception("error item");
         }
 
         $prefix = request()->server('REQUEST_SCHEME') . '://' . request()->getHttpHost();
@@ -567,6 +567,30 @@ if (!function_exists('getDetailUrl')) {
 
 }
 
+if (!function_exists('getDetailUrlById')) {
+
+    /**
+     * 通过文章id获取文章链接
+     * @param $id
+     * @param string $mode
+     * @return string
+     * @throws JsonException
+     */
+    function getDetailUrlById($id, string $mode = 'pc'): string
+    {
+
+        $item = getArticleById($id);
+
+        if (!$item) {
+            throw new Exception("not found id : " . $id);
+        }
+
+        return getDetailUrlForCli($item, $mode);
+
+
+    }
+}
+
 
 if (!function_exists('getDetailUrlForCli')) {
 
@@ -580,7 +604,7 @@ if (!function_exists('getDetailUrlForCli')) {
     function getDetailUrlForCli(Article $item, string $mode = 'pc'): string
     {
         if (!$item) {
-            return '';
+            throw new Exception("error item");
         }
 
         $category = $item->category;
@@ -2119,5 +2143,23 @@ if (!function_exists('staticByArticle')) {
     }
 }
 
+if (!function_exists('deleteArticle')) {
+
+    /**
+     * 文章删除
+     * @param $id
+     * @return bool
+     */
+    function deleteArticle($id): bool
+    {
+        $article = Article::withoutGlobalScopes()->where('id', $id)->first();
+        if (!$article) {
+
+            return false;
+        }
+        return $article->delete();
+    }
+
+}
 
 
