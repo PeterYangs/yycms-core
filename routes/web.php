@@ -328,7 +328,7 @@ Route::get('__download/{article_download_id}', function ($article_download_id) {
 });
 
 
-Route::get("__index_now/7ef0fcb958e24e2f9c54ecabcfdd9cd2.txt",function (){
+Route::get("7ef0fcb958e24e2f9c54ecabcfdd9cd2.txt",function (){
 
     return "7ef0fcb958e24e2f9c54ecabcfdd9cd2";
 });

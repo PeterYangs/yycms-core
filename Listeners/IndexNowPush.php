@@ -106,7 +106,7 @@ class IndexNowPush
             'json' => [
                 'host' => $u['host'] ?? "",
                 'key' => $key,
-                'keyLocation' => $u['scheme'] . "://" . $u['host'] . "/__index_now/" . $key . ".txt",
+                'keyLocation' => $u['scheme'] . "://" . $u['host'] . "/" . $key . ".txt",
                 'urlList' => [
                     $url
                 ]
