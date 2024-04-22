@@ -63,6 +63,7 @@ return [
         'children' => [
             ['name' => '404访问列表', 'path' => '/main/error_access', 'title' => ['消息队列', '正在运行的任务'], 'apiPath' => '/admin/queue/getTask'],
             ['name' => '网站地图', 'path' => '/main/sitemap', 'title' => ['消息队列', '正在运行的任务'], 'apiPath' => '/admin/queue/getTask'],
+            ['name' => '死链管理', 'path' => '/main/death', 'title' => ['消息队列', '正在运行的任务'], 'apiPath' => '/admin/queue/getTask'],
 
         ]
     ],

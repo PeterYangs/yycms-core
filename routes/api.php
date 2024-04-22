@@ -12,6 +12,7 @@ use Ycore\Http\Controllers\Admin\CategoryMapController;
 use Ycore\Http\Controllers\Admin\CategoryRouteController;
 use Ycore\Http\Controllers\Admin\CollectController;
 use Ycore\Http\Controllers\Admin\CommonController;
+use Ycore\Http\Controllers\Admin\DeathController;
 use Ycore\Http\Controllers\Admin\DownloadSiteController;
 use Ycore\Http\Controllers\Admin\ExpandChangeController;
 use Ycore\Http\Controllers\Admin\HomeController;
@@ -425,6 +426,16 @@ Route::middleware([])->group(function () {
             Route::post('detail', [DownloadSiteController::class, 'detail']);
             Route::post('apiList', [DownloadSiteController::class, 'apiList']);
             Route::post('downloadCodeCheck', [DownloadSiteController::class, 'downloadCodeCheck']);
+
+        });
+
+
+        Route::group(['prefix' => 'death'], function () {
+
+
+            Route::post('getLink', [DeathController::class, 'getLink']);
+            Route::post('createLink', [DeathController::class, 'createLink']);
+
 
         });
 

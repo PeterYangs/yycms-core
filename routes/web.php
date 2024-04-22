@@ -45,7 +45,7 @@ YRoute::pcRoute(function () {
     });
 
 
-    Route::get("_common.js",function (){
+    Route::get("_common.js", function () {
 
 
         $statistics_pc = getOption("statistics_pc", "");
@@ -57,11 +57,11 @@ YRoute::pcRoute(function () {
 
     Route::get("_detail-{id}.js", function ($id) {
 
-        $all_js="";
+        $all_js = "";
 
         $article = ArticleDetailModel()->where('id', $id)->first();
 
-        if (!$article){
+        if (!$article) {
 
             abort(404);
         }
@@ -114,7 +114,7 @@ YRoute::mobileRoute(function () {
     });
 
 
-    Route::get("_common.js",function (){
+    Route::get("_common.js", function () {
 
 
         $statistics_mobile = getOption("statistics_mobile", "");
@@ -126,11 +126,11 @@ YRoute::mobileRoute(function () {
 
     Route::get("_detail-{id}.js", function ($id) {
 
-        $all_js="";
+        $all_js = "";
 
         $article = ArticleDetailModel()->where('id', $id)->first();
 
-        if (!$article){
+        if (!$article) {
 
             abort(404);
         }
@@ -240,7 +240,7 @@ Route::get('/download/{type}/{id}',
 
 
 //文章点击
-Route::get('/hits/{id}', [YyCms::class, 'add'])->where(['id'=>"[0-9]+"]);
+Route::get('/hits/{id}', [YyCms::class, 'add'])->where(['id' => "[0-9]+"]);
 
 
 Route::get('/now', function () {
@@ -328,8 +328,21 @@ Route::get('__download/{article_download_id}', function ($article_download_id) {
 });
 
 
-Route::get("7ef0fcb958e24e2f9c54ecabcfdd9cd2.txt",function (){
+Route::get("7ef0fcb958e24e2f9c54ecabcfdd9cd2.txt", function () {
 
     return "7ef0fcb958e24e2f9c54ecabcfdd9cd2";
+});
+
+
+Route::get("_www_death.txt", function () {
+
+
+    return response()->file(storage_path('app/public/www-death.txt'));
+});
+
+Route::get("_m_death.txt", function () {
+
+
+    return response()->file(storage_path('app/public/m-death.txt'));
 });
 

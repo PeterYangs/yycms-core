@@ -59,6 +59,10 @@ class Kernel
             $schedule->command('StaticTool')->dailyAt("01:25");
         }
 
+        //生成死链
+        $schedule->command('CreateDeathLink')->dailyAt("03:25");
+
+
 
     }
 

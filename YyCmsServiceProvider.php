@@ -11,6 +11,7 @@ use Ycore\Console\AutoAssociationObject;
 use Ycore\Console\BatchImportArticleWithZip;
 use Ycore\Console\ChangeArticleTime;
 use Ycore\Console\CleanStaticPage;
+use Ycore\Console\CreateDeathLink;
 use Ycore\Console\CreateExpandTable;
 use Ycore\Console\CreateRoute;
 use Ycore\Console\GetAdminStatic;
@@ -297,6 +298,7 @@ class YyCmsServiceProvider extends ServiceProvider
             ResetDatabase::class,
             AndroidUrlToDownload::class,
             ChangeArticleTime::class,
+            CreateDeathLink::class,
 
         ]);
 
