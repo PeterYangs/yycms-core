@@ -313,8 +313,7 @@ Route::get('_js_hide.js', function () {
 });
 
 
-Route::get('__download/{article_download_id}', function ($article_download_id) {
-
+Route::middleware(['throttle:download'])->get('__download/{article_download_id}', function ($article_download_id) {
     $articleDownload = ArticleDownload::with('download_site')->findOrFail($article_download_id);
 
     if (!$articleDownload->download_site) {
