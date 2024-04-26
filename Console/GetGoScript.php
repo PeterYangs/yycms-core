@@ -52,7 +52,7 @@ class GetGoScript extends Command
 
             }
 
-            if ($version !== $value['version']) {
+            if (trim($version) !== trim($value['version'])) {
 
 
                 $this->info($value['name'] . "正在更新。。。");

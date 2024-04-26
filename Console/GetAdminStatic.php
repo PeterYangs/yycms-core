@@ -65,7 +65,7 @@ class GetAdminStatic extends Command
         }
 
 
-        if ($adminVersion != Core::GetAdminVersion()) {
+        if (trim($adminVersion) != trim(Core::GetAdminVersion())) {
 
 
             if (app()->runningInConsole()) {

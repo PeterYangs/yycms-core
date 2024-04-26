@@ -45,7 +45,7 @@ class GetLibrary extends Command
         $tag = $data['tag_name'];
 
 
-        if ($tag !== Core::GetVersion()) {
+        if (trim($tag) !== trim(Core::GetVersion())) {
 
 
             $url = $data['assets'][0]['browser_download_url'];
@@ -120,8 +120,6 @@ class GetLibrary extends Command
 
 
         }
-
-
 
 
         //执行数据库迁移
