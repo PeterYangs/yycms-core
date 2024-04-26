@@ -48,6 +48,10 @@ class Handler extends ExceptionHandler
 
         $er = parent::render($request, $e);
 
+        if ($er->getStatusCode() === 429) {
+            return response('访问过于频繁', 429);
+        }
+
 
         try {
 
@@ -110,7 +114,7 @@ class Handler extends ExceptionHandler
 
 
                 dispatch(new EmailJob([$notice_email], env('APP_NAME') . "-报错日志(状态码" . $er->getStatusCode() . ")-" . date("Y-m-d-H-i-s"),
-                    $e->getMessage(), 'error.html', $view));
+                    $e->getMessage()?:"无错误信息", 'error.html', $view?:"空数据"));
 
             }
 
