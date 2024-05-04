@@ -21,27 +21,26 @@ class Detail extends Base
             ->where('category_id', $cid)
             ->firstOrFail();
 
+        //获取下载地址
         $item->append('download_url');
-
-
 
         $category = Category::where('id', $cid)->with('category_route')->firstOrFail();
 
-        $listRoute = $category->category_route->where('type', 1)->where('tag', 'list')->where('is_main', 1)->value('route');
+        $listRoute = $category->category_route->where('type', 2)->where('tag', 'list')->where('is_main', 1)->value('route');
 
-        $viewFile = $this->getViewPath() . "/channel-" . $listRoute . ".blade.php";
+        $viewFile = $this->getViewPath() . "/detail-" . $listRoute . ".blade.php";
 
-        $view = "/detail-" . $listRoute;
 
-        if (!file_exists($viewFile)) {
+        if (!file_exists($viewFile) && $category->parent) {
 
-            $route = $category->parent->category_route->where('type', 1)->where('tag', 'list')->where('is_main', 1)->value('route');
+            $route = $category->parent->category_route->where('type', 2)->where('tag', 'list')->where('is_main', 1)->value('route');
 
             $viewFile = $this->getViewPath() . "/detail-" . $route . ".blade.php";
 
             $view = "/detail-" . $route;
 
         }
+
 
         if (file_exists($viewFile)) {
 

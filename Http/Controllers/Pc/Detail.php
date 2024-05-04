@@ -28,11 +28,10 @@ class Detail extends Base
 
         $listRoute = $category->category_route->where('type', 1)->where('tag', 'list')->where('is_main', 1)->value('route');
 
-        $viewFile = $this->getViewPath() . "/channel-" . $listRoute . ".blade.php";
+        $viewFile = $this->getViewPath() . "/detail-" . $listRoute . ".blade.php";
 
-        $view = "/detail-" . $listRoute;
 
-        if (!file_exists($viewFile)) {
+        if (!file_exists($viewFile) && $category->parent) {
 
             $route = $category->parent->category_route->where('type', 1)->where('tag', 'list')->where('is_main', 1)->value('route');
 

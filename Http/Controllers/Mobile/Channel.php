@@ -20,7 +20,7 @@ class Channel extends Base
 
         $category = Category::where('id', $cid)->with('category_route')->firstOrFail();
 
-        $route = $category->category_route->where('type', 1)->where('tag', 'list')->where('is_main', 1)->value('route');
+        $route = $category->category_route->where('type', 2)->where('tag', 'list')->where('is_main', 1)->value('route');
 
 
         $currentRoute = $route;
@@ -31,7 +31,7 @@ class Channel extends Base
 
         if (!file_exists($viewFile) && $category->pid !== 0) {
 
-            $route = $category->parent->category_route->where('type', 1)->where('tag', 'list')->where('is_main', 1)->value('route');
+            $route = $category->parent->category_route->where('type', 2)->where('tag', 'list')->where('is_main', 1)->value('route');
 
             $viewFile = $this->getViewPath() . "/channel-" . $route . ".blade.php";
 
