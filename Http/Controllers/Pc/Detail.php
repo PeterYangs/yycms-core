@@ -30,6 +30,7 @@ class Detail extends Base
 
         $viewFile = $this->getViewPath() . "/detail-" . $listRoute . ".blade.php";
 
+        $view= "/detail-" . $listRoute;
 
         if (!file_exists($viewFile) && $category->parent) {
 
