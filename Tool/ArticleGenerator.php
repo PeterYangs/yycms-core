@@ -421,7 +421,7 @@ class ArticleGenerator
                                     $img_url = $imgItem['img'] ?? "";
 
                                     //外链图片
-                                    if (preg_match("/^(http|https):\/\//", $img_url) !== false) {
+                                    if (preg_match("/^(http|https):\/\//", $img_url)) {
 
                                         if (!$img_url) {
 
