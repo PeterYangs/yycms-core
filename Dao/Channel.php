@@ -94,7 +94,7 @@ class Channel
     }
 
 
-    public static function channel($size = 10, $page = 1, $path = "/list-[PAGE].html", $orderField = 'push_time', $orderDirection = 'desc')
+    public static function channel($size = 10, $page = 1, $path = "/list-[PAGE].html", $orderField = 'push_time', $orderDirection = 'desc'): Channel
     {
 
         $c = new Channel();
@@ -104,7 +104,6 @@ class Channel
         $c->setPath($path);
         $c->setOrderField($orderField);
         $c->setOrderDirection($orderDirection);
-
 
         return $c;
     }

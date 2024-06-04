@@ -2,6 +2,7 @@
 
 namespace Ycore\Http\Controllers\Pc;
 
+use Ycore\Dao\ChannelRandom;
 use Ycore\Models\Category;
 use Ycore\Tool\Hook;
 
@@ -54,7 +55,16 @@ class Channel extends Base
 
         }
 
-        $query->orderBy($channel->getOrderField(), $channel->getOrderDirection());
+        if ($channel instanceof \Ycore\Dao\Channel) {
+
+            $query->orderBy($channel->getOrderField(), $channel->getOrderDirection());
+        }
+
+        if ($channel instanceof ChannelRandom) {
+
+            $query->inRandomOrder();
+        }
+
 
         $data = $query->seoPaginate($channel->getSize(), ['*'], $channel->getPage(),
             $channel->getPath());
