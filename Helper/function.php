@@ -543,8 +543,6 @@ if (!function_exists('getDetailUrl')) {
         if (!$item) {
             throw new Exception("error item");
         }
-
-        $prefix = request()->server('REQUEST_SCHEME') . '://' . request()->getHttpHost();
         $category = $item->category;
         if (!$category) {
             return '';
@@ -562,10 +560,39 @@ if (!function_exists('getDetailUrl')) {
 
         $id = $item->id;
         $detail_name = str_replace('{id}', $id, $detail_name);
-        return $prefix . '/' . $detail_name;
+        return getDomainPrefix($category) . '/' . $detail_name;
     }
 
 }
+
+if (!function_exists('getDomainPrefix')) {
+    function getDomainPrefix($category)
+    {
+        $pid = $category->pid;
+        if (app()->has('_category_item_id_' . $pid)) {
+            $parentCategory = resolve('_category_item_id_' . $pid);
+        } else {
+            if ($pid !== 0) {
+                app()->instance('categoryItemId' . $pid, $category->parent);
+                $parentCategory = resolve('categoryItemId' . $pid);
+            } else {
+                $parentCategory = null;
+            }
+        }
+        $prefix = "";
+        if ($category->category_host) {
+            $prefix = $category->category_host;
+        } else {
+            if ($parentCategory && $parentCategory->category_host) {
+                $prefix = $parentCategory->category_host;
+            } else {
+                $prefix = request()->server('REQUEST_SCHEME') . '://' . request()->getHttpHost();
+            }
+        }
+        return $prefix;
+    }
+}
+
 
 if (!function_exists('getDetailUrlById')) {
 
@@ -626,7 +653,7 @@ if (!function_exists('getDetailUrlForCli')) {
 
         $id = $item->id;
         $detail_name = str_replace('{id}', $id, $detail_name);
-        return $prefix . '/' . $detail_name;
+        return getDomainPrefix($category) . '/' . $detail_name;
     }
 }
 
@@ -675,8 +702,8 @@ if (!function_exists('getChannelUrl')) {
             $list_name = Cache::get('category:list:pc_' . $category->id);
         }
 
-        $prefix = request()->server('REQUEST_SCHEME') . '://' . request()->getHttpHost();
-        return $prefix . "/" . $list_name . "/";
+//        $prefix = request()->server('REQUEST_SCHEME') . '://' . request()->getHttpHost();
+        return getDomainPrefix($category). "/" . $list_name . "/";
     }
 
 }

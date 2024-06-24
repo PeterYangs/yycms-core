@@ -74,7 +74,9 @@ class SiteSettingController extends AuthCheckController
             'open_watermark',
             'watermark',
             'statistics_pc',
-            'statistics_mobile'
+            'statistics_mobile',
+            'disable_device_jump',
+            'enable_channel_domain'
 
         ];
 

@@ -4,149 +4,248 @@
 //后台图片访问
 use App\Http\Controllers\Pc\HitsController;
 use Ycore\Http\Controllers\YyCms;
+use Ycore\Http\Middleware\home\ArticleSpecial;
+use Ycore\Http\Middleware\home\HomeTag;
+use Ycore\Http\Middleware\home\StaticRender;
+use Ycore\Http\Middleware\home\UserAccess;
 use Ycore\Models\ArticleDownload;
 use Ycore\Tool\YRoute;
 
+//dd(getOption('site_name'));
+$enable_channel_domain = getOption('enable_channel_domain');
 
-YRoute::pcRoute(function () {
+if ($enable_channel_domain == 1) {
 
-
-    //网站地图
-    Route::get("/sitemap/{name}.xml", function ($name) {
-
-
-        try {
-
-            return response()->file(storage_path('sitemap/pc/' . $name . ".xml"),
-                ['content-type' => 'text/xml; charset=utf-8']);
-
-        } catch (\Exception $exception) {
+    \Route::middleware([HomeTag::class, UserAccess::class, ArticleSpecial::class])->group(function () {
 
 
-            abort(404);
-        }
-
-
-    })->where(['name' => '[0-9A-Za-z\-]+']);
-
-
-    //搜狗验证文件
-    Route::get('/sogousiteverification.txt', function () {
-
-        return response()->file(public_path('sougou/pc/sogousiteverification.txt'));
-    });
-
-
-    //全站链接
-    Route::get('/links/links.txt', function () {
-
-
-        return response()->file(storage_path('link/pc.txt'), ['content-type' => 'text/plain']);
-    });
-
-
-    Route::get("_common.js", function () {
-
-
-        $statistics_pc = getOption("statistics_pc", "");
-
-        return response($statistics_pc, 200, ['content-type' => 'text/javascript']);
-
-    });
-
-
-    Route::get("_detail-{id}.js", function ($id) {
-
-        $all_js = "";
-
-        $article = ArticleDetailModel()->where('id', $id)->first();
-
-        if (!$article) {
-
-            abort(404);
-        }
-
-        if (optional($article->special)->pc_js) {
-
-            $all_js .= $article->special->pc_js;
-
-        }
-
-        return response($all_js, 200, ['content-type' => 'text/javascript']);
-
-    });
-
-
-});
-
-YRoute::mobileRoute(function () {
-
-    //网站地图
-    Route::get("/sitemap/{name}.xml", function ($name) {
-
+        \Route::get("/", make(\Ycore\Http\Controllers\Pc\Index::class, 'index'))->middleware(StaticRender::class)->name('pc.index');
 
         try {
 
-            return response()->file(storage_path('sitemap/mobile/' . $name . ".xml"),
-                ['content-type' => 'text/xml; charset=utf-8']);
+            include_once base_path("routes/channel/pc.php");
 
         } catch (\Exception $exception) {
 
-
-            abort(404);
         }
 
 
-    })->where(['name' => '[0-9A-Za-z\-]+']);
+        if (file_exists(base_path('theme/' . getOption('theme', 'demo') . '/pc/route/route.php'))) {
 
-
-    //搜狗验证文件
-    Route::get('/sogousiteverification.txt', function () {
-
-        return response()->file(public_path('sougou/mobile/sogousiteverification.txt'));
-    });
-
-    //全站链接
-    Route::get('/links/links.txt', function () {
-
-
-        return response()->file(storage_path('link/mobile.txt'), ['content-type' => 'text/plain']);
-    });
-
-
-    Route::get("_common.js", function () {
-
-
-        $statistics_mobile = getOption("statistics_mobile", "");
-
-        return response($statistics_mobile, 200, ['content-type' => 'text/javascript']);
-
-    });
-
-
-    Route::get("_detail-{id}.js", function ($id) {
-
-        $all_js = "";
-
-        $article = ArticleDetailModel()->where('id', $id)->first();
-
-        if (!$article) {
-
-            abort(404);
-        }
-
-        if (optional($article->special)->mobile_js) {
-
-            $all_js .= $article->special->mobile_js;
+            include_once base_path('theme/' . getOption('theme', 'demo') . '/pc/route/route.php');
 
         }
 
-        return response($all_js, 200, ['content-type' => 'text/javascript']);
+
+        //网站地图
+        Route::get("/sitemap/{name}.xml", function ($name) {
+
+
+            try {
+
+                return response()->file(storage_path('sitemap/pc/' . $name . ".xml"),
+                    ['content-type' => 'text/xml; charset=utf-8']);
+
+            } catch (\Exception $exception) {
+
+
+                abort(404);
+            }
+
+
+        })->where(['name' => '[0-9A-Za-z\-]+']);
+
+
+        //搜狗验证文件
+        Route::get('/sogousiteverification.txt', function () {
+
+            return response()->file(public_path('sougou/pc/sogousiteverification.txt'));
+        });
+
+
+        //全站链接
+        Route::get('/links/links.txt', function () {
+
+
+            return response()->file(storage_path('link/pc.txt'), ['content-type' => 'text/plain']);
+        });
+
+
+        Route::get("_common.js", function () {
+
+
+            $statistics_pc = getOption("statistics_pc", "");
+
+            return response($statistics_pc, 200, ['content-type' => 'text/javascript']);
+
+        });
+
+
+        Route::get("_detail-{id}.js", function ($id) {
+
+            $all_js = "";
+
+            $article = ArticleDetailModel()->where('id', $id)->first();
+
+            if (!$article) {
+
+                abort(404);
+            }
+
+            if (optional($article->special)->pc_js) {
+
+                $all_js .= $article->special->pc_js;
+
+            }
+
+            return response($all_js, 200, ['content-type' => 'text/javascript']);
+
+        });
+
 
     });
 
+} else {
+    YRoute::pcRoute(function () {
 
-});
+
+        //网站地图
+        Route::get("/sitemap/{name}.xml", function ($name) {
+
+
+            try {
+
+                return response()->file(storage_path('sitemap/pc/' . $name . ".xml"),
+                    ['content-type' => 'text/xml; charset=utf-8']);
+
+            } catch (\Exception $exception) {
+
+
+                abort(404);
+            }
+
+
+        })->where(['name' => '[0-9A-Za-z\-]+']);
+
+
+        //搜狗验证文件
+        Route::get('/sogousiteverification.txt', function () {
+
+            return response()->file(public_path('sougou/pc/sogousiteverification.txt'));
+        });
+
+
+        //全站链接
+        Route::get('/links/links.txt', function () {
+
+
+            return response()->file(storage_path('link/pc.txt'), ['content-type' => 'text/plain']);
+        });
+
+
+        Route::get("_common.js", function () {
+
+
+            $statistics_pc = getOption("statistics_pc", "");
+
+            return response($statistics_pc, 200, ['content-type' => 'text/javascript']);
+
+        });
+
+
+        Route::get("_detail-{id}.js", function ($id) {
+
+            $all_js = "";
+
+            $article = ArticleDetailModel()->where('id', $id)->first();
+
+            if (!$article) {
+
+                abort(404);
+            }
+
+            if (optional($article->special)->pc_js) {
+
+                $all_js .= $article->special->pc_js;
+
+            }
+
+            return response($all_js, 200, ['content-type' => 'text/javascript']);
+
+        });
+
+
+    });
+
+    YRoute::mobileRoute(function () {
+
+        //网站地图
+        Route::get("/sitemap/{name}.xml", function ($name) {
+
+
+            try {
+
+                return response()->file(storage_path('sitemap/mobile/' . $name . ".xml"),
+                    ['content-type' => 'text/xml; charset=utf-8']);
+
+            } catch (\Exception $exception) {
+
+
+                abort(404);
+            }
+
+
+        })->where(['name' => '[0-9A-Za-z\-]+']);
+
+
+        //搜狗验证文件
+        Route::get('/sogousiteverification.txt', function () {
+
+            return response()->file(public_path('sougou/mobile/sogousiteverification.txt'));
+        });
+
+        //全站链接
+        Route::get('/links/links.txt', function () {
+
+
+            return response()->file(storage_path('link/mobile.txt'), ['content-type' => 'text/plain']);
+        });
+
+
+        Route::get("_common.js", function () {
+
+
+            $statistics_mobile = getOption("statistics_mobile", "");
+
+            return response($statistics_mobile, 200, ['content-type' => 'text/javascript']);
+
+        });
+
+
+        Route::get("_detail-{id}.js", function ($id) {
+
+            $all_js = "";
+
+            $article = ArticleDetailModel()->where('id', $id)->first();
+
+            if (!$article) {
+
+                abort(404);
+            }
+
+            if (optional($article->special)->mobile_js) {
+
+                $all_js .= $article->special->mobile_js;
+
+            }
+
+            return response($all_js, 200, ['content-type' => 'text/javascript']);
+
+        });
+
+
+    });
+}
 
 
 Route::get('/backend/{path}.{ex}', function ($path, $ex) {

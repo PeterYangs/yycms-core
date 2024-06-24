@@ -68,7 +68,8 @@ class Category extends Base
         'status',
         'sort',
         'ai_command',
-        'tag_relate_rule'
+        'tag_relate_rule',
+        'category_host'
     ];
 
     protected static function booted()
