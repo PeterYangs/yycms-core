@@ -310,6 +310,12 @@ class ArticleController extends AuthCheckController
             ->withoutGlobalScopes()
             ->orderBy('id', 'desc');
 
+        //草稿箱
+        if (request()->get('is_draft') === "1"){
+
+            $list->where('push_status',3);
+        }
+
 
         $custom = \Ycore\Tool\Search::searchList($list, request()->input('search', '[]'));
 
