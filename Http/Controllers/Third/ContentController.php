@@ -52,7 +52,7 @@ class ContentController extends BaseController
                 'seo_title' => $post['main']['seo_title'] ?? "",
                 'seo_desc' => $post['main']['seo_desc'] ?? "",
                 'seo_keyword' => $post['main']['seo_keyword'] ?? "",
-                'push_status' => 1,
+                'push_status' => $post['main']['push_status'],
                 'status' => 1,
 
             ], $post['expand'])->create(true, false, false);
