@@ -54,7 +54,7 @@ class Test extends Command
 
 
 
-        dd(parse_url("https://www.baidu.com/aaa"));
+//        dd(parse_url("https://www.baidu.com/aaa"));
 
 //        dd(\File::fi(storage_path('app/public/062fbbc1-e067-4d4a-9d08-fc888f4ecef8-temp-article/文章1.txt')));
 
@@ -66,16 +66,18 @@ class Test extends Command
 
         $a = new ArticleGenerator();
 //
-        $a->fill([], ['version_name' => "1.1.0.11111"])->update(['id' => 23984]);
+//        $a->fill([])->create(false);
 
 
-        dd("");
+//        dd("");
 
         $a->fill([
             'category_id' => 2,
             'content' => "角色扮演内容啊",
             'title' => '随便一个标题' . time(),
-            'img' => 'https://soft-library.oss-cn-hangzhou.aliyuncs.com/icon/2023/11/20/3162ec9cf15363c9d2380bb3ef348caf.png'
+            'img' => 'https://soft-library.oss-cn-hangzhou.aliyuncs.com/icon/2023/11/20/3162ec9cf15363c9d2380bb3ef348caf.png',
+            'push_time'=>'2023-12-01',
+//            'updated_at'=>'2023-12-01'
 
         ], [
             'screenshots' => [

@@ -1320,6 +1320,9 @@ if (!function_exists('getRelated')) {
             $ex_table,
             $obj
         ) {
+            if (!$ex_table) {
+                return;
+            }
             //查询其他文章中是否有关联当前文章
             $query->whereRaw('id in (SELECT ' . $ex_table . '.article_id FROM ' . $ex_table . ' WHERE ' . config('static.news_game_field') . ' = ? )', [$article->id]);
 

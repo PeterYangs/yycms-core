@@ -39,11 +39,14 @@ class ContentController extends BaseController
 
         $article = null;
 
+
         try {
+
+            $isUpdatedAt = false;
 
             $ag = new ArticleGenerator();
 
-            $article = $ag->fill([
+            $data = [
                 'title' => $post['main']['title'],
                 'category_id' => $post['main']['category_id'],
                 'push_time' => now(),
@@ -55,7 +58,18 @@ class ContentController extends BaseController
                 'push_status' => $post['main']['push_status'],
                 'status' => 1,
 
-            ], $post['expand'])->create(true, false, false);
+            ];
+
+            if ($post['main']['is_update_at']) {
+                $isUpdatedAt = true;
+                if (isset($post['main']['push_time']) && $post['main']['push_time']) {
+                    $data['push_time'] = $post['main']['push_time'];
+                    $data['updated_at'] = $post['main']['push_time'];
+                }
+
+            }
+
+            $article = $ag->fill($data, $post['expand'])->create(true, false, false, $isUpdatedAt);
 
         } catch (\Exception $exception) {
 

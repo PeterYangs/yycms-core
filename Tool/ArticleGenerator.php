@@ -293,9 +293,12 @@ class ArticleGenerator
      * Create by Peter Yang
      * 2023-03-23 15:03:56
      * @param bool $isPush 是否推送到站长
+     * @param bool $is_gpt 使用用ai替换content内容
+     * @param bool $titleUniqueCheck 是否进行标题重复度检查
+     * @param bool $isUpdatedAt 是否修改updated_at
      * @throws Throwable
      */
-    function create(bool $isPush = true, bool $is_gpt = false, $titleUniqueCheck = true): Article
+    function create(bool $isPush = true, bool $is_gpt = false, bool $titleUniqueCheck = true, bool $isUpdatedAt = false): Article
     {
 
 
@@ -545,6 +548,12 @@ class ArticleGenerator
                 $article->save();
 
 
+            }
+
+
+            if (isset($articleData['updated_at']) && $articleData['updated_at'] && $isUpdatedAt === true) {
+
+                DB::table('article')->where('id', $article->id)->update(['updated_at' => $articleData['updated_at']]);
             }
 
 
