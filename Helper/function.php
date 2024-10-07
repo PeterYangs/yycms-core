@@ -938,6 +938,11 @@ if (!function_exists('getContent')) {
                     '') . "'>" . getOption('site_name') . "</a>!</p>";
         }
 
+
+        $fContent = Hook::applyFilter('the_content', $str, $article);
+        if ($fContent !== null) {
+            return $fContent;
+        }
         return $str;
     }
 }
