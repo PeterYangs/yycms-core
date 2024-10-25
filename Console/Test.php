@@ -76,9 +76,9 @@ class Test extends Command
             'content' => "角色扮演内容啊",
             'title' => '随便一个标题' . time(),
             'img' => 'https://soft-library.oss-cn-hangzhou.aliyuncs.com/icon/2023/11/20/3162ec9cf15363c9d2380bb3ef348caf.png',
-            'push_time'=>'2023-12-01',
+//            'push_time'=>'2023-12-01',
 //            'updated_at'=>'2023-12-01'
-
+            'issue_time'=> now()
         ], [
             'screenshots' => [
                 [
@@ -91,7 +91,7 @@ class Test extends Command
                 ],
 
             ]
-        ])->create();
+        ])->update(['id'=>23991]);
 
 
         dd("");

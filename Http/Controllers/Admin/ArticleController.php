@@ -410,6 +410,7 @@ class ArticleController extends AuthCheckController
             'updated_at',
             'category_id',
             'push_time',
+            'issue_time',
             'deleted_at',
             'img',
             'title',

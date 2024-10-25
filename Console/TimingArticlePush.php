@@ -7,6 +7,7 @@ use Ycore\Events\WebsitePush;
 use Ycore\Models\Article;
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
+use Ycore\Tool\ArticleGenerator;
 
 class TimingArticlePush extends Command
 {
@@ -42,17 +43,12 @@ class TimingArticlePush extends Command
         foreach ($articles as $article) {
 
 
-            $article->push_status = 1;
+            $ad = new ArticleGenerator();
+
+            $ad->fill(['push_status' => 1], [])->update(['id' => $article->id], true);
 
 
-            $article->save();
-
-            //文章更新触发的事件
-            event(new ArticleUpdate($article->id));
-
-            //站长推送
-            event(new WebsitePush($article->id));
-
+//
             echo $article->title . "----" . "发布成功---" . date("Y-m-d H:i:s") . PHP_EOL;
 
 

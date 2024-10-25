@@ -3,6 +3,7 @@
 namespace Ycore\Tool;
 
 
+use Illuminate\Contracts\Foundation\ExceptionRenderer;
 use QL\QueryList;
 use Throwable;
 use Ycore\Events\ArticleUpdate;
@@ -15,6 +16,7 @@ use Ycore\Models\Category;
 use Ycore\Models\ExpandData;
 use Ycore\Service\Ai\Ai;
 use Ycore\Service\Upload\Upload;
+use function PHPUnit\Framework\throwException;
 
 /**
  * 文章操作类
@@ -89,6 +91,8 @@ class ArticleGenerator
 
 
             $article = Article::where($attributes)->whereNull('deleted_at')->withoutGlobalScopes()->first();
+
+//            dd(123);
 
             if (!$article) {
 
@@ -269,7 +273,7 @@ class ArticleGenerator
             //新增后触发的钩子
             if (Hook::actionExist('update_after')) {
 
-                $data=$article->toArray();
+                $data = $article->toArray();
 
                 Hook::applyAction('update_after', $data, $data['ex']);
             }
@@ -280,8 +284,11 @@ class ArticleGenerator
 
             DB::rollBack();
 
-            throw new \Exception($exception->getMessage() . "   " . $exception->getFile() . ":" . $exception->getLine());
 
+//            $view = app(ExceptionRenderer::class)->render($exception);
+
+
+            throw $exception;
 
         }
 
@@ -298,7 +305,7 @@ class ArticleGenerator
      * @param bool $isUpdatedAt 是否修改updated_at
      * @throws Throwable
      */
-    function create(bool $isPush = true, bool $is_gpt = false, bool $titleUniqueCheck = true, bool $isUpdatedAt = false): Article
+    function create(bool $isPush = true, bool $is_gpt = false, bool $titleUniqueCheck = true): Article
     {
 
 
@@ -357,8 +364,9 @@ class ArticleGenerator
 
             $now = Date::now();
 
-            if (!($articleData['push_time'] ?? "")) {
+            $pushTime = trim($articleData['push_time'] ?? "");
 
+            if (!$pushTime) {
                 //未设置发布时间则为当前时间
                 $articleData['push_time'] = date("Y-m-d H:i:s", $now->unix());
             }
@@ -476,6 +484,11 @@ class ArticleGenerator
                 throw new \Exception("分类id不存在:" . $category->id);
             }
 
+            $issueTime = trim($articleData['issue_time'] ?? "");
+
+            if (!$issueTime) {
+                $articleData['issue_time'] = $articleData['push_time'];
+            }
 
             $article = Article::create($articleData);
 
@@ -551,10 +564,10 @@ class ArticleGenerator
             }
 
 
-            if (isset($articleData['updated_at']) && $articleData['updated_at'] && $isUpdatedAt === true) {
-
-                DB::table('article')->where('id', $article->id)->update(['updated_at' => $articleData['updated_at']]);
-            }
+//            if (isset($articleData['updated_at']) && $articleData['updated_at'] && $isUpdatedAt === true) {
+//
+//                DB::table('article')->where('id', $article->id)->update(['updated_at' => $articleData['updated_at']]);
+//            }
 
 
             \DB::commit();

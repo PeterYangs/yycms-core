@@ -89,7 +89,8 @@ class Article extends Base
         'push_status',
         'special_id',
         'select_order',
-        'updated_at'
+        'updated_at',
+        'issue_time'
     ];
 
     protected $appends = ['ex'];

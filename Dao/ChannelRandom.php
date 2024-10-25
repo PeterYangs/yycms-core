@@ -58,7 +58,7 @@ class ChannelRandom
     }
 
 
-    public static function channelRandom($size = 10, $page = 1, $path = "/list-[PAGE].html", $orderField = 'push_time', $orderDirection = 'desc'): ChannelRandom
+    public static function channelRandom($size = 10, $page = 1, $path = "/list-[PAGE].html", $orderField = 'issue_time', $orderDirection = 'desc'): ChannelRandom
     {
 
         $c = new ChannelRandom();

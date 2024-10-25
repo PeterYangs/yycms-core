@@ -273,7 +273,7 @@ if (!function_exists('getArticleByCategoryName')) {
         int              $offset = 0,
         array            $querys = [],
         array            $notIdArray = [],
-        string           $orderField = 'push_time',
+        string           $orderField = 'issue_time',
         string           $orderDirection = 'desc',
         array            $expandQuerys = [],//[ ['obj','=','358'] ]
         bool             $isRandom = false
@@ -291,7 +291,7 @@ if (!function_exists('getArticleByCategoryName')) {
         }
 
         if ($orderField === "") {
-            $orderField = 'push_time';
+            $orderField = 'issue_time';
         }
 
         if ($orderDirection === "") {
@@ -359,7 +359,7 @@ if (!function_exists('getArticleByCategoryNameWithRandom')) {
         int          $offset = 0,
         array        $querys = [],
         array        $notIdArray = [],
-        string       $orderField = 'push_time',
+        string       $orderField = 'issue_time',
         string       $orderDirection = 'desc',
         array        $expandQuerys = [],
     ): \Illuminate\Database\Eloquent\Collection|array|\Illuminate\Support\Collection
@@ -1220,7 +1220,7 @@ if (!function_exists('getExGameList')) {
      * @param string $orderDirection
      * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
-    function getExGameList(Article $article, int $limit = 0, $name = '', string $orderField = 'push_time', string $orderDirection = 'desc'): \Illuminate\Database\Eloquent\Collection|array
+    function getExGameList(Article $article, int $limit = 0, $name = '', string $orderField = 'issue_time', string $orderDirection = 'desc'): \Illuminate\Database\Eloquent\Collection|array
     {
         $mainId = $article->id;
         if ($name === '') {
@@ -1255,7 +1255,7 @@ if (!function_exists('getExGameListWithPage')) {
      * @param string $orderDirection
      * @return Closure|mixed|object
      */
-    function getExGameListWithPage(Article $article, string $pageUrl = "", int $page = 1, int $size = 10, $name = '', string $orderField = 'push_time', string $orderDirection = 'desc')
+    function getExGameListWithPage(Article $article, string $pageUrl = "", int $page = 1, int $size = 10, $name = '', string $orderField = 'issue_time', string $orderDirection = 'desc')
     {
         $mainId = $article->id;
         if ($name === '') {
@@ -1345,7 +1345,7 @@ if (!function_exists('getRelated')) {
                     [$obj]);
             }
 
-        })->limit($limit)->orderBy('push_time', 'desc')->get();
+        })->limit($limit)->orderBy('issue_time', 'desc')->get();
     }
 }
 
@@ -1387,7 +1387,7 @@ if (!function_exists('getRelatedByTag')) {
 
         $category = getCategoryIds($categoryName);
         $query->whereIn('category_id', $category->all());
-        return $query->orderBy('push_time', 'desc')->get();
+        return $query->orderBy('issue_time', 'desc')->get();
     }
 
 }
@@ -1618,6 +1618,24 @@ if (!function_exists('getPushTime')) {
         return date($format, $time);
     }
 }
+
+if (!function_exists('getIssueTime')) {
+
+    /**
+     * 获取更新时间格式
+     * Create by Peter Yang
+     * 2022-10-18 11:51:35
+     * @param Article $article
+     * @param string $format
+     * @return string
+     */
+    function getIssueTime(Article $article, string $format = "Y-m-d"): string
+    {
+        $time = strtotime($article->issue_time);
+        return date($format, $time);
+    }
+}
+
 
 
 if (!function_exists('getUpdateTime')) {
@@ -1864,7 +1882,7 @@ if (!function_exists('getArticleByTagId')) {
      * @param $order
      * @return Closure|mixed|object
      */
-    function getArticleByTagId($tagId, $size = 10, $page = 1, $path = "/tag/list-[PAGE].html", $order = ['push_time', 'desc'])
+    function getArticleByTagId($tagId, $size = 10, $page = 1, $path = "/tag/list-[PAGE].html", $order = ['issue_time', 'desc'])
     {
         return ArticleListModel()->with('article_tag')->whereHas('article_tag', function ($query) use ($tagId) {
             $query->where('tag_id', $tagId);

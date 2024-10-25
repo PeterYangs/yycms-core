@@ -61,15 +61,13 @@ class ContentController extends BaseController
             ];
 
             if ($post['main']['is_update_at']) {
-                $isUpdatedAt = true;
                 if (isset($post['main']['push_time']) && $post['main']['push_time']) {
                     $data['push_time'] = $post['main']['push_time'];
-                    $data['updated_at'] = $post['main']['push_time'];
                 }
 
             }
 
-            $article = $ag->fill($data, $post['expand'])->create(true, false, false, $isUpdatedAt);
+            $article = $ag->fill($data, $post['expand'])->create(true, false, false);
 
         } catch (\Exception $exception) {
 
