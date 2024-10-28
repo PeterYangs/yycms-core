@@ -89,10 +89,29 @@ class ArticleGenerator
 
             $articleData = $this->articleData;
 
+            $content = $articleData['content'];
+
+
+            $html = QueryList::html($content);
+
+            $html->find('img')->each(function (\QL\Dom\Elements $dom) {
+
+                $imgUrl = $dom->attr('src');
+
+                $re = str_starts_with($imgUrl, "http");
+
+                if ($re) {
+
+                    $dom->attr('src', $this->upload->uploadRemoteFile($imgUrl));
+                }
+
+            });
+
+            $articleData['content'] = $html->getHtml();
+
 
             $article = Article::where($attributes)->whereNull('deleted_at')->withoutGlobalScopes()->first();
 
-//            dd(123);
 
             if (!$article) {
 
@@ -192,6 +211,7 @@ class ArticleGenerator
 
             $expandDataKeyValue = dealExpandToTable($expandData);
 
+            //赋值
             foreach ($this->articleData as $key => $value) {
 
 
@@ -346,6 +366,27 @@ class ArticleGenerator
 
 
             $articleData = $this->articleData;
+
+
+            $content = $articleData['content'];
+
+
+            $html = QueryList::html($content);
+
+            $html->find('img')->each(function (\QL\Dom\Elements $dom) {
+
+                $imgUrl = $dom->attr('src');
+
+                $re = str_starts_with($imgUrl, "http");
+
+                if ($re) {
+
+                    $dom->attr('src', $this->upload->uploadRemoteFile($imgUrl));
+                }
+
+            });
+
+            $articleData['content'] = $html->getHtml();
 
 
             if ($titleUniqueCheck) {
@@ -599,8 +640,9 @@ class ArticleGenerator
 
             \DB::rollBack();
 
+            throw $exception;
 
-            throw new \Exception($exception->getMessage() . "   " . $exception->getFile() . ":" . $exception->getLine());
+//            throw new \Exception($exception->getMessage() . "   " . $exception->getFile() . ":" . $exception->getLine());
 
         }
 
