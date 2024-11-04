@@ -174,6 +174,10 @@ if ($enable_channel_domain == 1) {
 
         });
 
+    //单页面
+    Route::get('/about/{route}.html',
+        [\Ycore\Http\Controllers\Pc\Detail::class, 'page'])->where(['route' => '[0-9a-zA-Z_]+'])->name('pc.page');
+
 
     });
 
@@ -242,6 +246,10 @@ if ($enable_channel_domain == 1) {
             return response($all_js, 200, ['content-type' => 'text/javascript']);
 
         });
+
+        //单页面
+        Route::get('/about/{route}.html',
+            [\Ycore\Http\Controllers\Mobile\Detail::class, 'page'])->where(['route' => '[0-9a-zA-Z_]+'])->name('mobile.page');
 
 
     });

@@ -3,6 +3,7 @@
 namespace Ycore\Http\Controllers\Pc;
 
 use Ycore\Models\Category;
+use Ycore\Models\Page;
 
 class Detail extends Base
 {
@@ -30,7 +31,7 @@ class Detail extends Base
 
         $viewFile = $this->getViewPath() . "/detail-" . $listRoute . ".blade.php";
 
-        $view= "/detail-" . $listRoute;
+        $view = "/detail-" . $listRoute;
 
         if (!file_exists($viewFile) && $category->parent) {
 
@@ -53,5 +54,22 @@ class Detail extends Base
 
 
     }
+
+
+    function page($route)
+    {
+
+        $page = Page::where('route', $route)->firstOrFail();
+
+        $viewFile = $this->getViewPath() . "/about.blade.php";
+
+        if (!file_exists($viewFile)) {
+
+            abort(404);
+        }
+
+        return view('about', ['page' => $page]);
+    }
+
 
 }

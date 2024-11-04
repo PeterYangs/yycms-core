@@ -3,6 +3,7 @@
 namespace Ycore\Http\Controllers\Mobile;
 
 use Ycore\Models\Category;
+use Ycore\Models\Page;
 
 class Detail extends Base
 {
@@ -52,6 +53,21 @@ class Detail extends Base
         return view('detail', ['category' => $category, 'data' => $item]);
 
 
+    }
+
+    function page($route)
+    {
+
+        $page = Page::where('route', $route)->firstOrFail();
+
+        $viewFile = $this->getViewPath() . "/about.blade.php";
+
+        if (!file_exists($viewFile)) {
+
+            abort(404);
+        }
+
+        return view('about', ['page' => $page]);
     }
 
 }
