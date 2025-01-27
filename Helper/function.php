@@ -573,7 +573,9 @@ if (!function_exists('getDomainPrefix')) {
             $parentCategory = resolve('_category_item_id_' . $pid);
         } else {
             if ($pid !== 0) {
-                app()->instance('categoryItemId' . $pid, $category->parent);
+                if (!app()->has('categoryItemId' . $pid)){
+                    app()->instance('categoryItemId' . $pid, $category->parent);
+                }
                 $parentCategory = resolve('categoryItemId' . $pid);
             } else {
                 $parentCategory = null;
