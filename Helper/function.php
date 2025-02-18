@@ -655,7 +655,7 @@ if (!function_exists('getDetailUrlForCli')) {
 
         $id = $item->id;
         $detail_name = str_replace('{id}', $id, $detail_name);
-        return getDomainPrefix($category) . '/' . $detail_name;
+        return $prefix . '/' . $detail_name;
     }
 }
 

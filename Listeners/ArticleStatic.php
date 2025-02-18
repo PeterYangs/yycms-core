@@ -32,7 +32,6 @@ class ArticleStatic
 
         if (!$article) {
 
-//            \Log::info("已知悉");
 
             return;
         }
