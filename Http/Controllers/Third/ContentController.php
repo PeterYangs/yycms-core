@@ -77,7 +77,7 @@ class ContentController extends BaseController
 
         }
 
-        $rule = $post['download']['rule'];
+        $rule = $post['download']['rule'] ?? "";
 
         $note = $post['download']['note'] ?? "";
 
@@ -87,15 +87,12 @@ class ContentController extends BaseController
 
         //设置下载服务器
         if (!$downloadSite) {
-
             $d = DownloadSite::create([
-                'rule' => $rule,
-                'note' => $note,
+                'rule' => $rule ?: "",
+                'note' => $note ?: "",
             ]);
             $downloadSiteId = $d->id;
-
         } else {
-
             $downloadSiteId = $downloadSite->id;
         }
 
@@ -110,11 +107,11 @@ class ContentController extends BaseController
         ArticleDownload::create([
             'article_id' => $article->id,
             'library_id' => $post['main']['library_article_id'],
-            'apk_id' => $post['main']['library_apk_id'],
+            'apk_id' => $post['main']['library_apk_id'] ?? 0,
             'download_site_id' => $downloadSiteId,
-            'file_path' => $post['download']['file_path'],
-            'save_type' => $post['download']['save_type'],
-            'pan_password' => $post['download']['pan_password']
+            'file_path' => $post['download']['file_path'] ?? "",
+            'save_type' => $post['download']['save_type']?? 1,
+            'pan_password' => $post['download']['pan_password']?? ""
         ]);
 
 
