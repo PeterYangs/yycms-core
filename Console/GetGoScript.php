@@ -32,6 +32,11 @@ class GetGoScript extends Command
     {
 
 
+        if (PHP_OS === 'Darwin') {
+            return "";
+        }
+
+
         $list = [
             ['name' => 'goScript', 'version' => Core::GetGoVersion(), 'download_url' => 'https://gitee.com/mryy1996/go-script/releases/download/{tag}/goScript'],
         ];
