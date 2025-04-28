@@ -207,7 +207,7 @@
         </div>
     </div>
 </div>
-<footer style="position: fixed;bottom: 26px">
+<footer style="height: 60px">
     <a target="_blank" href="https://beian.miit.gov.cn/" style="color: white">{{getOption('icp')}}</a>
 </footer>
 </body>
