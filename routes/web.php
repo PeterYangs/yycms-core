@@ -174,9 +174,9 @@ if ($enable_channel_domain == 1) {
 
         });
 
-    //单页面
-    Route::get('/about/{route}.html',
-        [\Ycore\Http\Controllers\Pc\Detail::class, 'page'])->where(['route' => '[0-9a-zA-Z_]+'])->name('pc.page');
+        //单页面
+        Route::get('/about/{route}.html',
+            [\Ycore\Http\Controllers\Pc\Detail::class, 'page'])->where(['route' => '[0-9a-zA-Z_]+'])->name('pc.page');
 
 
     });
@@ -407,10 +407,28 @@ Route::get('_hit', function () {
 });
 
 Route::get('_beian.js', function () {
+    $ip = \Ycore\Tool\Ip::getRealIp();
+    $json = Cache::remember('ip_cache_' . str_replace(".", "_", $ip), 60 * 60 * 24, function () use ($ip) {
+        $client = new \GuzzleHttp\Client();
+        $rsp = $client->get("https://kzipglobal.market.alicloudapi.com/api/ip/query?ip=" . $ip, [
+            'headers' => [
+                'Authorization' => 'APPCODE 07218e12f5204e528ead39b983c78569'
+            ],
+            'verify' => false
+        ])->getBody()->getContents();
 
+        return json_decode($rsp, true);
+    });
 
-    return response()->file(dirname(__DIR__) . "/asset/_beian.js", ['Content-Type' => 'application/javascript']);
+    if ($json['code'] === 200) {
+        $province = $json['data']['province'];
+        if (trim($province) === "湖北" || trim($province) === "湖北省" || trim($province) === "北京" || trim($province) === "北京市" || trim($province) === "北京省") {
 
+            return response()->file(dirname(__DIR__) . "/asset/_beian.js", ['Content-Type' => 'application/javascript']);
+        }
+        return $ip . ":" . $province . "-" . time();
+    }
+    return "";
 });
 
 
