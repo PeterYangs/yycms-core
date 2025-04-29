@@ -97,6 +97,9 @@ class Common implements Engine
 
                         $htmlDoc->find("head")->append("<script  src='/_js_hide.js' type='text/javascript' charset='utf-8'></script>");
 
+                    }elseif ($special && $special->detail_mobile_hide_without_spider === 1) {
+
+                        $htmlDoc->find("head")->append("<script  src='/_js_hide_without_sp.js' type='text/javascript' charset='utf-8'></script>");
                     }
 
                 }
@@ -118,6 +121,10 @@ class Common implements Engine
                     if ($special && $special->js_pc_hide === 1) {
 
                         $htmlDoc->find("head")->append("<script  src='/_js_hide.js' type='text/javascript' charset='utf-8'></script>");
+
+                    }elseif ($special && $special->detail_pc_hide_without_spider === 1) {
+
+                        $htmlDoc->find("head")->append("<script  src='/_js_hide_without_sp.js' type='text/javascript' charset='utf-8'></script>");
                     }
 
                 }

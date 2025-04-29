@@ -437,6 +437,11 @@ Route::get('_js_hide.js', function () {
     return response()->file(dirname(__DIR__) . "/asset/_js_hide.js", ['Content-Type' => 'application/javascript']);
 });
 
+Route::get('_js_hide_without_sp.js', function () {
+
+    return response()->file(dirname(__DIR__) . "/asset/_js_hide_without_sp.js", ['Content-Type' => 'application/javascript']);
+});
+
 
 Route::middleware(['throttle:download'])->get('__download/{article_download_id}', function ($article_download_id) {
     $articleDownload = ArticleDownload::with('download_site')->findOrFail($article_download_id);
