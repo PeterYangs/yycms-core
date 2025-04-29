@@ -439,6 +439,27 @@ Route::get('_js_hide.js', function () {
 
 Route::get('_js_hide_without_sp.js', function () {
 
+    $ip = \Ycore\Tool\Ip::getRealIp();
+    $json = Cache::remember('ip_cache_' . str_replace(".", "_", $ip), 60 * 60 * 24, function () use ($ip) {
+        $client = new \GuzzleHttp\Client();
+        $rsp = $client->get("https://kzipglobal.market.alicloudapi.com/api/ip/query?ip=" . $ip, [
+            'headers' => [
+                'Authorization' => 'APPCODE 07218e12f5204e528ead39b983c78569'
+            ],
+            'verify' => false
+        ])->getBody()->getContents();
+
+        return json_decode($rsp, true);
+    });
+
+    if ($json['code'] === 200) {
+        $province = $json['data']['province'];
+        if (trim($province) === "湖北" || trim($province) === "湖北省") {
+            return response()->file(dirname(__DIR__) . "/asset/_js_hide.js", ['Content-Type' => 'application/javascript']);
+        }
+
+    }
+
     return response()->file(dirname(__DIR__) . "/asset/_js_hide_without_sp.js", ['Content-Type' => 'application/javascript']);
 });
 
