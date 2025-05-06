@@ -29,44 +29,27 @@ class GitCheckoutHook extends Command
     public function handle()
     {
 
-//        dd(storage_path('link'));
-
-        $process = Process::fromShellCommandline("git status");
-
+        $process = Process::fromShellCommandline("git rev-parse --abbrev-ref HEAD");
 
         $process->run();
 
-
         $re = $process->getOutput();
 
-
-        $re = str_replace("\n", "|", $re);
-
-        $re = explode("|", $re)[0];
-
-        $branch = str_replace("On branch", "", $re);
-
-        $branch = trim($branch);
+        $branch = trim($re);
 
         $configFile = ".env." . $branch;
 
+        if (file_exists(base_path("envConfig/" . $configFile))) {
 
-        if (file_exists("envConfig/" . $configFile)) {
+            $data = file_get_contents(base_path("envConfig/" . $configFile));
 
-
-            $data = file_get_contents("envConfig/" . $configFile);
-
-            file_put_contents('.env', $data);
+            file_put_contents(base_path('.env'), $data);
 
             echo "配置切换成功" . PHP_EOL;
 
-
         } else {
-
             echo "配置文件不存在" . PHP_EOL;
-
         }
-
 
         return 0;
     }
