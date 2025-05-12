@@ -573,7 +573,7 @@ if (!function_exists('getDomainPrefix')) {
             $parentCategory = resolve('_category_item_id_' . $pid);
         } else {
             if ($pid !== 0) {
-                if (!app()->has('categoryItemId' . $pid)){
+                if (!app()->has('categoryItemId' . $pid)) {
                     app()->instance('categoryItemId' . $pid, $category->parent);
                 }
                 $parentCategory = resolve('categoryItemId' . $pid);
@@ -705,7 +705,7 @@ if (!function_exists('getChannelUrl')) {
         }
 
 //        $prefix = request()->server('REQUEST_SCHEME') . '://' . request()->getHttpHost();
-        return getDomainPrefix($category). "/" . $list_name . "/";
+        return getDomainPrefix($category) . "/" . $list_name . "/";
     }
 
 }
@@ -860,10 +860,11 @@ if (!function_exists('getContent')) {
      * Create by Peter Yang
      * 2023-02-22 14:00:19
      * @param Article $article
+     * @param bool $withFinalWords 是否带结束语（目前只针对资讯分类）
      * @return array|string|string[]|null
      * @throws JsonException
      */
-    function getContent(Article $article)
+    function getContent(Article $article, bool $withFinalWords = true)
     {
 
         $content = $article->content;
@@ -934,12 +935,14 @@ if (!function_exists('getContent')) {
         //移除游侠下载链接
         $str = preg_replace("/https:\/\/app\.ali213\.net\/[0-9a-zA-Z\/]+\.html/", getDetailUrl($article), $str);
 
-        if ($article->category->pid === config('category.news')) {
-            $str .= "<p style='margin-top: 30px'>以上就是<a href='" . getOption('domain',
-                    "") . "'>" . getOption('site_name') . "</a>为你带来的\"<a href='" . getDetailUrl($article) . "' target='_blank'>" . $article->title . "</a>\",更多有趣好玩的热门资讯攻略，请持续关注<a href='" . getOption('domain',
-                    '') . "'>" . getOption('site_name') . "</a>!</p>";
+        //结束语，目前只针对资讯分类
+        if ($withFinalWords) {
+            if ($article->category->pid === config('category.news')) {
+                $str .= "<p style='margin-top: 30px'>以上就是<a href='" . getOption('domain',
+                        "") . "'>" . getOption('site_name') . "</a>为你带来的\"<a href='" . getDetailUrl($article) . "' target='_blank'>" . $article->title . "</a>\",更多有趣好玩的热门资讯攻略，请持续关注<a href='" . getOption('domain',
+                        '') . "'>" . getOption('site_name') . "</a>!</p>";
+            }
         }
-
 
         $fContent = Hook::applyFilter('the_content', $str, $article);
         if ($fContent !== null) {
@@ -1637,7 +1640,6 @@ if (!function_exists('getIssueTime')) {
         return date($format, $time);
     }
 }
-
 
 
 if (!function_exists('getUpdateTime')) {
