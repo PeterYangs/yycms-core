@@ -135,8 +135,21 @@ class ArticleGenerator
             $expandData = optional(getExpandByCategoryId($article->category_id))->toArray() ?: [];
 
             //原值覆盖
-            foreach ($this->expandData as $key => $item) {
+            foreach ($article->expand as $key => $item) {
 
+                foreach ($expandData as $expandKey => $expand) {
+
+                    if ($item['name'] === $expand['name']) {
+
+                        $expandData[$expandKey]['value'] = $item['value'];
+                    }
+
+                }
+
+            }
+
+
+            foreach ($this->expandData as $key => $item) {
 
                 foreach ($expandData as $expandKey => $expand) {
 
@@ -144,7 +157,6 @@ class ArticleGenerator
 
                         $expandData[$expandKey]['value'] = $item;
                     }
-
                 }
 
             }

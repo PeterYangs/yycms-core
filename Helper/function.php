@@ -134,7 +134,11 @@ if (!function_exists('dealExpandToTable')) {
                     break;
                 case 7:
                 case 6:
-                    $expand_data[$value['name']] = json_encode($value['value'], JSON_THROW_ON_ERROR);
+                    if (is_array($value['value'])) {
+                        $expand_data[$value['name']] = json_encode($value['value'], JSON_THROW_ON_ERROR);
+                    } else {
+                        $expand_data[$value['name']] = $value['value'];
+                    }
                     break;
                 case 8:
                     $expand_data[$value['name']] = (int)($value['value']);
