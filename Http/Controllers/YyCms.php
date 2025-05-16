@@ -10,6 +10,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Ycore\Models\Article;
+use Ycore\Tool\Download;
 use Ycore\Tool\Json;
 
 class YyCms extends BaseController
@@ -20,7 +21,6 @@ class YyCms extends BaseController
     public function __construct()
     {
     }
-
 
 
     /**
@@ -78,7 +78,7 @@ class YyCms extends BaseController
             $u = parse_url($url);
 
 
-            return redirect()->away($url, 302,
+            return redirect()->away(Download::dealUrl(($url)), 302,
                 [
                     'referer' => ($u['scheme'] ?? "") . "://" . $u['host'] ?? "",
                     'User-Agent' => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36"
@@ -97,7 +97,7 @@ class YyCms extends BaseController
 
         $u = parse_url($url);
 
-        return redirect()->away($url, 302,
+        return redirect()->away(Download::dealUrl(($url)), 302,
             [
                 'referer' => ($u['scheme'] ?? "") . "://" . $u['host'] ?? "",
                 'User-Agent' => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36"
@@ -119,19 +119,18 @@ class YyCms extends BaseController
     {
 
 
-        $item=Article::findOrFail($id);
+        $item = Article::findOrFail($id);
 
-        $url=getDetailUrl($item);
+        $url = getDetailUrl($item);
 
 
-        $url=str_replace("www.","m.",$url);
-
+        $url = str_replace("www.", "m.", $url);
 
 
         $result = Builder::create()->data($url)->encoding(new Encoding('UTF-8'))->errorCorrectionLevel(new ErrorCorrectionLevelHigh())->build();
 
 
-        return response($result->getString(),200,['Content-type' => 'image/jpeg']);
+        return response($result->getString(), 200, ['Content-type' => 'image/jpeg']);
     }
 
 }

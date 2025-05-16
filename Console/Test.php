@@ -52,6 +52,29 @@ class Test extends Command
     {
 
 
+        $url = 'https://apk.down8818.com/1818836746/apk/068084b4c24c2309895d47e6a47e917d.apk';
+
+        $private_key = 'iamyourfather6';
+
+        $uid = 1818836746;
+
+        $expire_time = time() + 60;   // 该签发的资源30s以后过期
+
+        $rand_value = rand(0, 100000); // 生成随机数
+
+        $parse_result = parse_url($url); // 解析 URL
+
+        $request_path = rawurldecode($parse_result["path"]); // /29/音乐/02.一千零一夜-李克勤.wma
+
+        $sign = md5(sprintf("%s-%d-%d-%d-%s", $request_path, $expire_time, $rand_value, $uid, $private_key));
+
+        $wait = sprintf("%d-%d-%d-%s", $expire_time, $rand_value, $uid, $sign);
+
+        $result = $url . "?auth_key=" . $wait;
+
+        dd($result);
+
+
 
 
 //        dd(parse_url("https://www.baidu.com/aaa"));

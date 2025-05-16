@@ -11,7 +11,6 @@ use Ycore\Http\Middleware\home\UserAccess;
 use Ycore\Models\ArticleDownload;
 use Ycore\Tool\YRoute;
 
-//dd(getOption('site_name'));
 $enable_channel_domain = getOption('enable_channel_domain');
 
 if ($enable_channel_domain == 1) {
@@ -466,15 +465,11 @@ Route::get('_js_hide_without_sp.js', function () {
 
 Route::middleware(['throttle:download'])->get('__download/{article_download_id}', function ($article_download_id) {
     $articleDownload = ArticleDownload::with('download_site')->findOrFail($article_download_id);
-
     if (!$articleDownload->download_site) {
-
         abort(404);
     }
-
     $url = str_replace("{path}", $articleDownload->file_path, $articleDownload->download_site->rule);
-
-    return redirect()->away($url, 302);
+    return redirect()->away(\Ycore\Tool\Download::dealUrl($url), 302);
 });
 
 
