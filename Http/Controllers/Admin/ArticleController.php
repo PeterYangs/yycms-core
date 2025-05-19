@@ -94,9 +94,7 @@ class ArticleController extends AuthCheckController
     function detail()
     {
 
-
         $id = request()->input('id');
-
 
         $item = Article::with('category')
             ->whereNull('deleted_at')
@@ -105,26 +103,20 @@ class ArticleController extends AuthCheckController
             ->with('article_download.download_site')
             ->findOrFail($id);
 
-
         $item->append('has_collect');
 
 //        $item->append('download_url');
 
         $expand = $item->expand;
 
-
         //将拓展表中字段写入expand(防止新增字段后，编辑页面不显示新增字段的表单)
         $articleExpand = getExpandByCategoryId($item->category_id);
 
-
-        foreach ($articleExpand ?: [] as $key => $value) {
-
+        foreach (($articleExpand ?: []) as $key => $value) {
 
             foreach ($expand as $k => $v) {
 
-
-                if ($value->id == $v['id']) {
-
+                if ($value->name === $v['name']) {
 
                     $articleExpand[$key]->value = $v['value'];
 
@@ -132,15 +124,11 @@ class ArticleController extends AuthCheckController
 
             }
 
-
         }
-
 
         $item->expand = $articleExpand;
 
-
         return Json::code(1, 'success', $item);
-
     }
 
 
