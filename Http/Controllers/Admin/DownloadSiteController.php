@@ -54,6 +54,10 @@ class DownloadSiteController extends AuthCheckController
 
     }
 
+    /**
+     * @Auth(type='no_check')
+     * @return string
+     */
     function apiList()
     {
 
@@ -62,6 +66,10 @@ class DownloadSiteController extends AuthCheckController
     }
 
 
+    /**
+     * @Auth(type='no_check')
+     * @return string
+     */
     function downloadCodeCheck()
     {
 

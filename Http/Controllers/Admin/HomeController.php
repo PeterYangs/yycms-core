@@ -10,6 +10,10 @@ use Ycore\Tool\Json;
 class HomeController extends AuthCheckController
 {
 
+    /**
+     * @Auth(type='skip_auth')
+     * @return string
+     */
     function spiderTable()
     {
 
@@ -18,6 +22,7 @@ class HomeController extends AuthCheckController
     }
 
     /**
+     * @Auth(type='skip_auth')
      * 访问量
      */
     function access()
@@ -28,6 +33,10 @@ class HomeController extends AuthCheckController
     }
 
 
+    /**
+     * @Auth(type='skip_auth')
+     * @return string
+     */
     function search()
     {
 
