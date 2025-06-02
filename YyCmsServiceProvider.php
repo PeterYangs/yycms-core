@@ -21,6 +21,7 @@ use Ycore\Console\GetUpdate;
 use Ycore\Console\NewTheme;
 use Ycore\Console\PushAsset;
 use Ycore\Console\ResetDatabase;
+use Ycore\Console\SetArticleTimestamps;
 use Ycore\Console\SetExpandData;
 use Ycore\Console\SetExpandDataBatch;
 use Ycore\Console\SwitchTheme;
@@ -299,6 +300,7 @@ class YyCmsServiceProvider extends ServiceProvider
             AndroidUrlToDownload::class,
             ChangeArticleTime::class,
             CreateDeathLink::class,
+            SetArticleTimestamps::class,
 
         ]);
 
