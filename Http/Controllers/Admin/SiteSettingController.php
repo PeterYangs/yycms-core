@@ -76,7 +76,8 @@ class SiteSettingController extends AuthCheckController
             'statistics_pc',
             'statistics_mobile',
             'disable_device_jump',
-            'enable_channel_domain'
+            'enable_channel_domain',
+            'disable_content_link'
 
         ];
 

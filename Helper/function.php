@@ -924,8 +924,11 @@ if (!function_exists('getContent')) {
         });
 
         $str = $html->getHtml();
-        //设置标签链接
-        $str = Seo::setTagLinkForContent($article, $str);
+
+        if (getOption('disable_content_link',0) === 0){
+            //设置标签链接
+            $str = Seo::setTagLinkForContent($article, $str);
+        }
         $html2 = QueryList::html($str);
         $imgIndex = 1;
         //添加图片描述

@@ -1,5 +1,5 @@
 {
-    "VERSION": "v0.3.15",
+    "VERSION": "v0.3.16",
     "ADMIN_VERSION": "v0.2.10",
     "GO_VERSION": "v0.0.8",
     "inherit": true
