@@ -16,13 +16,8 @@ class Kernel
 
 
         //采集文章发布到正式文章
-//        $schedule->command('PushRandomStoreToArticle')->everyFifteenMinutes();
-        $schedule->command('AutoPush')->everyMinute();
+//        $schedule->command('AutoPush')->everyMinute();
 
-
-        //批量推送一次链接到站长
-//        $schedule->command('BatchPush')->dailyAt('09:30');
-//        $schedule->command('BatchPush')->dailyAt('18:30');
 
         //生成全站链接
         $schedule->command("MakeAllLink")->dailyAt("02:13");
@@ -31,7 +26,7 @@ class Kernel
         $schedule->command('MakeXml')->dailyAt("03:00");
 
         //数据库备份
-        $schedule->command('MysqlBackup')->dailyAt("04:00");
+//        $schedule->command('MysqlBackup')->dailyAt("04:00");
 
         //日志清理
         $schedule->command('CleanUserAccess')->dailyAt("01:05");
@@ -39,8 +34,8 @@ class Kernel
 
 
         //自动采集
-        $schedule->command('Spider')->hourly();
-        $schedule->command('SpiderTable')->hourly();
+//        $schedule->command('Spider')->hourly();
+//        $schedule->command('SpiderTable')->hourly();
 
 
         //每小时更新一次访问数据
@@ -52,7 +47,7 @@ class Kernel
         $schedule->command('HomeStatic')->everyMinute();
 
         //定时文章发布
-        $schedule->command('TimingArticlePush')->everyMinute();
+//        $schedule->command('TimingArticlePush')->everyMinute();
 
         if (getOption('static_everyday', 0) === 1) {
             //详情页静态化
