@@ -465,6 +465,7 @@ Route::middleware([])->group(function () {
 
 
                 Route::post('content', [ContentController::class, 'content']);
+                Route::get('specialList', [ContentController::class, 'specialList']);
 
             });
 

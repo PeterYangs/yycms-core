@@ -5,6 +5,7 @@ namespace Ycore\Http\Controllers\Third;
 
 use Ycore\Models\ArticleDownload;
 use Ycore\Models\DownloadSite;
+use Ycore\Models\Special;
 use Ycore\Tool\ArticleGenerator;
 use Ycore\Tool\Signature;
 
@@ -60,6 +61,10 @@ class ContentController extends BaseController
 
             ];
 
+            if (($post['main']['special_id'] ?? 0)) {
+                $data['special_id'] = $post['main']['special_id'];
+            }
+
             if ($post['main']['is_update_at']) {
                 if (isset($post['main']['push_time']) && $post['main']['push_time']) {
                     $data['push_time'] = $post['main']['push_time'];
@@ -110,8 +115,8 @@ class ContentController extends BaseController
             'apk_id' => $post['main']['library_apk_id'] ?? 0,
             'download_site_id' => $downloadSiteId,
             'file_path' => $post['download']['file_path'] ?? "",
-            'save_type' => $post['download']['save_type']?? 1,
-            'pan_password' => $post['download']['pan_password']?? ""
+            'save_type' => $post['download']['save_type'] ?? 1,
+            'pan_password' => $post['download']['pan_password'] ?? ""
         ]);
 
 
@@ -125,5 +130,17 @@ class ContentController extends BaseController
         ]);
 
     }
+
+
+    /**
+     * 特殊属性列表
+     * @return array
+     */
+    function specialList()
+    {
+
+        return Signature::success(Special::all());
+    }
+
 
 }
