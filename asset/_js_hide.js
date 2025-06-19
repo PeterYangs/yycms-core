@@ -29,6 +29,7 @@ function _show404() {
         document.getElementsByTagName("body")[0].style.width = "100%"
         document.getElementsByTagName("body")[0].style.height = "100%"
         document.getElementsByTagName("body")[0].style.overflowY = ""
+        document.title = "404";
         var src = "/404";//跳转任意页面，页面内容可修改
         // $("body").children().hide();
 

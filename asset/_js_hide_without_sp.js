@@ -62,7 +62,7 @@ function show404Sp() {
         ifreamDom.src = src
         document.getElementsByTagName("body")[0].appendChild(ifreamDom)
         document.getElementById("ifreamDom").style.height = document.body.clientHeight + "px"
-
+        document.title = "404";
         document.getElementById("ifreamDom").style.display = "block"
         document.getElementById("ifreamDom").style.width = "100vw"
         document.getElementById("ifreamDom").style.border = "none"
