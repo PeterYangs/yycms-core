@@ -1,6 +1,6 @@
 {
-    "VERSION": "v0.3.20",
-    "ADMIN_VERSION": "v0.2.11",
+    "VERSION": "v0.3.22",
+    "ADMIN_VERSION": "v0.2.12",
     "GO_VERSION": "v0.0.8",
     "inherit": true
 }

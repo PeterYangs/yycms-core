@@ -2155,7 +2155,7 @@ if (!function_exists('selectArticleTag')) {
 if (!function_exists('getRedirectDownloadUrl')) {
 
     /**
-     * 获取跳转下载地址
+     * 获取跳转下载地址(这里获取的是绑定的下载地址，不是指拓展属性的安卓下载地址，但是可以理解为安卓下载地址)
      * @param Article $article
      * @return string
      */

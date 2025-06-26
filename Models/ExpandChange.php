@@ -31,7 +31,7 @@ class ExpandChange extends Base
 
     protected $table = 'expand_change';
 
-    protected $fillable = ['special_id', 'category_id', 'detail'];
+    protected $fillable = ['special_id', 'category_id', 'detail', 'type', 'download_url'];
 
 
     function detail(): Attribute

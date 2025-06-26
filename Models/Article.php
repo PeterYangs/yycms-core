@@ -102,13 +102,13 @@ class Article extends Base
         static::addGlobalScope(new ArticleScope);
 
 
-        static::deleting(function (Article $article){
+        static::deleting(function (Article $article) {
 
 
             //删除前触发的钩子
             if (Hook::actionExist('delete_before')) {
 
-                $data=$article->toArray();
+                $data = $article->toArray();
 
                 Hook::applyAction('delete_before', $data, $data['ex']);
             }
@@ -122,7 +122,7 @@ class Article extends Base
             //删除前触发的钩子
             if (Hook::actionExist('delete_after')) {
 
-                $data=$article->toArray();
+                $data = $article->toArray();
 
                 Hook::applyAction('delete_after', $data, $data['ex']);
             }
@@ -179,6 +179,12 @@ class Article extends Base
 
         return new Attribute(
             get: function ($value, $data) {
+
+                //链接替换
+                if (app()->has('run_env') && app()->get('run_env') === "home" && $data['special_id'] !== 0) {
+                    $exRes = ExpandChange::where('special_id', $data['special_id'])->where('type', 2)->first();
+                    return $exRes->download_url ?? "";
+                }
 
                 $articleDownload = $this->article_download;
 
@@ -311,32 +317,63 @@ class Article extends Base
 
             get: function ($value, $attrs) {
 
-
-                $expand = $attrs['expand'] ?? null;
-
-                $ex = $this->getEx($expand);
+                $expand = $this->getEx($attrs['expand']);
 
                 if (app()->has('run_env') && app()->get('run_env') === "home") {
 
 
+                    if ($attrs['special_id'] !== 0) {
+
+
+                        $category = Category::where('id', $attrs['category_id'])->first();
+
+                        if (!$category) {
+
+                            return [];
+                        }
+
+                        $exRes = ExpandChange::where('special_id', $attrs['special_id'])->where('type', 1)->whereIn('category_id',
+                            [$category->id, $category->pid])->first();
+
+                        if ($exRes && $expand) {
+
+
+                            $temp_ex = $expand;
+
+                            foreach ($temp_ex as $k => $v) {
+
+                                foreach ($exRes->detail as $k1 => $v1) {
+
+                                    if ($k === $v1["field"] && $v1["value"]) {
+
+                                        $temp_ex[$k] = $v1["value"];
+                                    }
+                                }
+
+                            }
+
+                            $expand = $temp_ex;
+
+                        }
+
+                    }
+
                     if (Hook::filterExist('the_expand')) {
 
-                        $newEx = Hook::applyFilter('the_expand', $attrs, $ex);
+                        $newEx = Hook::applyFilter('the_expand', $attrs, $expand);
 
                         if ($newEx !== null) {
 
-                            $ex = $newEx;
+                            $expand = $newEx;
                         }
 
                     }
 
                 }
 
-
-                return $ex;
+                return $expand;
 
             }
-
 
         );
 
@@ -371,6 +408,10 @@ class Article extends Base
 
     }
 
+    /**
+     * 有特殊属性替换的拓展属性
+     * @return Attribute
+     */
     function specialEx(): Attribute
     {
 
@@ -379,6 +420,7 @@ class Article extends Base
             get: function ($value, $attrs) {
 
                 $expand = $this->getEx($attrs['expand']);
+
 
                 if ($attrs['special_id'] !== 0) {
 
@@ -391,7 +433,7 @@ class Article extends Base
                         return [];
                     }
 
-                    $ex = ExpandChange::where('special_id', $attrs['special_id'])->whereIn('category_id',
+                    $ex = ExpandChange::where('special_id', $attrs['special_id'])->where('type', 1)->whereIn('category_id',
                         [$category->id, $category->pid])->first();
 
 

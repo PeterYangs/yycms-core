@@ -16,6 +16,9 @@ class ExpandChangeController extends AuthCheckController
 
         $post = request()->input();
 
+        if ($post['category_id'] === "") {
+            $post['category_id'] = 0;
+        }
 
         ExpandChange::updateOrCreate(['id' => $id], $post);
 

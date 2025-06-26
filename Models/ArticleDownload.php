@@ -20,7 +20,13 @@ class ArticleDownload extends Base
     function download_site()
     {
 
-
         return $this->belongsTo(DownloadSite::class, 'download_site_id', 'id');
     }
+
+
+    function article()
+    {
+        return $this->belongsTo(Article::class, 'article_id', 'id');
+    }
+
 }
