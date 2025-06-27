@@ -3,6 +3,8 @@
 namespace Ycore\Http\Controllers\Third;
 
 
+use Illuminate\Support\Facades\DB;
+use Ycore\Jobs\ArticleStatic;
 use Ycore\Models\ArticleDownload;
 use Ycore\Models\DownloadSite;
 use Ycore\Models\Special;
@@ -42,7 +44,7 @@ class ContentController extends BaseController
 
 
         try {
-
+            DB::beginTransaction();
             $isUpdatedAt = false;
 
             $ag = new ArticleGenerator();
@@ -74,60 +76,63 @@ class ContentController extends BaseController
 
             $article = $ag->fill($data, $post['expand'])->create(true, false, false);
 
-        } catch (\Exception $exception) {
 
-            report($exception);
+            $rule = $post['download']['rule'] ?? "";
 
-            return Signature::fail(Signature::CONTENT_ERROR, $exception->getMessage());
+            $note = $post['download']['note'] ?? "";
 
-        }
+            $downloadSite = DownloadSite::where('rule', $rule)->first();
 
-        $rule = $post['download']['rule'] ?? "";
+            $downloadSiteId = 0;
 
-        $note = $post['download']['note'] ?? "";
+            //设置下载服务器
+            if (!$downloadSite) {
+                $d = DownloadSite::create([
+                    'rule' => $rule ?: "",
+                    'note' => $note ?: "",
+                ]);
+                $downloadSiteId = $d->id;
+            } else {
+                $downloadSiteId = $downloadSite->id;
+            }
 
-        $downloadSite = DownloadSite::where('rule', $rule)->first();
-
-        $downloadSiteId = 0;
-
-        //设置下载服务器
-        if (!$downloadSite) {
-            $d = DownloadSite::create([
-                'rule' => $rule ?: "",
-                'note' => $note ?: "",
+            $get_article_download_article_id = ArticleDownload::where('library_id', $post['main']['library_article_id'])->first();
+            //重复分发，直接返回结果
+            if ($get_article_download_article_id) {
+                DB::commit();
+                return Signature::success([
+                    'id' => $article->id,
+                    'path' => parse_url(getDetailUrl($article))['path']
+                ]);
+            }
+            ArticleDownload::create([
+                'article_id' => $article->id,
+                'library_id' => $post['main']['library_article_id'],
+                'apk_id' => $post['main']['library_apk_id'] ?? 0,
+                'download_site_id' => $downloadSiteId,
+                'file_path' => $post['download']['file_path'] ?? "",
+                'save_type' => $post['download']['save_type'] ?? 1,
+                'pan_password' => $post['download']['pan_password'] ?? ""
             ]);
-            $downloadSiteId = $d->id;
-        } else {
-            $downloadSiteId = $downloadSite->id;
-        }
 
-        $get_article_download_article_id = ArticleDownload::where('library_id', $post['main']['library_article_id'])->first();
-        //重复分发，直接返回结果
-        if ($get_article_download_article_id) {
+
+            DB::commit();
+
+            //重新静态化，防止下载地址不出现
+            dispatch(new ArticleStatic($article->id));
+
             return Signature::success([
                 'id' => $article->id,
                 'path' => parse_url(getDetailUrl($article))['path']
             ]);
+
+        } catch (\Exception $exception) {
+
+            report($exception);
+            DB::rollBack();
+            return Signature::fail(Signature::CONTENT_ERROR, $exception->getMessage());
+
         }
-        ArticleDownload::create([
-            'article_id' => $article->id,
-            'library_id' => $post['main']['library_article_id'],
-            'apk_id' => $post['main']['library_apk_id'] ?? 0,
-            'download_site_id' => $downloadSiteId,
-            'file_path' => $post['download']['file_path'] ?? "",
-            'save_type' => $post['download']['save_type'] ?? 1,
-            'pan_password' => $post['download']['pan_password'] ?? ""
-        ]);
-
-
-        //重新静态化，防止下载地址不出现
-        $ag->articleStatic($article->id);
-
-
-        return Signature::success([
-            'id' => $article->id,
-            'path' => parse_url(getDetailUrl($article))['path']
-        ]);
 
     }
 

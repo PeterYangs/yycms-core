@@ -925,7 +925,7 @@ if (!function_exists('getContent')) {
 
         $str = $html->getHtml();
 
-        if (getOption('disable_content_link',0) === 0){
+        if (getOption('disable_content_link', 0) === 0) {
             //设置标签链接
             $str = Seo::setTagLinkForContent($article, $str);
         }
@@ -2182,20 +2182,24 @@ if (!function_exists('staticByArticle')) {
     {
         try {
 
-            $b = \Http::get(getDetailUrlForCli($article) . '?admin_key=' . env('ADMIN_KEY'))->body();
+            $rsp = \Http::get(getDetailUrlForCli($article) . '?admin_key=' . env('ADMIN_KEY'));
 
 
-            \Storage::disk('static')->put('pc/' . str_replace("{id}", $article->id,
-                    \Cache::get('category:detail:pc_' . $article->category->id)),
-                $b);
+            if ($rsp->ok()) {
+                \Storage::disk('static')->put('pc/' . str_replace("{id}", $article->id,
+                        \Cache::get('category:detail:pc_' . $article->category->id)),
+                    $rsp->body());
+            }
 
 
-            $b = \Http::withHeaders(['User-Agent' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1'])->get(getDetailUrlForCli($article,
-                    'mobile') . '?admin_key=' . env('ADMIN_KEY'))->body();
+            $rsp = \Http::withHeaders(['User-Agent' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1'])->get(getDetailUrlForCli($article,
+                    'mobile') . '?admin_key=' . env('ADMIN_KEY'));
 
 
-            \Storage::disk('static')->put('mobile/' . str_replace("{id}", $article->id,
-                    \Cache::get('category:detail:mobile_' . $article->category->id)), $b);
+            if ($rsp->ok()) {
+                \Storage::disk('static')->put('mobile/' . str_replace("{id}", $article->id,
+                        \Cache::get('category:detail:mobile_' . $article->category->id)), $rsp->body());
+            }
 
 
         } catch (\Exception $exception) {
