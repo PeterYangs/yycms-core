@@ -179,39 +179,47 @@ class BaiduPush
             $url,
         );
 
-        $api = 'http://data.zz.baidu.com/urls?site=' . $domain . '&token=' . $token;
-        $ch = curl_init();
-        $options = array(
-            CURLOPT_URL => $api,
-            CURLOPT_POST => true,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POSTFIELDS => implode("\n", $urls),
-            CURLOPT_HTTPHEADER => array('Content-Type: text/plain'),
-        );
-        curl_setopt_array($ch, $options);
-        $result = curl_exec($ch);
+        try {
 
-        if (curl_errno($ch)) {
+            $api = 'http://data.zz.baidu.com/urls?site=' . $domain . '&token=' . $token;
+            $ch = curl_init();
+            $options = array(
+                CURLOPT_URL => $api,
+                CURLOPT_POST => true,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POSTFIELDS => implode("\n", $urls),
+                CURLOPT_HTTPHEADER => array('Content-Type: text/plain'),
+                CURLOPT_TIMEOUT => 3,
+            );
+            curl_setopt_array($ch, $options);
+            $result = curl_exec($ch);
 
-            $msg = curl_error($ch);
+            if (curl_errno($ch)) {
 
-            curl_close($ch);
+                $msg = curl_error($ch);
 
-            \Log::channel('push')->error($msg);
+                curl_close($ch);
 
-
-            throw new \Exception($msg);
-
-
-        } else {
+                \Log::channel('push')->error($msg);
 
 
-            \Log::channel('push')->info($result . "-----" . $url);
+                throw new \Exception($msg);
 
-            curl_close($ch);
 
-            return $result;
+            } else {
 
+
+                \Log::channel('push')->info($result . "-----" . $url);
+
+                curl_close($ch);
+
+                return $result;
+
+            }
+
+        } catch (\Throwable $exception) {
+
+            return $exception->getMessage();
         }
 
 

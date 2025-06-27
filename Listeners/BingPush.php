@@ -64,7 +64,6 @@ class BingPush
 
         if (!$bing_token) {
 
-//            \Log::channel('push')->error("token不能为空");
 
             return;
         }
@@ -186,7 +185,7 @@ class BingPush
     function push(string $url, $domain, $token)
     {
 
-        $rsp = Http::post("https://ssl.bing.com/webmaster/api.svc/json/SubmitUrlbatch?apikey=" . $token, [
+        $rsp = Http::timeout(3)->post("https://ssl.bing.com/webmaster/api.svc/json/SubmitUrlbatch?apikey=" . $token, [
             'siteUrl' => rtrim($domain, '/'),
             'urlList' => [
                 $url

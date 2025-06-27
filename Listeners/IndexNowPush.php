@@ -27,7 +27,7 @@ class IndexNowPush
         $this->now = time();
 
 
-        $this->client = new Client(['timeout' => 30]);
+        $this->client = new Client(['timeout' => 5]);
 
 
     }
@@ -97,6 +97,7 @@ class IndexNowPush
 
     function push($url)
     {
+
 
         $u = parse_url($url);
 

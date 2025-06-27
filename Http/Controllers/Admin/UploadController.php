@@ -47,7 +47,9 @@ class UploadController extends LoginCheckController
     function ueditor(Upload $upload)
     {
 
-        \Debugbar::disable();
+        if (env('APP_DEBUG') === true) {
+            \Debugbar::disable();
+        }
 
         $all_file = request()->allFiles();
 
