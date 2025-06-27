@@ -339,11 +339,11 @@ Route::middleware([HomeTag::class])->group(function () {
 
 
 //二维码
-    Route::get('/qrcode/{id}', [YyCms::class, 'build'])->name('qrcode');
+    Route::get('/qrcode/{id}', [YyCms::class, 'build'])->name('qrcode')->where(['id' => "[0-9]+"]);
 
 
     Route::get('/download/{type}/{id}',
-        [YyCms::class, 'download'])->where(['type' => '(az|ios){1}'])->name('download');
+        [YyCms::class, 'download'])->where(['type' => '(az|ios){1}','id' => "[0-9]+"])->name('download');
 
 
 //文章点击
