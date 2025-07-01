@@ -7,6 +7,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Mail\Mailer;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Intervention\Image\Facades\Image;
@@ -51,6 +52,14 @@ class Test extends Command
     public function handle()
     {
 
+//        dd();
+
+
+        $f = Date::createFromTimeString(date("Y-m-d") . " " . $this->getNightTimeFromString("522gg.com13"));
+
+        dd($f->addMinutes(50)->format('H:i'));
+
+        return;
 
         $url = 'https://apk.down8818.com/1818836746/apk/068084b4c24c2309895d47e6a47e917d.apk';
 
@@ -73,8 +82,6 @@ class Test extends Command
         $result = $url . "?auth_key=" . $wait;
 
         dd($result);
-
-
 
 
 //        dd(parse_url("https://www.baidu.com/aaa"));
@@ -101,7 +108,7 @@ class Test extends Command
             'img' => 'https://soft-library.oss-cn-hangzhou.aliyuncs.com/icon/2023/11/20/3162ec9cf15363c9d2380bb3ef348caf.png',
 //            'push_time'=>'2023-12-01',
 //            'updated_at'=>'2023-12-01'
-            'issue_time'=> now()
+            'issue_time' => now()
         ], [
             'screenshots' => [
                 [
@@ -114,7 +121,7 @@ class Test extends Command
                 ],
 
             ]
-        ])->update(['id'=>23991]);
+        ])->update(['id' => 23991]);
 
 
         dd("");
@@ -651,5 +658,21 @@ oef;
         return 0;
     }
 
+
+    function getNightTimeFromString($input)
+    {
+        // 将字符串转换为哈希值
+        $hash = crc32($input);
+
+        // 限制在 0~239（4小时 * 60分钟）
+        $minutes = $hash % 240;
+
+        // 计算小时和分钟
+        $hour = intdiv($minutes, 60);
+        $minute = $minutes % 60;
+
+        // 返回格式化时间
+        return sprintf("%02d:%02d", $hour, $minute);
+    }
 
 }

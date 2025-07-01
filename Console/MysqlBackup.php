@@ -32,7 +32,7 @@ class MysqlBackup extends Command
 
         $path = storage_path('backup') . "/";
 
-        $filename = date('Y-m-d-H-i-s') . ".sql";
+        $filename = env('APP_NAME') . "_" . date('Y-m-d-H-i-s') . ".sql";
 
 
         $allPath = $path . $filename;
@@ -53,7 +53,7 @@ class MysqlBackup extends Command
 
             $options = array(
                 OssClient::OSS_CHECK_MD5 => true,
-                OssClient::OSS_PART_SIZE => 1024 * 1024 ,
+                OssClient::OSS_PART_SIZE => 1024 * 1024,
             );
 
             $accessKeyId = env('ALI_KEY', "");
