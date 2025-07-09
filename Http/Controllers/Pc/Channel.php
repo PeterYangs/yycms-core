@@ -20,13 +20,14 @@ class Channel extends Base
     {
         // 判断是否启用读取静态缓存
         $staticCacheReadEnabled = env('STATIC_CACHE_READ_ENABLED', true); // 默认为 true
+        $staticOpen = env('STATIC_OPEN', true); // 默认为 true
         $cid = request()->route('cid');
         $category = Category::where('id', $cid)->with('category_route')->firstOrFail();
         $path = request()->path();
         $htmlPath = str_replace("/", "_____", $path);
 
         // 如果启用静态缓存读取，且文件存在且未过期，则返回静态文件
-        if ($staticCacheReadEnabled && \Storage::disk('static')->exists('pc/__channel/' . $htmlPath)) {
+        if ($staticOpen && $staticCacheReadEnabled && \Storage::disk('static')->exists('pc/__channel/' . $htmlPath)) {
             if (time() - \Storage::disk('static')->lastModified('pc/__channel/' . $htmlPath) < 60 * 10) {
                 // 返回缓存的静态文件
                 return \Storage::disk('static')->get('pc/__channel/' . $htmlPath);

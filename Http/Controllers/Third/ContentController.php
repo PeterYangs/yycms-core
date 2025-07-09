@@ -148,4 +148,48 @@ class ContentController extends BaseController
     }
 
 
+    /**
+     * 根据链接获取seo标题
+     * @return array
+     */
+    function getSeoByUrl()
+    {
+        $post = request()->post();
+
+        $validator = \Validator::make($post, [
+            'urls' => 'required|array',
+        ]);
+
+        if ($validator->fails()) {
+            return Signature::fail(Signature::PARAMS_ERROR, $validator->errors()->first());
+        }
+
+        $urls = $post['urls'];
+        $result = [];
+        foreach ($urls as $url) {
+
+            try {
+                $request = \Request::create($url);
+                $route = \Route::getRoutes()->match($request);
+                $id = $route->parameter('id');
+                if (!is_numeric($id)){
+                    $result[] = ['url' => $url, 'seo_title' => ""];
+                    continue;
+                }
+            } catch (\Throwable $exception) {
+                $result[] = ['url' => $url, 'seo_title' => ""];
+                continue;
+            }
+
+            $article = ArticleDetailModel()->where('id', $id)->first();
+            if ($article) {
+                $result[] = ['url' => $url, 'seo_title' => $article->seo_title];
+            }
+
+        }
+
+        return Signature::success($result);
+    }
+
+
 }

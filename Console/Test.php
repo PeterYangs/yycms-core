@@ -52,6 +52,15 @@ class Test extends Command
     public function handle()
     {
 
+        $url = "http://www.core.com/yx/60504.html";
+
+        $request = \Request::create($url);
+
+        $route = \Route::getRoutes()->match($request);
+
+        dd($route->parameter('id'));
+
+
 //        dd();
 
 
