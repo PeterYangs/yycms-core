@@ -20,6 +20,7 @@ use Ycore\Events\WebsitePush;
 use Ycore\Http\Controllers\Admin\CategoryController;
 use Ycore\Models\Article;
 use Ycore\Models\ArticleExpand;
+use Ycore\Models\Mode;
 use Ycore\Service\Upload\Upload;
 use Ycore\Tool\ArticleGenerator;
 use Illuminate\Console\Command;
@@ -43,6 +44,52 @@ class Test extends Command
      */
     protected $description = '调试';
 
+
+    function addFriendshipLinks($websiteName, $websiteLink, $device = 'pc')
+    {
+
+        $websiteLink = rtrim($websiteLink, '/') . "/";
+
+        $modeTitle = "";
+
+        if ($device === 'pc') {
+            $modeTitle = "友情链接-pc";
+        } else {
+            $modeTitle = "友情链接-mobile";
+        }
+
+        $mode = Mode::where('title', $modeTitle)->first();
+
+        if (!$mode) {
+            throw new \Exception('未找到对应的模块(mode)');
+        }
+
+        $list = $mode->list;
+
+        if (!is_array($list)) {
+            throw new \Exception('模块数据结构不是数组');
+        }
+
+        $isFind = false;
+        foreach ($list as $item) {
+
+            $link = rtrim($item[1], '/') . "/";
+
+            if ($link === $websiteLink) {
+                $isFind = true;
+                break;
+            }
+
+        }
+
+        if (!$isFind) {
+            $list[] = [$websiteName, $websiteLink];
+            $mode->list = $list;
+            $mode->save();
+        }
+
+    }
+
     /**
      * Execute the console command.
      *
@@ -51,6 +98,16 @@ class Test extends Command
      */
     public function handle()
     {
+
+        return;
+
+        $websiteName = "522gg手游网";
+        $websiteLink = "https://www.baidu.com";
+        $device = "pc";
+
+        $this->addFriendshipLinks($websiteName, $websiteLink, $device);
+
+        return;
 
         $url = "http://www.core.com/yx/60504.html";
 

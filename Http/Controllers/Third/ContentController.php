@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Ycore\Jobs\ArticleStatic;
 use Ycore\Models\ArticleDownload;
 use Ycore\Models\DownloadSite;
+use Ycore\Models\Mode;
 use Ycore\Models\Special;
 use Ycore\Tool\ArticleGenerator;
 use Ycore\Tool\Signature;
@@ -172,7 +173,7 @@ class ContentController extends BaseController
                 $request = \Request::create($url);
                 $route = \Route::getRoutes()->match($request);
                 $id = $route->parameter('id');
-                if (!is_numeric($id)){
+                if (!is_numeric($id)) {
                     $result[] = ['url' => $url, 'seo_title' => ""];
                     continue;
                 }
@@ -191,5 +192,99 @@ class ContentController extends BaseController
         return Signature::success($result);
     }
 
+
+    /**
+     * 获取网站信息
+     * @return array
+     * @throws \JsonException
+     */
+    function getWebsiteInfo()
+    {
+        $data = [
+            'domain' => getOption("domain"),
+            'm_domain' => getOption('m_domain'),
+            'site_name' => getOption('site_name'),
+        ];
+
+        return Signature::success($data);
+    }
+
+
+    /**
+     * 同步友情链接
+     * @return array
+     * @throws \Exception
+     */
+    function syncFriendshipLinks()
+    {
+
+        $post = request()->post();
+
+        $validator = \Validator::make($post, [
+            'links' => 'required|array',
+            'links.*.site_name' => 'string|required',
+            'links.*.domain' => 'string|required',
+            'links.*.m_domain' => 'string|required',
+        ]);
+
+        if ($validator->fails()) {
+            return Signature::fail(Signature::PARAMS_ERROR, $validator->errors()->first());
+        }
+
+        foreach ($post['links'] as $link) {
+
+            $this->addFriendshipLinks($link['site_name'], $link['domain'], "pc");
+            $this->addFriendshipLinks($link['site_name'], $link['m_domain'], "mobile");
+
+        }
+
+        return Signature::success([]);
+    }
+
+
+    private function addFriendshipLinks($websiteName, $websiteLink, $device = 'pc')
+    {
+
+        $websiteLink = rtrim($websiteLink, '/') . "/";
+
+        $modeTitle = "";
+
+        if ($device === 'pc') {
+            $modeTitle = "友情链接-pc";
+        } else {
+            $modeTitle = "友情链接-mobile";
+        }
+
+        $mode = Mode::where('title', $modeTitle)->first();
+
+        if (!$mode) {
+            throw new \Exception('未找到对应的模块(mode)');
+        }
+
+        $list = $mode->list;
+
+        if (!is_array($list)) {
+            throw new \Exception('模块数据结构不是数组');
+        }
+
+        $isFind = false;
+        foreach ($list as $item) {
+
+            $link = rtrim($item[1], '/') . "/";
+
+            if ($link === $websiteLink) {
+                $isFind = true;
+                break;
+            }
+
+        }
+
+        if (!$isFind) {
+            $list[] = [$websiteName, $websiteLink];
+            $mode->list = $list;
+            $mode->save();
+        }
+
+    }
 
 }
