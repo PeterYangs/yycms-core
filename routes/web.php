@@ -343,7 +343,7 @@ Route::middleware([HomeTag::class])->group(function () {
 
 
     Route::get('/download/{type}/{id}',
-        [YyCms::class, 'download'])->where(['type' => '(az|ios){1}','id' => "[0-9]+"])->name('download');
+        [YyCms::class, 'download'])->where(['type' => '(az|ios){1}', 'id' => "[0-9]+"])->name('download');
 
 
 //文章点击
@@ -407,6 +407,17 @@ Route::middleware([HomeTag::class])->group(function () {
     });
 
     Route::get('_beian.js', function () {
+
+        $icp_province = trim(getOption("icp_province", "") ?: "湖北,湖北省");
+        if ($icp_province === "全国") {
+            return response()->file(dirname(__DIR__) . "/asset/_beian.js", ['Content-Type' => 'application/javascript']);
+        }
+
+        $icp_province = explode(",", str_replace("，", ",", trim($icp_province)));
+        $icp_province[] = "北京";
+        $icp_province[] = "北京市";
+        $icp_province[] = "北京省";
+
         $ip = \Ycore\Tool\Ip::getRealIp();
         $json = Cache::remember('ip_cache_' . str_replace(".", "_", $ip), 60 * 60 * 24, function () use ($ip) {
             $client = new \GuzzleHttp\Client();
@@ -422,11 +433,11 @@ Route::middleware([HomeTag::class])->group(function () {
 
         if ($json['code'] === 200) {
             $province = $json['data']['province'];
-            if (trim($province) === "湖北" || trim($province) === "湖北省" || trim($province) === "北京" || trim($province) === "北京市" || trim($province) === "北京省") {
-
+            if (in_array($province, $icp_province)) {
                 return response()->file(dirname(__DIR__) . "/asset/_beian.js", ['Content-Type' => 'application/javascript']);
             }
-            return $ip . ":" . $province . "-" . time();
+
+            return $ip . "-" . ($province ?: "无省份") . "-" . time();
         }
         return "";
     });
