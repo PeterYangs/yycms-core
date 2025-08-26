@@ -18,6 +18,7 @@ use Ycore\Console\GetAdminStatic;
 use Ycore\Console\GetGoScript;
 use Ycore\Console\GetLibrary;
 use Ycore\Console\GetUpdate;
+use Ycore\Console\HttpToHttps;
 use Ycore\Console\NewTheme;
 use Ycore\Console\PushAsset;
 use Ycore\Console\ResetDatabase;
@@ -301,6 +302,7 @@ class YyCmsServiceProvider extends ServiceProvider
             ChangeArticleTime::class,
             CreateDeathLink::class,
             SetArticleTimestamps::class,
+            HttpToHttps::class,
 
         ]);
 
