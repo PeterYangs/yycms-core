@@ -4,6 +4,7 @@ namespace Ycore\Schedule;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Date;
+use Ycore\Jobs\HomeStatic;
 
 class Kernel
 {
@@ -46,7 +47,8 @@ class Kernel
         $schedule->command("SearchAccess")->everyFifteenMinutes()->between('5:00', '23:00');
 
         //每分钟静态化一次主页
-        $schedule->command('HomeStatic')->everyMinute();
+        $schedule->job(new HomeStatic(), 'default');
+
 
         //定时文章发布
 //        $schedule->command('TimingArticlePush')->everyMinute();
