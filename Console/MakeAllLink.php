@@ -32,7 +32,7 @@ class MakeAllLink extends Command
     {
 
 
-        $out = Cmd::commandline(Cmd::getCommandlineByName('goScript') . " makeAllLink --path " . storage_path('link'), 90);
+        $out = Cmd::commandline(Cmd::getCommandlineByName('goScript') . " makeAllLink --path " . storage_path('link'), 300);
 
 
         if (app()->runningInConsole()) {

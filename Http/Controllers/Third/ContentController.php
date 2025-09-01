@@ -4,6 +4,7 @@ namespace Ycore\Http\Controllers\Third;
 
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Ycore\Jobs\ArticleStatic;
 use Ycore\Models\ArticleDownload;
 use Ycore\Models\DownloadSite;
@@ -64,7 +65,9 @@ class ContentController extends BaseController
 
             ];
 
-            if (($post['main']['special_id'] ?? 0)) {
+            $special_id = $post['main']['special_id'] ?? 0;
+
+            if ($special_id) {
                 $data['special_id'] = $post['main']['special_id'];
             }
 
@@ -75,10 +78,7 @@ class ContentController extends BaseController
 
             }
 
-            $article = $ag->fill($data, $post['expand'])->create(true, false, false);
-
-
-            $rule = $post['download']['rule'] ?? "";
+            $rule = ($post['download']['rule'] ?? "{path}") ?: "{path}";
 
             $note = $post['download']['note'] ?? "";
 
@@ -88,14 +88,31 @@ class ContentController extends BaseController
 
             //设置下载服务器
             if (!$downloadSite) {
-                $d = DownloadSite::create([
-                    'rule' => $rule ?: "",
-                    'note' => $note ?: "",
-                ]);
-                $downloadSiteId = $d->id;
+                if (empty($rule)) {
+                    $downloadSite = DownloadSite::where('rule', '{path}')->first();
+                    $downloadSiteId = $downloadSite->id;
+                } else {
+                    $d = DownloadSite::create([
+                        'rule' => $rule ?: "",
+                        'note' => $note ?: "",
+                    ]);
+                    $downloadSiteId = $d->id;
+                }
+
             } else {
                 $downloadSiteId = $downloadSite->id;
             }
+
+            $file_path = trim($post['download']['file_path'] ?? "");
+
+            if ($special_id !== 0 && empty($file_path) && $downloadSite->rule === "{path}") {
+                $file_path = getOption("domain");
+                if (isset($post['expand']['ios']) && empty($post['expand']['ios'])) {
+                    $post['expand']['ios'] = getOption("domain");
+                }
+            }
+
+            $article = $ag->fill($data, $post['expand'])->create(true, false, false);
 
             $get_article_download_article_id = ArticleDownload::where('library_id', $post['main']['library_article_id'])->first();
             //重复分发，直接返回结果
@@ -106,12 +123,13 @@ class ContentController extends BaseController
                     'path' => parse_url(getDetailUrl($article))['path']
                 ]);
             }
+
             ArticleDownload::create([
                 'article_id' => $article->id,
                 'library_id' => $post['main']['library_article_id'],
                 'apk_id' => $post['main']['library_apk_id'] ?? 0,
                 'download_site_id' => $downloadSiteId,
-                'file_path' => $post['download']['file_path'] ?? "",
+                'file_path' => $file_path,
                 'save_type' => $post['download']['save_type'] ?? 1,
                 'pan_password' => $post['download']['pan_password'] ?? ""
             ]);
