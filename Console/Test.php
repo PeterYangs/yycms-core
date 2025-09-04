@@ -20,6 +20,7 @@ use Ycore\Events\WebsitePush;
 use Ycore\Http\Controllers\Admin\CategoryController;
 use Ycore\Models\Article;
 use Ycore\Models\ArticleExpand;
+use Ycore\Models\ExpandChange;
 use Ycore\Models\Mode;
 use Ycore\Service\Upload\Upload;
 use Ycore\Tool\ArticleGenerator;
@@ -98,6 +99,15 @@ class Test extends Command
      */
     public function handle()
     {
+
+        $post = ['special_id' => 2, 'android' => 'https://www.925g.com', 'ios' => "https://www.52xz.com"];
+
+//        ExpandChange::where('special_id',$post['special_id']);
+
+        ExpandChange::updateOrCreate(['special_id' => $post['special_id'], 'type' => 2], ['special_id' => $post['special_id'], 'type' => 2, 'download_url' => $post['android'], 'category_id' => 0, 'detail' => ""]);
+        ExpandChange::updateOrCreate(['special_id' => $post['special_id'], 'type' => 1, 'category_id' => config('category.game')], ['special_id' => $post['special_id'], 'type' => 1, 'category_id' => config('category.game'), 'detail' => [['field' => 'ios', 'value' => $post['ios']]]]);
+        ExpandChange::updateOrCreate(['special_id' => $post['special_id'], 'type' => 1, 'category_id' => config('category.app')], ['special_id' => $post['special_id'], 'type' => 1, 'category_id' => config('category.app'), 'detail' => [['field' => 'ios', 'value' => $post['ios']]]]);
+
 
         return;
 

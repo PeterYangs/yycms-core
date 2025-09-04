@@ -68,6 +68,11 @@ class YyCms extends BaseController
 
             $url = $specialEx[config('static.ios_download_link')];
 
+            //防止链接为空
+            if (!$url && $article->special_id !== 0) {
+                return redirect()->away(getOption('domain'));
+            }
+
             if (!$url) {
 
                 abort(404);
@@ -89,10 +94,13 @@ class YyCms extends BaseController
 
         $url = $specialEx[config('static.android_download_link')];
 
+        //防止链接为空
+        if (!$url && $article->special_id !== 0) {
+            return redirect()->away(getOption('domain'));
+        }
+
         if (!$url) {
-
             abort(404);
-
         }
 
         $u = parse_url($url);

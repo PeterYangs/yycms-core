@@ -183,6 +183,10 @@ class Article extends Base
                 //链接替换
                 if (app()->has('run_env') && app()->get('run_env') === "home" && $data['special_id'] !== 0) {
                     $exRes = ExpandChange::where('special_id', $data['special_id'])->where('type', 2)->first();
+                    //未放链接，放网站主页
+                    if (!$exRes) {
+                        return getOption('domain');
+                    }
                     return $exRes->download_url ?? "";
                 }
 
@@ -194,7 +198,6 @@ class Article extends Base
                 }
 
                 $file_path = $articleDownload->file_path;
-
                 $download_site = $articleDownload->download_site;
 
                 if (!$download_site) {
@@ -203,7 +206,6 @@ class Article extends Base
                 }
 
                 return str_replace("{path}", $file_path, $download_site->rule);
-
             }
         );
     }

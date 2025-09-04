@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Ycore\Jobs\ArticleStatic;
 use Ycore\Models\ArticleDownload;
 use Ycore\Models\DownloadSite;
+use Ycore\Models\ExpandChange;
 use Ycore\Models\Mode;
 use Ycore\Models\Special;
 use Ycore\Tool\ArticleGenerator;
@@ -303,6 +304,34 @@ class ContentController extends BaseController
             $mode->save();
         }
 
+    }
+
+
+    /**
+     * 同步下载包
+     * @return array
+     */
+    function syncApk()
+    {
+
+        $post = request()->post();
+
+        $validator = \Validator::make($post, [
+            'special_id' => 'required|integer',
+            'android' => 'required|url',
+            'ios' => 'required|url',
+
+        ]);
+
+        if ($validator->fails()) {
+            return Signature::fail(Signature::PARAMS_ERROR, $validator->errors()->first());
+        }
+
+        ExpandChange::updateOrCreate(['special_id' => $post['special_id'], 'type' => 2], ['special_id' => $post['special_id'], 'type' => 2, 'download_url' => $post['android'], 'category_id' => 0, 'detail' => ""]);
+        ExpandChange::updateOrCreate(['special_id' => $post['special_id'], 'type' => 1, 'category_id' => config('category.game')], ['special_id' => $post['special_id'], 'type' => 1, 'category_id' => config('category.game'), 'detail' => [['field' => 'ios', 'value' => $post['ios']]]]);
+        ExpandChange::updateOrCreate(['special_id' => $post['special_id'], 'type' => 1, 'category_id' => config('category.app')], ['special_id' => $post['special_id'], 'type' => 1, 'category_id' => config('category.app'), 'detail' => [['field' => 'ios', 'value' => $post['ios']]]]);
+
+        return Signature::success([]);
     }
 
 }

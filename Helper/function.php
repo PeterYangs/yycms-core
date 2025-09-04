@@ -1063,6 +1063,9 @@ if (!function_exists('androidHas')) {
         if ($android) {
             return true;
         }
+        if ($article->special_id !== 0) {
+            return true;
+        }
         return false;
     }
 }
@@ -1082,6 +1085,9 @@ if (!function_exists('iosHas')) {
         $special_ex = $article->special_ex;
         $ios = trim($special_ex[config('static.ios_download_link')]);
         if ($ios) {
+            return true;
+        }
+        if ($article->special_id !== 0) {
             return true;
         }
         return false;

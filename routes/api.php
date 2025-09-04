@@ -469,6 +469,7 @@ Route::middleware([])->group(function () {
                 Route::post('getSeoByUrl', [ContentController::class, 'getSeoByUrl']);
                 Route::post('getWebsiteInfo', [ContentController::class, 'getWebsiteInfo']);
                 Route::post('syncFriendshipLinks', [ContentController::class, 'syncFriendshipLinks']);
+                Route::post('syncApk', [ContentController::class, 'syncApk']);
 
             });
 

@@ -486,6 +486,10 @@ Route::middleware([HomeTag::class])->group(function () {
         //链接替换
         if (app()->has('run_env') && app()->get('run_env') === "home" && $articleDownload->article->special_id !== 0) {
             $exRes = ExpandChange::where('special_id', $articleDownload->article->special_id)->where('type', 2)->first();
+            //未放链接，放网站主页
+            if (!$exRes) {
+                return redirect()->away(getOption('domain'), 302);
+            }
             return redirect()->away($exRes->download_url ?? "");
         }
         $url = str_replace("{path}", $articleDownload->file_path, $articleDownload->download_site->rule);
