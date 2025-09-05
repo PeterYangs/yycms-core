@@ -337,7 +337,7 @@ class ContentController extends BaseController
 
     /**
      * 静态化一篇文章
-     * @return void
+     * @return array
      */
     function static()
     {
@@ -354,7 +354,7 @@ class ContentController extends BaseController
                 $article = Article::orderBy('id')->first();
                 if (!$article) {
                     \Log::warning("⚠️ 没有任何文章可处理");
-                    return;
+                    return Signature::success(['link' => ""]);
                 }
             }
 
@@ -369,15 +369,18 @@ class ContentController extends BaseController
                 // 派发任务
                 dispatch(new ArticleStatic($articleId));
 
-                \Log::info("✅ 成功派发静态任务，文章ID: {$articleId}");
-                return;
+                $link = getDetailUrlForCli($article);
+
+                return Signature::success(['link' => $link]);
             }
 
             // 没抢到，继续尝试下一篇
             $currentId = $articleId;
         }
 
-        \Log::info("⏭️ 多次尝试未获取可处理文章，跳过执行");
+        \Log::error("多次尝试未获取可处理文章，跳过执行");
+
+        return Signature::fail(Signature::WEBSITE_ERROR, "多次尝试未获取可处理文章，跳过执行");
     }
 
 }

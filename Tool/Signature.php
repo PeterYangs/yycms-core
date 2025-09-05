@@ -17,6 +17,9 @@ class Signature
     //内容添加错误
     public const CONTENT_ERROR = 10003;
 
+    //站点内部错误
+    public const WEBSITE_ERROR = 10004;
+
 
     public static function decrypt($time, $echostr, $app_id, $secret, $signature)
     {
