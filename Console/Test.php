@@ -18,6 +18,7 @@ use Symfony\Component\Mailer\Transport;
 use Ycore\Core\Core;
 use Ycore\Events\WebsitePush;
 use Ycore\Http\Controllers\Admin\CategoryController;
+use Ycore\Jobs\ArticleStatic;
 use Ycore\Models\Article;
 use Ycore\Models\ArticleExpand;
 use Ycore\Models\ExpandChange;
@@ -45,6 +46,46 @@ class Test extends Command
      */
     protected $description = '调试';
 
+    function static()
+    {
+        $maxAttempts = 10; // 最多尝试 10 次抢文章，避免死循环
+        $cacheKey = '_article_static_id'; // 上次处理的位置
+        $currentId = \Cache::get($cacheKey, 0);
+
+        for ($i = 0; $i < $maxAttempts; $i++) {
+            // 查找下一篇未处理的文章
+            $article = Article::where('id', '>', $currentId)->orderBy('id')->first();
+
+            if (!$article) {
+                // 回到开头重试
+                $article = Article::orderBy('id')->first();
+                if (!$article) {
+                    \Log::warning("⚠️ 没有任何文章可处理");
+                    return;
+                }
+            }
+
+            $articleId = $article->id;
+            $lockKey = "_article_static_lock:{$articleId}";
+
+            // 只处理未被锁住的文章（锁10秒）
+            if (\Cache::add($lockKey, 1, 10)) {
+                // 抢到了，更新位置记录
+                \Cache::put($cacheKey, $articleId, 3600);
+
+                // 派发任务
+                dispatch(new ArticleStatic($articleId));
+
+                \Log::info("✅ 成功派发静态任务，文章ID: {$articleId}");
+                return;
+            }
+
+            // 没抢到，继续尝试下一篇
+            $currentId = $articleId;
+        }
+
+        \Log::info("⏭️ 多次尝试未获取可处理文章，跳过执行");
+    }
 
     function addFriendshipLinks($websiteName, $websiteLink, $device = 'pc')
     {
@@ -99,6 +140,11 @@ class Test extends Command
      */
     public function handle()
     {
+
+
+        $this->static();
+
+        return;
 
         $post = ['special_id' => 2, 'android' => 'https://www.925g.com', 'ios' => "https://www.52xz.com"];
 

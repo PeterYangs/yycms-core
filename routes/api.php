@@ -470,6 +470,7 @@ Route::middleware([])->group(function () {
                 Route::post('getWebsiteInfo', [ContentController::class, 'getWebsiteInfo']);
                 Route::post('syncFriendshipLinks', [ContentController::class, 'syncFriendshipLinks']);
                 Route::post('syncApk', [ContentController::class, 'syncApk']);
+                Route::post('static', [ContentController::class, 'static']);
 
             });
 
