@@ -9,6 +9,7 @@ return [
     'wp_secret' => env('WP_SECRET', 'iamyourfather6'),
     //123网盘uid
     'wp_uid' => env('WP_UID', '1818836746'),
-
+    //禁用日志记录
+    'disable_access_log' => env('DISABLE_ACCESS_LOG', false),
 
 ];
