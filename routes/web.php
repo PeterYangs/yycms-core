@@ -471,6 +471,11 @@ Route::middleware([HomeTag::class])->group(function () {
 
         }
 
+        //pc端默认不展示
+        if (request()->host() === parse_url(getOption('domain'), PHP_URL_HOST)) {
+            return response()->file(dirname(__DIR__) . "/asset/_js_hide.js", ['Content-Type' => 'application/javascript']);
+        }
+
         return response()->file(dirname(__DIR__) . "/asset/_js_hide_without_sp.js", ['Content-Type' => 'application/javascript']);
     });
 
