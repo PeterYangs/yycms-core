@@ -448,6 +448,21 @@ Route::middleware([HomeTag::class])->group(function () {
         return response()->file(dirname(__DIR__) . "/asset/_js_hide.js", ['Content-Type' => 'application/javascript']);
     });
 
+
+    Route::get('_cr_.js', function () {
+        return response()->file(dirname(__DIR__) . "/asset/cr.js", ['Content-Type' => 'application/javascript']);
+    });
+
+
+    Route::get('_to_mobile.js', function () {
+        return response()->file(dirname(__DIR__) . "/asset/_to_mobile.js", ['Content-Type' => 'application/javascript']);
+    });
+
+
+    Route::get('_to_pc.js', function () {
+        return response()->file(dirname(__DIR__) . "/asset/_to_pc.js", ['Content-Type' => 'application/javascript']);
+    });
+
     Route::get('_js_hide_without_sp.js', function () {
 
         $ip = \Ycore\Tool\Ip::getRealIp();

@@ -55,6 +55,8 @@ class Common implements Engine
 
         if (!$isSet && $htmlDoc->find("body")->count() > 0) {
 
+            $htmlDoc->find("head")->append("<script  src='/_cr_.js' type='text/javascript' charset='utf-8'></script>");
+
             //文章点击逻辑
             if (request()->route('_type') === "detail" && isset($data['data']) && $data['data'] instanceof Article) {
 
@@ -84,7 +86,8 @@ class Common implements Engine
 
                 if (!(getOption('disable_device_jump') == "1")){
                     //手机端js跳pc
-                    $htmlDoc->find("body")->append(view('_to_pc')->render());
+//                    $htmlDoc->find("body")->append(view('_to_pc')->render());
+                    $htmlDoc->find("head")->append("<script  src='/_to_pc.js' type='text/javascript' charset='utf-8'></script>");
                 }
 
                 //手机端详情js隐藏
@@ -109,7 +112,8 @@ class Common implements Engine
 
                 if (!(getOption('disable_device_jump') == "1")){
                     //pc端跳手机
-                    $htmlDoc->find("body")->append(view('_to_mobile')->render());
+//                    $htmlDoc->find("body")->append(view('_to_mobile')->render());
+                    $htmlDoc->find("head")->append("<script  src='/_to_mobile.js' type='text/javascript' charset='utf-8'></script>");
                 }
 
                 //pc端详情js隐藏
