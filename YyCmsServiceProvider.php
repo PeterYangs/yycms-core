@@ -25,6 +25,7 @@ use Ycore\Console\ResetDatabase;
 use Ycore\Console\SetArticleTimestamps;
 use Ycore\Console\SetExpandData;
 use Ycore\Console\SetExpandDataBatch;
+use Ycore\Console\SetOption;
 use Ycore\Console\SwitchTheme;
 use Ycore\Models\Options;
 use Ycore\Service\Ai\ChatGpt;
@@ -63,7 +64,6 @@ use Ycore\Console\StaticTool;
 use Ycore\Console\SyncExpand;
 use Ycore\Console\Test;
 use Ycore\Console\Test2;
-use Closure;
 use Ycore\Console\TimingArticlePush;
 use Ycore\Tool\AcademyPaginator;
 use Ycore\Service\Ai\Ai;
@@ -303,7 +303,7 @@ class YyCmsServiceProvider extends ServiceProvider
             CreateDeathLink::class,
             SetArticleTimestamps::class,
             HttpToHttps::class,
-
+            SetOption::class,
         ]);
 
 
