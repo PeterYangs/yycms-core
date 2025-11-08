@@ -2237,3 +2237,27 @@ if (!function_exists('deleteArticle')) {
 }
 
 
+if (!function_exists('calculateScheduledTime')) {
+
+    /**
+     * 根据命令名称生成稳定、分散的时间点（HH:MM）
+     *
+     * @param string $command 命令名（如 backup:mysql）
+     * @return string          格式化时间，如 "03:42"
+     */
+    function calculateScheduledTime($command)
+    {
+        $key = env("APP_NAME") . '|' . $command;
+
+        // 计算哈希（你也可以改为 hash('sha256', ...) 或 md5(...))
+        $hash = crc32($key);
+
+        // 小时：0 ~ 23
+        $hour = $hash % 24;
+
+        // 分钟：0 ~ 59（右移避免高位重复）
+        $minute = ($hash >> 8) % 60;
+
+        return sprintf('%02d:%02d', $hour, $minute);
+    }
+}

@@ -13,7 +13,7 @@ class Kernel
     public function schedule(Schedule $schedule)
     {
 
-        $date = Date::createFromTimeString(date("Y-m-d") . " " . $this->getNightTimeFromString(env('APP_NAME')));
+//        $date = Date::createFromTimeString(date("Y-m-d") . " " . $this->getNightTimeFromString(env('APP_NAME')));
 
 
         //go脚本自动更新
@@ -25,15 +25,15 @@ class Kernel
 
 
         //生成全站链接
-        $schedule->command("MakeAllLink")->dailyAt($date->format('H:i'));
+        $schedule->command("MakeAllLink")->dailyAt(calculateScheduledTime("MakeAllLink"));
 
         //生成网站地图
-        $schedule->command('MakeXml')->dailyAt($date->addMinutes(30)->format('H:i'));
+        $schedule->command('MakeXml')->dailyAt(calculateScheduledTime('MakeXml'));
 
 
         //日志清理
-        $schedule->command('CleanUserAccess')->dailyAt($date->addMinutes(60)->format('H:i'));
-        $schedule->command('CleanErrorAccess')->dailyAt($date->addMinutes(90)->format('H:i'));
+        $schedule->command('CleanUserAccess')->dailyAt(calculateScheduledTime('CleanUserAccess'));
+        $schedule->command('CleanErrorAccess')->dailyAt(calculateScheduledTime('CleanErrorAccess'));
 
 
         //自动采集
@@ -55,14 +55,14 @@ class Kernel
 
         if (getOption('static_everyday', 0) === 1) {
             //详情页静态化
-            $schedule->command('StaticTool')->dailyAt($date->addMinutes(120)->format('H:i'));
+            $schedule->command('StaticTool')->dailyAt(calculateScheduledTime('StaticTool'));
         }
 
         //生成死链
-        $schedule->command('CreateDeathLink')->dailyAt($date->addMinutes(150)->format('H:i'));
+        $schedule->command('CreateDeathLink')->dailyAt(calculateScheduledTime('CreateDeathLink'));
 
         //数据库备份
-        $schedule->command('MysqlBackup')->dailyAt($date->addMinutes(180)->format('H:i'));
+        $schedule->command('MysqlBackup')->dailyAt(calculateScheduledTime('MysqlBackup'));
 
 
     }
