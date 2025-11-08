@@ -41,8 +41,13 @@ class DeleteStaticPage
 
 
         //删除静态文件
-        \Storage::disk('static')->delete('pc/'.\Cache::get('category:list:pc_' . $item->category->id)."/".$item->id.".html");
-        \Storage::disk('static')->delete('mobile/'.\Cache::get('category:list:mobile_' . $item->category->id)."/".$item->id.".html");
+        \Storage::disk('static')->delete('pc/' . \Cache::get('category:list:pc_' . $item->category->id) . "/" . $item->id . ".html");
+
+        $disable_mobile = getOption('disable_mobile', 0);
+
+        if ($disable_mobile !== 1) {
+            \Storage::disk('static')->delete('mobile/' . \Cache::get('category:list:mobile_' . $item->category->id) . "/" . $item->id . ".html");
+        }
 
 
     }

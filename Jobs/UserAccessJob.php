@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Ycore\Models\UserAccess;
 
 class UserAccessJob implements ShouldQueue
 {
@@ -48,12 +49,20 @@ class UserAccessJob implements ShouldQueue
     {
         //
 
-        \Ycore\Models\UserAccess::create([
-            'ip' => $this->ip,
-            'url' => $this->url,
-            'referer' => $this->referer,
-            'query' => $this->query,
-            'agent' => $this->agent,
-        ]);
+        try {
+
+            UserAccess::create([
+                'ip' => $this->ip,
+                'url' => $this->url,
+                'referer' => $this->referer,
+                'query' => $this->query,
+                'agent' => $this->agent,
+            ]);
+
+        } catch (\Exception $exception) {
+
+        }
+
+
     }
 }

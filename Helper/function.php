@@ -2186,6 +2186,9 @@ if (!function_exists('staticByArticle')) {
      */
     function staticByArticle(Article $article): void
     {
+
+        $disable_mobile = getOption('disable_mobile', 0);
+
         try {
 
             $rsp = \Http::get(getDetailUrlForCli($article) . '?admin_key=' . env('ADMIN_KEY'));
@@ -2198,13 +2201,17 @@ if (!function_exists('staticByArticle')) {
             }
 
 
-            $rsp = \Http::withHeaders(['User-Agent' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1'])->get(getDetailUrlForCli($article,
-                    'mobile') . '?admin_key=' . env('ADMIN_KEY'));
+            if ($disable_mobile !== 1) {
+
+                $rsp = \Http::withHeaders(['User-Agent' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1'])->get(getDetailUrlForCli($article,
+                        'mobile') . '?admin_key=' . env('ADMIN_KEY'));
 
 
-            if ($rsp->ok()) {
-                \Storage::disk('static')->put('mobile/' . str_replace("{id}", $article->id,
-                        \Cache::get('category:detail:mobile_' . $article->category->id)), $rsp->body());
+                if ($rsp->ok()) {
+                    \Storage::disk('static')->put('mobile/' . str_replace("{id}", $article->id,
+                            \Cache::get('category:detail:mobile_' . $article->category->id)), $rsp->body());
+                }
+
             }
 
 

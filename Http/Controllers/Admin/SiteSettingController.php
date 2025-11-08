@@ -78,7 +78,8 @@ class SiteSettingController extends AuthCheckController
             'disable_device_jump',
             'enable_channel_domain',
             'disable_content_link',
-            'icp_province'
+            'icp_province',
+            'disable_mobile'
 
         ];
 

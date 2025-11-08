@@ -654,8 +654,6 @@ class ArticleGenerator
 
             throw $exception;
 
-//            throw new \Exception($exception->getMessage() . "   " . $exception->getFile() . ":" . $exception->getLine());
-
         }
 
 

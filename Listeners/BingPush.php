@@ -59,7 +59,7 @@ class BingPush
         $mobileUrl = getDetailUrlForCli($article, 'mobile');
 
 
-        $bing_token = getOption('bing_token', "");
+        $bing_token = trim(getOption('bing_token', ""));
 
 
         if (!$bing_token) {
@@ -125,9 +125,10 @@ class BingPush
 
 
         $m_domain = getOption('m_domain', "");
+        $disable_mobile = getOption('disable_mobile', 0);
 
 
-        if ($m_domain) {
+        if ($m_domain && $disable_mobile !== 1) {
 
 
             //判断是否超出推送配额标记

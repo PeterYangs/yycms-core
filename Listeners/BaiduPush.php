@@ -121,9 +121,9 @@ class BaiduPush
 
 
         $m_domain = getOption('m_domain', "");
+        $disable_mobile = getOption('disable_mobile', 0);
 
-
-        if ($m_domain) {
+        if ($m_domain && $disable_mobile !== 1) {
 
 
             //判断是否超出推送配额标记

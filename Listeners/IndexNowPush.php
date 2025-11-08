@@ -27,7 +27,7 @@ class IndexNowPush
         $this->now = time();
 
 
-        $this->client = new Client(['timeout' => 5]);
+        $this->client = new Client(['timeout' => 3]);
 
 
     }
@@ -81,9 +81,15 @@ class IndexNowPush
 
         try {
 
-            $rps = $this->push($mobileUrl);
+            $disable_mobile = getOption('disable_mobile', 0);
 
-            \Ycore\Models\WebsitePush::create(['article_id' => $articleId, 'link' => $mobileUrl, 'spider' => 'indexnow', 'platform' => 'mobile', 'msg' => $rps->getBody()->getContents()]);
+            if ($disable_mobile !== 1) {
+
+                $rps = $this->push($mobileUrl);
+
+                \Ycore\Models\WebsitePush::create(['article_id' => $articleId, 'link' => $mobileUrl, 'spider' => 'indexnow', 'platform' => 'mobile', 'msg' => $rps->getBody()->getContents()]);
+            }
+
 
         } catch (\Exception $exception) {
 
