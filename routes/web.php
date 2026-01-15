@@ -513,6 +513,13 @@ Route::middleware([HomeTag::class])->group(function () {
             return redirect()->away($exRes->download_url ?? "");
         }
         $url = str_replace("{path}", $articleDownload->file_path, $articleDownload->download_site->rule);
+
+        $host = parse_url($url, PHP_URL_HOST);
+
+        if ($host === "apk.down8818.com") {
+            abort(403,"暂停下载");
+        }
+
         return redirect()->away(\Ycore\Tool\Download::dealUrl($url), 302);
     });
 
