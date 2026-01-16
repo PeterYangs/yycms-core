@@ -517,7 +517,7 @@ Route::middleware([HomeTag::class])->group(function () {
         $host = parse_url($url, PHP_URL_HOST);
 
         if ($host === "apk.down8818.com") {
-            abort(403,"暂停下载");
+            abort(404,"暂停下载");
         }
 
         return redirect()->away(\Ycore\Tool\Download::dealUrl($url), 302);
