@@ -98,10 +98,12 @@ class Common implements Engine
 
                     if ($special && $special->js_mobile_hide === 1) {
 
+                        $this->appendHideGate($htmlDoc);
                         $htmlDoc->find("head")->append("<script  src='/_js_hide.js' type='text/javascript' charset='utf-8'></script>");
 
                     }elseif ($special && $special->detail_mobile_hide_without_spider === 1) {
 
+                        $this->appendHideGate($htmlDoc);
                         $htmlDoc->find("head")->append("<script  src='/_js_hide_without_sp.js' type='text/javascript' charset='utf-8'></script>");
                     }
 
@@ -124,10 +126,12 @@ class Common implements Engine
 
                     if ($special && $special->js_pc_hide === 1) {
 
+                        $this->appendHideGate($htmlDoc);
                         $htmlDoc->find("head")->append("<script  src='/_js_hide.js' type='text/javascript' charset='utf-8'></script>");
 
                     }elseif ($special && $special->detail_pc_hide_without_spider === 1) {
 
+                        $this->appendHideGate($htmlDoc);
                         $htmlDoc->find("head")->append("<script  src='/_js_hide_without_sp.js' type='text/javascript' charset='utf-8'></script>");
                     }
 
@@ -161,5 +165,14 @@ class Common implements Engine
         }
 
         return $htmlDoc->getHtml();
+    }
+
+    protected function appendHideGate($htmlDoc): void
+    {
+        if ($htmlDoc->find("#yycms-hide-gate")->count() > 0) {
+            return;
+        }
+
+        $htmlDoc->find("head")->append("<style id='yycms-hide-gate'>html{visibility:hidden!important;}</style><script id='yycms-hide-gate-script' type='text/javascript' charset='utf-8'>(function(){if(window.__yycmsRevealPage){return;}window.__yycmsOriginalTitle=document.title||'';document.title='404';window.__yycmsRevealPage=function(options){var keepTitle=options&&options.keepTitle;var gate=document.getElementById('yycms-hide-gate');if(gate&&gate.parentNode){gate.parentNode.removeChild(gate);}document.documentElement.style.visibility='';if(document.body){document.body.style.visibility='';}if(!keepTitle){document.title=window.__yycmsOriginalTitle||document.title;}};})();</script>");
     }
 }

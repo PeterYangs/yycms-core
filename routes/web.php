@@ -447,7 +447,7 @@ Route::middleware([HomeTag::class])->group(function () {
 
         $ip = \Ycore\Tool\Ip::getRealIp();
         if (\Ycore\Tool\Ip::isInWhiteList($ip)) {
-            return response('', 200, ['Content-Type' => 'application/javascript']);
+            return response('window.__yycmsRevealPage && window.__yycmsRevealPage();', 200, ['Content-Type' => 'application/javascript']);
         }
 
         return response()->file(dirname(__DIR__) . "/asset/_js_hide.js", ['Content-Type' => 'application/javascript']);
@@ -475,7 +475,7 @@ Route::middleware([HomeTag::class])->group(function () {
         $hideWithoutSpiderJs = dirname(__DIR__) . "/asset/_js_hide_without_sp.js";
 
         if (\Ycore\Tool\Ip::isInWhiteList($ip)) {
-            return response('', 200, ['Content-Type' => 'application/javascript']);
+            return response('window.__yycmsRevealPage && window.__yycmsRevealPage();', 200, ['Content-Type' => 'application/javascript']);
         }
 
         $json = [];
