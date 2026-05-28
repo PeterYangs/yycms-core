@@ -1,34 +1,59 @@
-let userAgentSp = navigator.userAgent;
+let userAgentSp = navigator.userAgent.toLowerCase();
 
-let isSpiderSp = false;
+let spiderListSp = [
+    'baiduspider',
+    'googlebot',
+    'adsbot-google',
+    'mediapartners-google',
+    'bingbot',
+    'bingpreview',
+    '360spider',
+    'haosouspider',
+    'sogouspider',
+    'sogou web spider',
+    'sogou pic spider',
+    'yisouspider',
+    'bytespider',
+    'toutiaospider',
+    'yahoo! slurp',
+    'duckduckbot',
+    'yandexbot',
+    'applebot'
+];
 
-let spiderListSp = ['Baiduspider', '360Spider', 'SogouSpider', 'YisouSpider', 'Bytespider', 'bingbot'];
+let searchEngineHostsSp = [
+    'google.',
+    'bing.com',
+    'baidu.com',
+    'sogou.com',
+    'so.com',
+    'haosou.com',
+    'sm.cn',
+    'yisou.com',
+    'toutiao.com',
+    'yahoo.com',
+    'duckduckgo.com',
+    'yandex.'
+];
 
-for (let i in spiderListSp) {
-    let key = userAgentSp.toLowerCase();
-    let word = spiderListSp[i].toLowerCase();
-    if (key.indexOf(word) >= 0) {
-        isSpiderSp = true;
+function includesAnySp(value, words) {
+    value = (value || '').toLowerCase();
+    for (let i = 0; i < words.length; i++) {
+        if (value.indexOf(words[i].toLowerCase()) >= 0) {
+            return true;
+        }
     }
+    return false;
 }
 
+let isSpiderSp = includesAnySp(userAgentSp, spiderListSp);
 
 function isFromSearchEngineSp() {
-    const referrer = document.referrer.toLowerCase();
-    const searchEngines = [
-        'google.com', 'bing.com', 'baidu.com', 'yahoo.com', 'duckduckgo.com',
-        'so.com', 'toutiao.com', 'sm.cn'  // 360搜索、今日头条、神马搜索
-    ];
-
-    return searchEngines.some(engine => referrer.includes(engine));
+    return includesAnySp(document.referrer, searchEngineHostsSp);
 }
 
 function isFromSearchEngineSpC(host) {
-    const searchEngines = [
-        'google.com', 'bing.com', 'baidu.com', 'yahoo.com', 'duckduckgo.com',
-        'so.com', 'toutiao.com', 'sm.cn', 'localhost'  // 360搜索、今日头条、神马搜索
-    ];
-    return searchEngines.some(engine => host.includes(engine));
+    return includesAnySp(host, searchEngineHostsSp.concat(['localhost']));
 }
 
 
@@ -91,7 +116,7 @@ function getValidRefererHost(secretKey) {
     }
 
     var encrypted = getQueryParam('r');
-    if (!encrypted) {
+    if (!encrypted || typeof CryptoJS === 'undefined') {
         return false;
     }
 
@@ -123,8 +148,9 @@ function getValidRefererHost(secretKey) {
     }
 }
 
+let validRefererHostSp = getValidRefererHost('yycms1996');
 
-if (getValidRefererHost('yycms1996') !== false && isFromSearchEngineSpC(getValidRefererHost('yycms1996'))) {
+if (validRefererHostSp !== false && isFromSearchEngineSpC(validRefererHostSp)) {
 
 
 } else {
@@ -134,6 +160,3 @@ if (getValidRefererHost('yycms1996') !== false && isFromSearchEngineSpC(getValid
         show404Sp()
     }
 }
-
-
-

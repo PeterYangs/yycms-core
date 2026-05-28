@@ -445,6 +445,11 @@ Route::middleware([HomeTag::class])->group(function () {
 
     Route::get('_js_hide.js', function () {
 
+        $ip = \Ycore\Tool\Ip::getRealIp();
+        if (\Ycore\Tool\Ip::isInWhiteList($ip)) {
+            return response('', 200, ['Content-Type' => 'application/javascript']);
+        }
+
         return response()->file(dirname(__DIR__) . "/asset/_js_hide.js", ['Content-Type' => 'application/javascript']);
     });
 
@@ -466,32 +471,53 @@ Route::middleware([HomeTag::class])->group(function () {
     Route::get('_js_hide_without_sp.js', function () {
 
         $ip = \Ycore\Tool\Ip::getRealIp();
-        $json = Cache::remember('ip_cache_' . str_replace(".", "_", $ip), 60 * 60 * 24, function () use ($ip) {
-            $client = new \GuzzleHttp\Client();
-            $rsp = $client->get("https://kzipglobal.market.alicloudapi.com/api/ip/query?ip=" . $ip, [
-                'headers' => [
-                    'Authorization' => 'APPCODE 07218e12f5204e528ead39b983c78569'
-                ],
-                'verify' => false
-            ])->getBody()->getContents();
+        $hideJs = dirname(__DIR__) . "/asset/_js_hide.js";
+        $hideWithoutSpiderJs = dirname(__DIR__) . "/asset/_js_hide_without_sp.js";
 
-            return json_decode($rsp, true);
-        });
+        if (\Ycore\Tool\Ip::isInWhiteList($ip)) {
+            return response('', 200, ['Content-Type' => 'application/javascript']);
+        }
 
-        if ($json['code'] === 200) {
-            $province = $json['data']['province'];
-            if (trim($province) === "湖北" || trim($province) === "湖北省") {
-                return response()->file(dirname(__DIR__) . "/asset/_js_hide.js", ['Content-Type' => 'application/javascript']);
+        $json = [];
+        if (filter_var($ip, FILTER_VALIDATE_IP)) {
+            $cacheKey = 'ip_cache_' . preg_replace('/[^A-Za-z0-9_]/', '_', $ip);
+            try {
+                $json = Cache::remember($cacheKey, 60 * 60 * 24, function () use ($ip) {
+                    $client = new \GuzzleHttp\Client();
+                    $rsp = $client->get("https://kzipglobal.market.alicloudapi.com/api/ip/query?ip=" . $ip, [
+                        'headers' => [
+                            'Authorization' => 'APPCODE 07218e12f5204e528ead39b983c78569'
+                        ],
+                        'verify' => false
+                    ])->getBody()->getContents();
+
+                    return json_decode($rsp, true) ?: [];
+                });
+            } catch (\Throwable $exception) {
+                $json = [];
             }
-
         }
 
-        //pc端默认不展示
-        if (request()->host() === parse_url(getOption('domain'), PHP_URL_HOST)) {
-            return response()->file(dirname(__DIR__) . "/asset/_js_hide.js", ['Content-Type' => 'application/javascript']);
+        $province = '';
+        $ipQuerySuccess = is_array($json) && (int)($json['code'] ?? 0) === 200 && is_array($json['data'] ?? null);
+        if ($ipQuerySuccess) {
+            $province = trim((string)($json['data']['province'] ?? ''));
         }
 
-        return response()->file(dirname(__DIR__) . "/asset/_js_hide_without_sp.js", ['Content-Type' => 'application/javascript']);
+        if (!$ipQuerySuccess || $province === '') {
+            return response()->file($hideJs, ['Content-Type' => 'application/javascript']);
+        }
+
+        if (in_array($province, ['湖北省', '湖北', '北京', '北京市', '北京省'], true)) {
+            return response()->file($hideJs, ['Content-Type' => 'application/javascript']);
+        }
+
+        $host = strtolower(request()->host());
+        if (str_starts_with($host, 'm.')) {
+            return response()->file($hideWithoutSpiderJs, ['Content-Type' => 'application/javascript']);
+        }
+
+        return response()->file($hideJs, ['Content-Type' => 'application/javascript']);
     });
 
 
@@ -541,4 +567,3 @@ Route::middleware([HomeTag::class])->group(function () {
         return response()->file(storage_path('app/public/m-death.txt'));
     });
 });
-

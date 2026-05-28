@@ -2,34 +2,93 @@
 
 namespace Ycore\Tool;
 
+use Symfony\Component\HttpFoundation\IpUtils;
+
 class Ip
 {
 
 
     /**
      * 获取真实ip
-     * @return bool|mixed|string
+     * @return string
      */
-    static function getRealIp(){
-        $ip=FALSE;
-        //客户端IP 或 NONE
-        if(!empty($_SERVER["HTTP_CLIENT_IP"])){
-            $ip = $_SERVER["HTTP_CLIENT_IP"];
+    static function getRealIp(): string
+    {
+        $candidates = [];
+
+        if (!empty($_SERVER["HTTP_CLIENT_IP"])) {
+            $candidates[] = $_SERVER["HTTP_CLIENT_IP"];
         }
 
-        //多重代理服务器下的客户端真实IP地址（可能伪造）,如果没有使用代理，此字段为空
         if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ips = explode (", ", $_SERVER['HTTP_X_FORWARDED_FOR']);
-            if ($ip) { array_unshift($ips, $ip); $ip = FALSE; }
-            for ($i = 0, $iMax = count($ips); $i < $iMax; $i++) {
-                if (!preg_match("/^\(10│172\.16│192\.168\)./u", $ips[$i])) {
-                    $ip = $ips[$i];
-                    break;
-                }
+            $candidates = array_merge($candidates, explode(",", $_SERVER['HTTP_X_FORWARDED_FOR']));
+        }
+
+        if (!empty($_SERVER['HTTP_X_REAL_IP'])) {
+            $candidates[] = $_SERVER['HTTP_X_REAL_IP'];
+        }
+
+        if (!empty($_SERVER['REMOTE_ADDR'])) {
+            $candidates[] = $_SERVER['REMOTE_ADDR'];
+        }
+
+        try {
+            $clientIp = request()->getClientIp();
+            if ($clientIp) {
+                $candidates[] = $clientIp;
+            }
+        } catch (\Throwable $exception) {
+        }
+
+        $validIps = [];
+
+        foreach ($candidates as $candidate) {
+            $ip = trim((string)$candidate);
+            if ($ip === '' || !filter_var($ip, FILTER_VALIDATE_IP)) {
+                continue;
+            }
+
+            $validIps[] = $ip;
+
+            if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+                return $ip;
             }
         }
-        //客户端IP 或 (最后一个)代理服务器 IP
-        return ($ip ? $ip : $_SERVER['REMOTE_ADDR']??request()->getClientIp());
+
+        return $validIps[0] ?? '';
+    }
+
+    /**
+     * 判断 IP 是否在 white_ips.txt 白名单内，支持单 IP 和 CIDR。
+     */
+    static function isInWhiteList(string $ip, ?string $path = null): bool
+    {
+        if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+            return false;
+        }
+
+        $path = $path ?: base_path('white_ips.txt');
+        if (!is_file($path) || !is_readable($path)) {
+            return false;
+        }
+
+        $rules = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        if (!$rules) {
+            return false;
+        }
+
+        foreach ($rules as $rule) {
+            $rule = trim(preg_replace('/\s*#.*/', '', $rule));
+            if ($rule === '') {
+                continue;
+            }
+
+            if (IpUtils::checkIp($ip, $rule)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

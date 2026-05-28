@@ -1,21 +1,4 @@
-let __userAgent = navigator.userAgent;
-
-let __isSpider = false;
-
-let __spiderList = ['Baiduspider', '360Spider', 'SogouSpider', 'YisouSpider', 'Bytespider', 'bingbot'];
-
-for (let i in __spiderList) {
-    let key = __userAgent.toLowerCase();
-    let word = __spiderList[i].toLowerCase();
-    if (key.indexOf(word) >= 0) {
-        __isSpider = true;
-    }
-}
-
-if (!__isSpider) {
-
-    _show404()
-}
+_show404()
 
 function _show404() {
 
