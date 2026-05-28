@@ -27,6 +27,7 @@ use Ycore\Console\SetExpandData;
 use Ycore\Console\SetExpandDataBatch;
 use Ycore\Console\SetOption;
 use Ycore\Console\SwitchTheme;
+use Ycore\Console\WebsitePush;
 use Ycore\Models\Options;
 use Ycore\Service\Ai\ChatGpt;
 use Ycore\Service\Search\Search;
@@ -304,6 +305,7 @@ class YyCmsServiceProvider extends ServiceProvider
             SetArticleTimestamps::class,
             HttpToHttps::class,
             SetOption::class,
+            WebsitePush::class,
         ]);
 
 

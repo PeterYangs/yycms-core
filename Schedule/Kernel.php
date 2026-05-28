@@ -64,6 +64,11 @@ class Kernel
         //数据库备份
         $schedule->command('MysqlBackup')->dailyAt(calculateScheduledTime('MysqlBackup'));
 
+        if ((int)getOption('enable_website_push_schedule', 0) === 1) {
+            //站点推送
+            $schedule->command('WebsitePush')->everyThirtyMinutes();
+        }
+
 
     }
 

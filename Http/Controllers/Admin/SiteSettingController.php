@@ -79,7 +79,8 @@ class SiteSettingController extends AuthCheckController
             'enable_channel_domain',
             'disable_content_link',
             'icp_province',
-            'disable_mobile'
+            'disable_mobile',
+            'enable_website_push_schedule'
 
         ];
 
@@ -89,7 +90,9 @@ class SiteSettingController extends AuthCheckController
         foreach ($list as $value) {
 
 
-            $data[$value] = getOption($value, "");
+            $default = $value === 'enable_website_push_schedule' ? 0 : "";
+
+            $data[$value] = getOption($value, $default);
 
         }
 

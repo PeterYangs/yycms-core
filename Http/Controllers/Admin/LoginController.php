@@ -34,8 +34,11 @@ class LoginController extends BaseController
 
             $realCaptcha = session()->get('captcha');
 
+            $captchaDebugPass = config('app.env') === 'local'
+                && config('app.debug') === true
+                && config('debugbar.enabled') === true;
 
-            if (strtolower($captcha) !== strtolower($realCaptcha)) {
+            if (!$captchaDebugPass && strtolower($captcha) !== strtolower($realCaptcha)) {
 
                 return Json::code(2, '验证码错误！', session()->get('captcha'));
             }
