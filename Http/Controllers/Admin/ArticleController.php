@@ -18,6 +18,7 @@ use Ycore\Tool\ArticleGenerator;
 use Ycore\Tool\Expand;
 use Ycore\Tool\Json;
 use Ycore\Tool\Seo;
+use Ycore\Tool\SwitchCore;
 use Illuminate\Contracts\Foundation\ExceptionRenderer;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Date;
@@ -304,8 +305,14 @@ class ArticleController extends AuthCheckController
             $list->where('push_status',3);
         }
 
+        $specialEnabled = SwitchCore::enabled(SwitchCore::ARTICLE_SPECIAL_ATTRIBUTE);
 
-        $custom = \Ycore\Tool\Search::searchList($list, request()->input('search', '[]'));
+        if (!$specialEnabled) {
+            $list->where('special_id', 0);
+        }
+
+
+        $custom = \Ycore\Tool\Search::searchList($list, $this->specialSearchPayload($specialEnabled));
 
 
         foreach ($custom as $key => $value) {
@@ -445,6 +452,28 @@ class ArticleController extends AuthCheckController
     }
 
 
+    private function specialSearchPayload(bool $specialEnabled): string
+    {
+        $search = request()->input('search', '[]');
+
+        if ($specialEnabled) {
+            return $search;
+        }
+
+        $items = json_decode($search, true);
+
+        if (!is_array($items)) {
+            return '[]';
+        }
+
+        $items = array_values(array_filter($items, function ($item) {
+            return ($item['field'] ?? '') !== 'special_id';
+        }));
+
+        return json_encode($items);
+    }
+
+
     /**
      * 特殊属性列表
      * Create by Peter Yang
@@ -454,6 +483,9 @@ class ArticleController extends AuthCheckController
     function specialList()
     {
 
+        if (SwitchCore::disabled(SwitchCore::ARTICLE_SPECIAL_ATTRIBUTE)) {
+            return Json::code(1, 'success', []);
+        }
 
         return Json::code(1, 'success', Special::all());
     }

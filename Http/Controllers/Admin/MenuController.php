@@ -3,6 +3,7 @@
 namespace Ycore\Http\Controllers\Admin;
 
 use Ycore\Tool\Json;
+use Ycore\Tool\SwitchCore;
 
 class MenuController extends AuthCheckController
 {
@@ -17,6 +18,13 @@ class MenuController extends AuthCheckController
     {
         $menu = config('menu');
         $allRule = resolve("allRule");
+
+        if (SwitchCore::disabled(SwitchCore::ARTICLE_SPECIAL_ATTRIBUTE)) {
+            $menu = $this->removeMenusByPath($menu, [
+                '/main/special',
+                '/main/expand_change_list',
+            ]);
+        }
 
 //        dd($allRule);
 
@@ -49,6 +57,29 @@ class MenuController extends AuthCheckController
                 $filteredMenus[] = $menu;
             }
         }
+        return $filteredMenus;
+    }
+
+
+    private function removeMenusByPath(array $menus, array $paths): array
+    {
+        $filteredMenus = [];
+
+        foreach ($menus as $menu) {
+            if (!isset($menu['children']) || !is_array($menu['children'])) {
+                $filteredMenus[] = $menu;
+                continue;
+            }
+
+            $menu['children'] = array_values(array_filter($menu['children'], function ($child) use ($paths) {
+                return !in_array($child['path'] ?? '', $paths, true);
+            }));
+
+            if (!empty($menu['children'])) {
+                $filteredMenus[] = $menu;
+            }
+        }
+
         return $filteredMenus;
     }
 

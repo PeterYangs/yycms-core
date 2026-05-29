@@ -15,6 +15,7 @@ use Ycore\Models\Mode;
 use Ycore\Models\Special;
 use Ycore\Tool\ArticleGenerator;
 use Ycore\Tool\Signature;
+use Ycore\Tool\SwitchCore;
 
 class ContentController extends BaseController
 {
@@ -165,8 +166,49 @@ class ContentController extends BaseController
      */
     function specialList()
     {
+        if (SwitchCore::disabled(SwitchCore::ARTICLE_SPECIAL_ATTRIBUTE)) {
+            return Signature::success([]);
+        }
 
         return Signature::success(Special::all());
+    }
+
+
+    /**
+     * 同步 core 开关
+     * @return array
+     */
+    function switchCore()
+    {
+        $post = request()->input();
+
+        $validator = \Validator::make($post, [
+            'key' => 'required|string',
+            'enabled' => 'required|boolean',
+        ], [
+            'required' => ':attribute 字段必填',
+            'boolean' => ':attribute 字段必须是布尔值',
+        ]);
+
+        if ($validator->fails()) {
+            return Signature::fail(Signature::PARAMS_ERROR, $validator->errors()->first());
+        }
+
+        try {
+            $enabled = filter_var($post['enabled'], FILTER_VALIDATE_BOOLEAN);
+            SwitchCore::set($post['key'], $enabled);
+        } catch (\InvalidArgumentException $exception) {
+            return Signature::fail(Signature::PARAMS_ERROR, $exception->getMessage());
+        } catch (\Throwable $throwable) {
+            report($throwable);
+            return Signature::fail(Signature::WEBSITE_ERROR, $throwable->getMessage());
+        }
+
+        return Signature::success([
+            'accepted' => true,
+            'key' => $post['key'],
+            'enabled' => $enabled,
+        ]);
     }
 
 

@@ -466,6 +466,7 @@ Route::middleware([])->group(function () {
 
                 Route::post('content', [ContentController::class, 'content']);
                 Route::get('specialList', [ContentController::class, 'specialList']);
+                Route::post('switchCore', [ContentController::class, 'switchCore']);
                 Route::post('getSeoByUrl', [ContentController::class, 'getSeoByUrl']);
                 Route::post('getWebsiteInfo', [ContentController::class, 'getWebsiteInfo']);
                 Route::post('syncFriendshipLinks', [ContentController::class, 'syncFriendshipLinks']);
