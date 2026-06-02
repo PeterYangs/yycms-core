@@ -9,53 +9,83 @@ class Ip
 
 
     /**
-     * 获取真实ip
+     * Get real client IP.
      * @return string
      */
     static function getRealIp(): string
     {
         $candidates = [];
+        $remoteIp = self::normalizeIp($_SERVER['REMOTE_ADDR'] ?? '');
 
-        if (!empty($_SERVER["HTTP_CLIENT_IP"])) {
-            $candidates[] = $_SERVER["HTTP_CLIENT_IP"];
-        }
-
-        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $candidates = array_merge($candidates, explode(",", $_SERVER['HTTP_X_FORWARDED_FOR']));
-        }
-
-        if (!empty($_SERVER['HTTP_X_REAL_IP'])) {
-            $candidates[] = $_SERVER['HTTP_X_REAL_IP'];
-        }
-
-        if (!empty($_SERVER['REMOTE_ADDR'])) {
-            $candidates[] = $_SERVER['REMOTE_ADDR'];
-        }
-
-        try {
-            $clientIp = request()->getClientIp();
-            if ($clientIp) {
-                $candidates[] = $clientIp;
-            }
-        } catch (\Throwable $exception) {
-        }
-
-        $validIps = [];
-
-        foreach ($candidates as $candidate) {
-            $ip = trim((string)$candidate);
-            if ($ip === '' || !filter_var($ip, FILTER_VALIDATE_IP)) {
+        foreach ([
+                     'HTTP_CF_CONNECTING_IP',
+                     'HTTP_X_REAL_IP',
+                     'HTTP_CLIENT_IP',
+                     'HTTP_X_FORWARDED_FOR',
+                 ] as $key) {
+            if (empty($_SERVER[$key])) {
                 continue;
             }
 
-            $validIps[] = $ip;
+            foreach (explode(',', $_SERVER[$key]) as $value) {
+                $ip = self::normalizeIp($value);
 
-            if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+                if ($ip) {
+                    $candidates[] = $ip;
+                }
+            }
+        }
+
+        foreach ($candidates as $ip) {
+            if (self::isPublicIp($ip)) {
                 return $ip;
             }
         }
 
-        return $validIps[0] ?? '';
+        $requestIp = '';
+        try {
+            $requestIp = self::normalizeIp(request()->getClientIp());
+        } catch (\Throwable $exception) {
+        }
+
+        foreach (array_merge($candidates, [$remoteIp, $requestIp]) as $value) {
+            $ip = self::normalizeIp($value);
+
+            if ($ip) {
+                return $ip;
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * Keep only valid IPs and support IPv4:port / [IPv6]:port values.
+     */
+    private static function normalizeIp($value): string
+    {
+        $value = trim((string)$value);
+        $value = trim($value, '"\'');
+
+        if ($value === '' || strtolower($value) === 'unknown') {
+            return '';
+        }
+
+        if (preg_match('/^\[([0-9a-fA-F:.]+)\](?::\d+)?$/', $value, $matches)) {
+            $value = $matches[1];
+        } elseif (preg_match('/^(\d{1,3}(?:\.\d{1,3}){3}):\d+$/', $value, $matches)) {
+            $value = $matches[1];
+        }
+
+        return filter_var($value, FILTER_VALIDATE_IP) ? $value : '';
+    }
+
+    /**
+     * Prefer public IPs over private/reserved proxy-chain values.
+     */
+    private static function isPublicIp($ip): bool
+    {
+        return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false;
     }
 
     /**
