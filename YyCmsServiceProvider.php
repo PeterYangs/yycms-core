@@ -26,6 +26,7 @@ use Ycore\Console\SetArticleTimestamps;
 use Ycore\Console\SetExpandData;
 use Ycore\Console\SetExpandDataBatch;
 use Ycore\Console\SetOption;
+use Ycore\Console\SetupSiteData;
 use Ycore\Console\SwitchTheme;
 use Ycore\Console\WebsitePush;
 use Ycore\Models\Options;
@@ -305,6 +306,7 @@ class YyCmsServiceProvider extends ServiceProvider
             SetArticleTimestamps::class,
             HttpToHttps::class,
             SetOption::class,
+            SetupSiteData::class,
             WebsitePush::class,
         ]);
 
