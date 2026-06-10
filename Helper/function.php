@@ -285,7 +285,7 @@ if (!function_exists('getArticleByCategoryName')) {
     {
         $category = getCategoryIds($categoryName);
         if ($category->count() <= 0) {
-            return [];
+            return collect([]);
         }
 
         $query = ArticleListModel()->offset($offset)->limit($limit);

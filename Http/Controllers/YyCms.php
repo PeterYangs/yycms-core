@@ -22,6 +22,89 @@ class YyCms extends BaseController
     {
     }
 
+    protected function resolveCategoryTemplate($category, string $templateType, int $routeType): array
+    {
+        $viewPath = rtrim($this->getViewPath(), '/');
+        $templateCategories = [$category];
+        $parent = $this->getCategoryParent($category);
+
+        if ($parent) {
+            $templateCategories[] = $parent;
+        }
+
+        foreach ($templateCategories as $templateCategory) {
+            $categoryId = $this->getCategoryId($templateCategory);
+
+            if ($categoryId === null) {
+                continue;
+            }
+
+            $templateName = "id-{$categoryId}-{$templateType}";
+            $templateFile = "{$viewPath}/{$templateName}.blade.php";
+
+            if (file_exists($templateFile)) {
+                return [
+                    'view' => "/{$templateName}",
+                    'file' => $templateFile,
+                    'exists' => true,
+                ];
+            }
+        }
+
+        foreach ($templateCategories as $templateCategory) {
+            $route = $this->getCategoryMainListRoute($templateCategory, $routeType);
+
+            if (!$route) {
+                continue;
+            }
+
+            $templateName = "{$templateType}-{$route}";
+            $templateFile = "{$viewPath}/{$templateName}.blade.php";
+
+            if (file_exists($templateFile)) {
+                return [
+                    'view' => "/{$templateName}",
+                    'file' => $templateFile,
+                    'exists' => true,
+                ];
+            }
+        }
+
+        $defaultFile = "{$viewPath}/{$templateType}.blade.php";
+
+        return [
+            'view' => $templateType,
+            'file' => $defaultFile,
+            'exists' => file_exists($defaultFile),
+        ];
+    }
+
+    protected function getCategoryMainListRoute($category, int $routeType): ?string
+    {
+        $routes = $category->category_route ?? collect();
+
+        $route = $routes->where('type', $routeType)
+            ->where('tag', 'list')
+            ->where('is_main', 1)
+            ->value('route');
+
+        return $route ? (string)$route : null;
+    }
+
+    private function getCategoryId($category): ?int
+    {
+        if (!isset($category->id)) {
+            return null;
+        }
+
+        return (int)$category->id;
+    }
+
+    private function getCategoryParent($category)
+    {
+        return $category->parent ?? null;
+    }
+
 
     /**
      * 文章点击数加一

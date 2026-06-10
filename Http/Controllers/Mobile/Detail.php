@@ -27,30 +27,9 @@ class Detail extends Base
 
         $category = Category::where('id', $cid)->with('category_route')->firstOrFail();
 
-        $listRoute = $category->category_route->where('type', 2)->where('tag', 'list')->where('is_main', 1)->value('route');
+        $template = $this->resolveCategoryTemplate($category, 'detail', 2);
 
-        $viewFile = $this->getViewPath() . "/detail-" . $listRoute . ".blade.php";
-
-        $view= "/detail-" . $listRoute;
-
-        if (!file_exists($viewFile) && $category->parent) {
-
-            $route = $category->parent->category_route->where('type', 2)->where('tag', 'list')->where('is_main', 1)->value('route');
-
-            $viewFile = $this->getViewPath() . "/detail-" . $route . ".blade.php";
-
-            $view = "/detail-" . $route;
-
-        }
-
-
-        if (file_exists($viewFile)) {
-
-
-            return view($view, ['category' => $category, 'data' => $item]);
-        }
-
-        return view('detail', ['category' => $category, 'data' => $item]);
+        return view($template['view'], ['category' => $category, 'data' => $item]);
 
 
     }

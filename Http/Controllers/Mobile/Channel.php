@@ -68,16 +68,8 @@ class Channel extends Base
      */
     private function generateViewHtml($category, $htmlPath)
     {
-        $route = $category->category_route->where('type', 2)->where('tag', 'list')->where('is_main', 1)->value('route');
-        $currentRoute = $route;
-        $viewFile = $this->getViewPath() . "/channel-" . $route . ".blade.php";
-        $view = "/channel-" . $route;
-
-        if (!file_exists($viewFile) && $category->pid !== 0) {
-            $route = $category->parent->category_route->where('type', 2)->where('tag', 'list')->where('is_main', 1)->value('route');
-            $viewFile = $this->getViewPath() . "/channel-" . $route . ".blade.php";
-            $view = "/channel-" . $route;
-        }
+        $currentRoute = $this->getCategoryMainListRoute($category, 2);
+        $template = $this->resolveCategoryTemplate($category, 'channel', 2);
 
         $cid = getCategoryIds($category->id);
         $query = ArticleListModel()->whereIn('category_id', $cid);
@@ -98,12 +90,7 @@ class Channel extends Base
 
         $data = $query->seoPaginate($channel->getSize(), ['*'], $channel->getPage(), $channel->getPath());
 
-        $viewHtml = "";
-        if (file_exists($viewFile)) {
-            $viewHtml = view($view, ['category' => $category, 'data' => $data])->render();
-        } else {
-            $viewHtml = view('channel', ['category' => $category, 'data' => $data])->render();
-        }
+        $viewHtml = view($template['view'], ['category' => $category, 'data' => $data])->render();
 
         return $viewHtml;
     }
