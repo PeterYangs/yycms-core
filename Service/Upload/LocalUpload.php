@@ -183,25 +183,19 @@ class LocalUpload implements Upload
             throw new \Exception($va->errors()->first());
         }
 
-        $ext = pathinfo($url, PATHINFO_EXTENSION);
-
-
         $allowList = env('ALLOW_UPLOAD_TYPE', 'png,gif,jpg,jpeg');
 
         $allowList = explode(',', $allowList);
-
-        if (!in_array(strtolower($ext), $allowList)) {
-
-            throw new \Exception('不允许上传该类型文件:' . $ext);
-
-        }
+        $ext = RemoteImage::allowedExtensionFromUrl($url, $allowList);
 
         $fileName = date('Ymd') . '/' . uniqid('',
                 true) . '.' . $ext;
 
         $rsp = \Http::withOptions(['verify' => false])->timeout(15)->connectTimeout(10)->get($url);
 
-        Storage::disk('upload')->put($fileName, $rsp);
+        RemoteImage::assertImageResponse($rsp->status(), (string)$rsp->header('Content-Type'), $url);
+
+        Storage::disk('upload')->put($fileName, $rsp->body());
 
 
         return "/" . ltrim(rtrim(config('yycms.upload_prefix'), '/'), '/') . "/" . $fileName;

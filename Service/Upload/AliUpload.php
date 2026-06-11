@@ -272,26 +272,20 @@ class AliUpload implements Upload
             throw new \Exception($va->errors()->first());
         }
 
-        $ext = pathinfo($url, PATHINFO_EXTENSION);
-
-
         $allowList = env('ALLOW_UPLOAD_TYPE', 'png,gif,jpg,jpeg');
 
         $allowList = explode(',', $allowList);
-
-        if (!in_array(strtolower($ext), $allowList)) {
-
-            throw new \Exception('不允许上传该类型文件:' . $ext);
-
-        }
+        $ext = RemoteImage::allowedExtensionFromUrl($url, $allowList);
 
         $fileName = date('Ymd') . '/' . uniqid('',
                 true) . '.' . $ext;
 
         $rsp = \Http::withOptions(['verify' => false])->retry(2,200)->timeout(15)->connectTimeout(10)->get($url);
 
+        RemoteImage::assertImageResponse($rsp->status(), (string)$rsp->header('Content-Type'), $url);
+
         $this->ossClient->putObject(env("ALI_BUCKET_NAME", ""), rtrim(config('yycms.upload_prefix'), '/') . "/" . $fileName,
-            $rsp);
+            $rsp->body());
 
         $this->ossClient->putSymlink(env("ALI_BUCKET_NAME", ""), "api/" . ltrim(rtrim(config('yycms.upload_prefix'), '/'), '/') . "/" . $fileName,
             ltrim(rtrim(config('yycms.upload_prefix'), '/'), '/') . $fileName);
