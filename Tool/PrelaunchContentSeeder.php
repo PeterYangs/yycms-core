@@ -18,6 +18,14 @@ class PrelaunchContentSeeder
         'app_collect' => 10,
     ];
 
+    private const RELATED_ARTICLE_LIMITS = [
+        'rank' => 10,
+        'game_collect' => 2,
+        'app_collect' => 2,
+    ];
+
+    private const COLLECT_CATEGORY_MINIMUM_ARTICLES = 2;
+
     private PrelaunchContentCatalog $catalog;
 
     public function __construct(?PrelaunchContentCatalog $catalog = null)
@@ -96,6 +104,38 @@ class PrelaunchContentSeeder
         usort($decorated, fn (array $a, array $b): int => strcmp($a['key'], $b['key']));
 
         return array_slice(array_column($decorated, 'item'), 0, $limit);
+    }
+
+    public static function relatedArticleLimit(string $type): int
+    {
+        return self::RELATED_ARTICLE_LIMITS[$type] ?? 10;
+    }
+
+    public static function collectCategoryMinimumArticleCount(): int
+    {
+        return self::COLLECT_CATEGORY_MINIMUM_ARTICLES;
+    }
+
+    public static function collectCategoryPlansForSlots(array $slots, array $eligibleCategories, int $target, string $seed, string $type): array
+    {
+        $selectedCategories = self::deterministicTake($eligibleCategories, $target, $seed, "{$type}:categories");
+        $plans = [];
+
+        foreach ($slots as $slot) {
+            $slot = (int)$slot;
+            $category = $selectedCategories[$slot - 1] ?? null;
+
+            if ($category === null) {
+                continue;
+            }
+
+            $plans[] = [
+                'slot' => $slot,
+                'category' => $category,
+            ];
+        }
+
+        return $plans;
     }
 
     public static function makeUniqueTitle(string $title, int $categoryId, string $batch, callable $titleExists): string
@@ -225,15 +265,15 @@ class PrelaunchContentSeeder
 
         $articles = $this->articlesForRoot((int)config('category.game'), 60);
 
-        if (count($articles) < 10) {
-            throw new RuntimeException('手游排行榜至少需要 10 篇已发布游戏文章。');
+        if (count($articles) < self::relatedArticleLimit('rank')) {
+            throw new RuntimeException('手游排行榜至少需要 ' . self::relatedArticleLimit('rank') . ' 篇已发布游戏文章。');
         }
 
         $plans = [];
 
         foreach ($slots as $slot) {
             $definition = $this->catalog()->rankDefinition($slot, $seed);
-            $selectedArticles = self::deterministicTake($articles, 10, $seed, "rank:{$slot}:articles");
+            $selectedArticles = self::deterministicTake($articles, self::relatedArticleLimit('rank'), $seed, "rank:{$slot}:articles");
             $title = self::makeUniqueTitle(
                 $definition['title'],
                 $rankCategory->id,
@@ -283,18 +323,14 @@ class PrelaunchContentSeeder
         }
 
         $eligibleCategories = $this->eligibleCollectCategories($parentCategoryId, $defaultIds);
-
-        if (count($eligibleCategories) < self::TARGETS[$type]) {
-            throw new RuntimeException($targetCategory->name . ' 至少需要 ' . self::TARGETS[$type] . ' 个默认子分类同时满足：已上架、有 10 篇已发布内容、有 20 张图片池。');
-        }
-
-        $selectedCategories = self::deterministicTake($eligibleCategories, self::TARGETS[$type], $seed, "{$type}:categories");
+        $slotCategories = self::collectCategoryPlansForSlots($slots, $eligibleCategories, self::TARGETS[$type], $seed, $type);
         $plans = [];
 
-        foreach ($slots as $slot) {
-            $category = $selectedCategories[$slot - 1];
+        foreach ($slotCategories as $slotCategory) {
+            $slot = $slotCategory['slot'];
+            $category = $slotCategory['category'];
             $articles = $this->articlesForCategory((int)$category['id'], 60);
-            $selectedArticles = self::deterministicTake($articles, 10, $seed, "{$type}:{$category['id']}:articles");
+            $selectedArticles = self::deterministicTake($articles, self::relatedArticleLimit($type), $seed, "{$type}:{$category['id']}:articles");
             $baseTitle = $this->catalog()->collectTitle($type, $category['name']);
             $title = self::makeUniqueTitle(
                 $baseTitle,
@@ -432,7 +468,7 @@ class PrelaunchContentSeeder
 
             $articleCount = Article::where('category_id', $category->id)->count();
 
-            if ($articleCount < 10) {
+            if ($articleCount < self::collectCategoryMinimumArticleCount()) {
                 continue;
             }
 
