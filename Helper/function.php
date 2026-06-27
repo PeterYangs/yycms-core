@@ -2186,6 +2186,9 @@ if (!function_exists('staticByArticle')) {
      */
     function staticByArticle(Article $article): void
     {
+        if (env('APP_ENV') !== 'production') {
+            return;
+        }
 
         $disable_mobile = getOption('disable_mobile', 0);
 
