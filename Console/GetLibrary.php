@@ -32,7 +32,7 @@ class GetLibrary extends Command
     public function handle()
     {
 
-        $rep = Http::withOptions(['verify' => false])->get("http://121.199.20.221:8198/releases");
+        $rep = Http::withOptions(['verify' => false])->get("http://47.121.176.113:8198/releases");
 
         if ($rep->status() !== 200) {
 
