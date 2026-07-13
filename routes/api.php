@@ -256,6 +256,7 @@ Route::middleware([])->group(function () {
 
 
         Route::group(['prefix' => 'sitemap'], function () {
+            Route::post('createLink', [SitemapController::class, 'createLink']);
             Route::post('create', [SitemapController::class, 'create']);
             Route::post('list', [SitemapController::class, 'list']);
         });

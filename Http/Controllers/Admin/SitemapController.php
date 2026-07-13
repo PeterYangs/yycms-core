@@ -21,6 +21,18 @@ class SitemapController extends AuthCheckController
     }
 
 
+    function createLink()
+    {
+
+
+        \Artisan::call('MakeAllLink');
+
+
+        return Json::code(1, 'success');
+
+    }
+
+
     function list()
     {
 
