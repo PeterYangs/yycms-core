@@ -476,6 +476,13 @@ Route::middleware([])->group(function () {
 
             });
 
+            Route::group(['prefix' => "statistics"], function () {
+
+                Route::post('info', [\Ycore\Http\Controllers\Third\StatisticsController::class, 'info']);
+                Route::post('sync', [\Ycore\Http\Controllers\Third\StatisticsController::class, 'sync']);
+
+            });
+
         });
 
     });
