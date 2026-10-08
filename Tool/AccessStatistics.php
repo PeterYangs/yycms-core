@@ -54,10 +54,14 @@ class AccessStatistics
 
         preg_match_all('/accessJs\?key=([0-9a-zA-Z]+)/', $current, $matches);
 
+        // 统计代码引用的统计地址（协议 + 域名），换统计域名时据此判断是否需要重写
+        preg_match_all('#(https?://[^/"\'\s]+)/api/third/access/accessJs#i', $current, $origins);
+
         return [
             'empty' => trim($current) === '',
             'managed' => $range !== null,
             'keys' => array_values(array_unique($matches[1])),
+            'origins' => array_values(array_unique(array_map('strtolower', $origins[1]))),
             'other' => trim($other) !== '',
         ];
     }
