@@ -34,16 +34,18 @@ class StatisticsController extends BaseController
     {
         $global = [];
 
+        // content 为原始脚本，统计项目导出给人工核对用（v0.3.59 起）
         foreach (self::OPTION_KEYS as $device => $key) {
-            $global[$device] = AccessStatistics::describe((string)getOption($key, ''));
+            $content = (string)getOption($key, '');
+            $global[$device] = AccessStatistics::describe($content) + ['content' => $content];
         }
 
         $specials = Special::orderBy('id')->get(['id', 'title', 'pc_js', 'mobile_js'])->map(function (Special $special) {
             return [
                 'id' => $special->id,
                 'title' => $special->title,
-                'pc' => AccessStatistics::describe((string)$special->pc_js),
-                'mobile' => AccessStatistics::describe((string)$special->mobile_js),
+                'pc' => AccessStatistics::describe((string)$special->pc_js) + ['content' => (string)$special->pc_js],
+                'mobile' => AccessStatistics::describe((string)$special->mobile_js) + ['content' => (string)$special->mobile_js],
             ];
         });
 
@@ -52,6 +54,8 @@ class StatisticsController extends BaseController
             'm_domain' => getOption('m_domain', ''),
             'site_name' => getOption('site_name', ''),
             'special_enabled' => SwitchCore::enabled(SwitchCore::ARTICLE_SPECIAL_ATTRIBUTE),
+            // v0.3.59 起：remove_legacy 写入时可删除早期手动安装的旧统计代码；content 返回原始脚本
+            'features' => ['remove_legacy', 'content'],
             'global' => $global,
             'specials' => $specials,
         ]);
@@ -74,6 +78,7 @@ class StatisticsController extends BaseController
             'items.*.device' => 'required|in:pc,mobile',
             'items.*.special_id' => 'required_if:items.*.target,special|integer',
             'items.*.code' => 'required|string|max:5000',
+            'items.*.remove_legacy' => 'boolean',
         ]);
 
         if ($validator->fails()) {
@@ -123,10 +128,27 @@ class StatisticsController extends BaseController
 
         $before = AccessStatistics::describe($current);
 
-        $merged = AccessStatistics::merge($current, $item['code']);
+        $content = $current;
+        $removed = 0;
+        $removeLegacy = !empty($item['remove_legacy']);
+
+        if ($removeLegacy) {
+            [$content, $removed] = AccessStatistics::removeLegacy($current);
+        }
+
+        $merged = AccessStatistics::merge($content, $item['code']);
+
+        $result += ['removed_legacy' => $removed, 'before' => $before, 'before_content' => $current, 'after_content' => $merged];
+
+        // 要求清理旧代码但还有认不出格式的旧统计引用：这个位置不写，留给人工处理
+        if ($removeLegacy && AccessStatistics::describe($merged)['unrecognized'] > 0) {
+            return ['action' => 'legacy_unmatched'] + $result;
+        }
 
         if ($merged === $current) {
             $action = 'unchanged';
+        } elseif ($removed > 0) {
+            $action = 'replace_legacy';
         } elseif ($before['managed']) {
             $action = 'replace';
         } else {
@@ -145,7 +167,7 @@ class StatisticsController extends BaseController
 
         }
 
-        return $result + ['action' => $action, 'before' => $before];
+        return ['action' => $action] + $result;
     }
 
 }
