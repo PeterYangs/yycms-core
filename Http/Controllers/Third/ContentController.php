@@ -3,6 +3,7 @@
 namespace Ycore\Http\Controllers\Third;
 
 
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -318,11 +319,7 @@ class ContentController extends BaseController
             $modeTitle = "友情链接-mobile";
         }
 
-        $mode = Mode::where('title', $modeTitle)->first();
-
-        if (!$mode) {
-            throw new \Exception('未找到对应的模块(mode)');
-        }
+        $mode = $this->friendshipLinkMode($modeTitle);
 
         $list = $mode->list;
 
@@ -346,6 +343,48 @@ class ContentController extends BaseController
             $list[] = [$websiteName, $websiteLink];
             $mode->list = $list;
             $mode->save();
+        }
+
+    }
+
+
+    /**
+     * 取友情链接模块：先按 title 找，再按 code 找，都没有就按标准结构新建（title 和 code 相同）
+     * 找到的旧记录原样使用，不改它的 title、code
+     * @param string $modeTitle 友情链接-pc 或 友情链接-mobile
+     * @return Mode
+     */
+    private function friendshipLinkMode(string $modeTitle): Mode
+    {
+
+        $mode = Mode::where('title', $modeTitle)->first() ?: Mode::where('code', $modeTitle)->first();
+
+        if ($mode) {
+            return $mode;
+        }
+
+        try {
+
+            return Mode::create([
+                'title' => $modeTitle,
+                'code' => $modeTitle,
+                'tip_img' => '',
+                'field_list' => [['type' => 3, 'title' => '网站名称'], ['type' => 3, 'title' => '网站链接']],
+                'list' => [],
+                'hide' => 1,
+                'expired_time' => null,
+            ]);
+
+        } catch (QueryException $exception) {
+
+            // code 有唯一索引，同时到达的另一个请求已经建好了这条记录，就用它
+            $mode = Mode::where('code', $modeTitle)->first();
+
+            if (!$mode) {
+                throw $exception;
+            }
+
+            return $mode;
         }
 
     }
