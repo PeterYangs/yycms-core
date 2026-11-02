@@ -28,7 +28,9 @@ class HomeStatic implements ShouldQueue, ShouldBeUnique
     public function handle()
     {
 
-        \Artisan::call("HomeStatic");
+        if (\Artisan::call("HomeStatic") !== 0) {
+            throw new \RuntimeException("Homepage static generation failed; see sanitized application log.");
+        }
 
     }
 }

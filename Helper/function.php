@@ -1253,7 +1253,7 @@ if (!function_exists('getExGameList')) {
         if ($limit !== 0) {
             $query->limit($limit);
         }
-        return $query->get();
+        return \Ycore\Tool\ArticleListQuery::get($query);
     }
 }
 
@@ -1405,7 +1405,7 @@ if (!function_exists('getRelatedByTag')) {
 
         $category = getCategoryIds($categoryName);
         $query->whereIn('category_id', $category->all());
-        return $query->orderBy('issue_time', 'desc')->get();
+        return \Ycore\Tool\ArticleListQuery::get($query->orderBy('issue_time', 'desc'));
     }
 
 }
