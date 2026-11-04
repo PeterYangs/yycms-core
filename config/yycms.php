@@ -1,6 +1,9 @@
 <?php
 
 return [
+    // Opt in only after Nginx supplies YYCMS_VERIFIED_SPIDER on every PHP entry.
+    'spider_identity' => env('YYCMS_SPIDER_IDENTITY', 'ua'),
+
 
     'upload_prefix' => env('UPLOAD_PREFIX', 'uploads'),
     //123网盘域名

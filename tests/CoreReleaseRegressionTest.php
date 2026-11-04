@@ -114,6 +114,22 @@ class CoreReleaseRegressionTest extends TestCase
         self::assertStringNotContainsString('order by', $queries[1]['query']);
     }
 
+    public function testVerifiedIpControlsActualArticleQueries(): void
+    {
+        $this->app['config']->set('yycms.spider_identity', 'verified_ip');
+        // Same UA, opposite server decisions must produce opposite visibility.
+        foreach (['0' => false, '1' => true] as $flag => $visible) {
+            $request = Request::create('http://www.test/', 'GET', [], [], [], [
+                'HTTP_USER_AGENT' => 'Googlebot', 'YYCMS_VERIFIED_SPIDER' => (string) $flag,
+            ]);
+            $this->app->instance('request', $request);
+            self::assertSame($visible, \ArticleListModel()->where('id', 10)->exists());
+            self::assertTrue(\ArticleListModel()->where('id', 6)->exists());
+            self::assertFalse(\ArticleListModel()->where('id', 9)->exists());
+        }
+        $this->app['config']->set('yycms.spider_identity', 'ua');
+    }
+
     public function visibilityCases(): array
     {
         return [['www.test', 'browser', 'desc', [6,5,4]], ['www.test', 'Baiduspider', 'desc', [10,6,5]],

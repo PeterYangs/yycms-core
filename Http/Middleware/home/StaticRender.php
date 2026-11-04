@@ -21,7 +21,8 @@ class StaticRender
     public function handle(Request $request, Closure $next)
     {
 
-        if (!config('static.open', false)) {
+        // Legacy static files have no audience dimension; let Nginx cache the rendered variant.
+        if (\Ycore\Tool\SpiderIdentity::usesVerifiedIp() || !config('static.open', false)) {
 
 
             return $next($request);

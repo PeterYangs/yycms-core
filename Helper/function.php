@@ -1438,7 +1438,7 @@ if (!function_exists('ArticleListModel')) {
     {
         //(special_id != 0 and exists (select 1 from `special` where `article`.`special_id` = `special`.`id` and `real_pc_hide` = 2))
         $spiderCondition = "";
-        $isSpider = isSearchEngine(request()->header('user-agent', ""));
+        $isSpider = \Ycore\Tool\SpiderIdentity::isSpider(request());
 
         if ($isSpider) {
             $spiderCondition = " 1 = 1 ";
