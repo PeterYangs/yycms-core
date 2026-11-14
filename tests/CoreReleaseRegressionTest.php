@@ -159,6 +159,49 @@ class CoreReleaseRegressionTest extends TestCase
         self::assertSame([], \getRelatedByTag($article, [99], 2)->modelKeys());
     }
 
+    public function testRelatedCandidatesPreserveVisibilityDeduplicationAndFallback(): void
+    {
+        \Illuminate\Support\Facades\Cache::swap(new \Illuminate\Cache\Repository(new \Illuminate\Cache\ArrayStore()));
+        $this->app['config']->set('static.news_game_field', 'game');
+        $this->db->schema()->create('article_expand', function ($t) { $t->integer('category_id'); });
+        $this->db->schema()->create('expand_table_1', function ($t) { $t->integer('article_id'); $t->integer('game'); });
+        $this->db->schema()->create('article_tag', function ($t) { $t->integer('article_id'); $t->integer('tag_id'); });
+        $this->db->table('article_expand')->insert(['category_id' => 1]);
+        foreach ([2 => 6, 4 => 99, 6 => 6] as $id => $game) {
+            $this->db->table('expand_table_1')->insert(['article_id' => $id, 'game' => $game]);
+        }
+        foreach ([2, 3, 4, 6, 7, 8, 9, 10] as $id) {
+            $this->db->table('article_tag')->insert(['article_id' => $id, 'tag_id' => 11]);
+        }
+        $this->db->table('article_tag')->insert(['article_id' => 5, 'tag_id' => 12]);
+        $article = Article::findOrFail(6);
+        $article->setRawAttributes(array_merge($article->getAttributes(), [
+            'expand' => json_encode([['name' => 'game', 'value' => 99]]),
+        ]));
+        $article->setRelation('article_tag', collect([
+            (object) ['tag_id' => 11, 'tag' => (object) ['id' => 11, 'type' => 1]],
+            (object) ['tag_id' => 12, 'tag' => (object) ['id' => 12, 'type' => 2]],
+        ]));
+        $items = \getRelated($article, [1], 6);
+        self::assertSame([5, 4, 3, 2], $items->modelKeys());
+        self::assertSame(str_repeat('body', 1024), $items->first()->content);
+        self::assertTrue($items->first()->relationLoaded('category'));
+        self::assertSame([4, 3], \getRelated($article, [1], 2, 1)->modelKeys());
+        self::assertSame([], \getRelated($article, [1], 0)->modelKeys());
+        foreach (['www.test' => [10, 4, 3, 2], 'm.test' => [4, 3, 2]] as $host => $expected) {
+            $request = Request::create('http://' . $host . '/');
+            $request->headers->set('User-Agent', 'Baiduspider');
+            $this->app->instance('request', $request);
+            self::assertSame($expected, \getRelated($article, [1], 6, 1)->modelKeys());
+        }
+        $article->setRelation('article_tag', collect());
+        self::assertSame([4, 2], \getRelated($article, [1], 6)->modelKeys());
+        $article->setRawAttributes(array_merge($article->getAttributes(), ['expand' => '[]']));
+        self::assertSame([2], \getRelated($article, [1], 6)->modelKeys());
+        $this->db->table('article_expand')->delete();
+        self::assertSame([5, 4, 3, 2, 1], \getRelated($article, [1], 6)->modelKeys());
+    }
+
     private function runHomepage(): int
     {
         $command = new \Ycore\Console\HomeStatic();

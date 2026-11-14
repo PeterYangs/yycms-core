@@ -1311,59 +1311,35 @@ if (!function_exists('getRelated')) {
      */
     function getRelated(Article $article, array|int|string $categoryName, int $limit = 5, int $type = 0)
     {
-        $category = getCategoryIds($categoryName);
-        $ex_table = CategoryController::getExpandTableName($category->first());
+        $categories = getCategoryIds($categoryName);
+        $expandTable = CategoryController::getExpandTableName($categories->first());
+        $query = ArticleListModel()->select('article.*')
+            ->where('article.id', '!=', $article->id)
+            ->whereIn('article.category_id', $categories);
 
-        //获取当前文章所有标签
-        $tagList = $article->article_tag;
+        if ($expandTable) {
+            $objectField = config('static.news_game_field');
+            $objectId = $article->ex[$objectField] ?? null;
+            $objects = $objectId ? [$article->id, $objectId] : [$article->id];
 
-        $tList = [];
+            // Collect matching IDs first so sparse matches don't scan articles in date order.
+            $connection = $query->getModel()->getConnection();
+            $candidates = $connection->table($expandTable)->select('article_id')
+                ->whereIn($objectField, $objects);
+            $tags = $article->article_tag;
+            $tagIds = $type === 0
+                ? $tags->pluck('tag_id')
+                : $tags->filter(fn ($item) => $item->tag?->type === $type)->pluck('tag.id');
 
-        if ($type !== 0) {
-            foreach ($tagList as $key => $item) {
-                if ($item->tag->type === $type) {
-                    $tList[] = $item->tag->id;
-                }
+            if ($tagIds->isNotEmpty()) {
+                $candidates->union($connection->table('article_tag')->select('article_id')->whereIn('tag_id', $tagIds));
+            } else {
+                $candidates->distinct();
             }
-
-        } else {
-
-            $tList = $tagList->pluck('tag_id')->all();
+            $query->joinSub($candidates, 'related', 'related.article_id', '=', 'article.id');
         }
 
-        $tagList = $tList;
-
-        //获取当前文章中关联的单一文章id
-        $obj = $article->ex[config('static.news_game_field')] ?? false;
-
-        return ArticleListModel()->where('id', "!=", $article->id)->whereIn('category_id',
-            $category->all())->where(function (Illuminate\Database\Eloquent\Builder $query) use (
-            $tagList,
-            $article,
-            $ex_table,
-            $obj
-        ) {
-            if (!$ex_table) {
-                return;
-            }
-            //查询其他文章中是否有关联当前文章
-            $query->whereRaw('id in (SELECT ' . $ex_table . '.article_id FROM ' . $ex_table . ' WHERE ' . config('static.news_game_field') . ' = ? )', [$article->id]);
-
-            //查找同一个标签的文章
-            if (count($tagList) > 0) {
-
-//            $query->orWhereRaw("id in (select article_tag.article_id from article_tag where article_tag.tag_id in (" . join(",", $tagList) . ") and article_tag.article_id != " . $article->id . ")");
-                $query->orWhereRaw("EXISTS(select 1 from article_tag where article_tag.tag_id in (" . join(",", $tagList) . ") and  article_tag.article_id = article.id)");
-            }
-
-            //查询当前文章绑定的文章是否也被其他文章绑定
-            if ($obj) {
-
-                $query->orwhereRaw('EXISTS(select * from ' . $ex_table . ' where article.id = ' . $ex_table . '.article_id and ' . config('static.news_game_field') . ' = ?)',
-                    [$obj]);
-            }
-
-        })->limit($limit)->orderBy('issue_time', 'desc')->get();
+        return $query->orderBy('article.issue_time', 'desc')->limit($limit)->get();
     }
 }
 
